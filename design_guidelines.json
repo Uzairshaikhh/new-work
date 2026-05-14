@@ -1,0 +1,123 @@
+{
+  "theme": "dark",
+  "archetype": "5 (Jewel & Luxury)",
+  "brand": {
+    "name": "Amazing Groups",
+    "phone": "+91 8657211339",
+    "email": "amazinggroups51@gmail.com",
+    "location": "Jogeshwari West, Mumbai"
+  },
+  "typography": {
+    "headings": {
+      "font": "Cormorant Garamond",
+      "style": "elegant, high contrast, large, generous spacing",
+      "classes": "font-serif tracking-tight leading-none text-white"
+    },
+    "body": {
+      "font": "Outfit",
+      "style": "clean sans-serif, light weight",
+      "classes": "font-sans font-light text-gray-300"
+    },
+    "buttons": {
+      "style": "uppercase, letter-spacing",
+      "classes": "uppercase tracking-[0.2em] text-xs font-semibold"
+    }
+  },
+  "colors": {
+    "background": {
+      "hex": "#0a0a0a",
+      "name": "Deep Black"
+    },
+    "surface": {
+      "hex": "#111111",
+      "name": "Dark Surface"
+    },
+    "accent": {
+      "primary": "#D4AF37",
+      "hover": "#F3E5AB",
+      "border": "rgba(212, 175, 55, 0.2)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A3A3A3"
+    }
+  },
+  "spacing_and_layout": {
+    "general": "Generous spacing. p-12, p-16, p-24 for sections to create breathing room.",
+    "grid": "Bento layouts for categories. Optical alignment.",
+    "hero": "Full viewport height slider (min-h-[90vh] or 100vh)."
+  },
+  "components": {
+    "navbar": "Sticky, backdrop-blur-xl bg-black/60, border-b border-[#D4AF37]/20, gold underline on active links.",
+    "cards": "Premium minimal luxury feel. Subtle gold borders (border-[#D4AF37]/20), hover gold glow (shadow-[0_0_15px_rgba(212,175,55,0.15)]), flat backgrounds.",
+    "buttons": "Uppercase, slight letter spacing. Hover states must have text color transition and glow.",
+    "images": "High contrast, dark overlays to ensure text readability."
+  },
+  "pages": {
+    "home": "Sticky blurred navbar, full-width hero slider, category grid, featured products, contact, footer.",
+    "category_page": "Hero banner + product grid.",
+    "product_detail": "Image gallery, video preview placeholder, WhatsApp/Call CTAs, description.",
+    "admin": "Admin panel at /admin-x9k2l-secret. Same black/gold theme. Login, dashboard with sidebar, CRUD tables."
+  },
+  "interactions": {
+    "animations": "Gold hover glow, smooth scroll-reveal (framer-motion), micro-animations on cards and buttons."
+  },
+  "constraints": [
+    "No cart",
+    "No checkout",
+    "No user accounts",
+    "No purple/violet gradients (no AI-slop)",
+    "Black background must stay solid (#0a0a0a)"
+  ],
+  "media": {
+    "hero_slider": [
+      {
+        "url": "https://images.unsplash.com/photo-1598634222670-87c5f558119c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBwZXJmdW1lJTIwZGFya3xlbnwwfHx8fDE3Nzg3MzU0MDF8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Luxury Perfume Dark Background"
+      },
+      {
+        "url": "https://images.pexels.com/photos/19810840/pexels-photo-19810840.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "alt": "Luxury Watch Rose Gold Dark"
+      }
+    ],
+    "categories": [
+      {
+        "url": "https://images.unsplash.com/photo-1694481901573-a970f982ac5e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBnaWZ0JTIwYm94fGVufDB8fHx8MTc3ODczNTM4Nnww&ixlib=rb-4.1.0&q=85",
+        "alt": "Premium Gift Box"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1674620213535-9b2a2553ef40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBnaWZ0JTIwYm94fGVufDB8fHx8MTc3ODczNTM4Nnww&ixlib=rb-4.1.0&q=85",
+        "alt": "Corporate Gifting"
+      }
+    ],
+    "products": [
+      {
+        "url": "https://images.unsplash.com/photo-1759794108525-94ff060da692?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBwZXJmdW1lJTIwZGFya3xlbnwwfHx8fDE3Nzg3MzU0MDF8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Dior Luxury Perfume"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3YXRjaCUyMGRhcmt8ZW58MHx8fHwxNzc4NzM1NDA1fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Silver and Gold Watch"
+      },
+      {
+        "url": "https://images.pexels.com/photos/13013041/pexels-photo-13013041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "alt": "Elegant Timepiece"
+      }
+    ],
+    "textures": [
+      {
+        "url": "https://images.unsplash.com/photo-1656055450593-5f9fc1e88b65?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwyfHxnb2xkJTIwdGV4dHVyZSUyMGJsYWNrfGVufDB8fHx8MTc3ODczNTQwMXww&ixlib=rb-4.1.0&q=85",
+        "alt": "Gold on Black Texture"
+      }
+    ]
+  },
+  "icons": "lucide-react",
+  "instructions_to_main_agent": [
+    "Install Cormorant Garamond and Outfit from Google Fonts.",
+    "Use standard Tailwind classes for #0a0a0a and #D4AF37.",
+    "Do NOT build a checkout or cart system, only WhatsApp / Call-to-action buttons on product pages.",
+    "Admin panel MUST be located at /admin-x9k2l-secret. It must retain the black and gold luxury aesthetics.",
+    "Ensure 100% adherence to dark mode luxury principles (high contrast, ample spacing, slow smooth interactions).",
+    "Use provided image URLs."
+  ]
+}
