@@ -5,6 +5,8 @@ import { api, resolveMedia } from "../lib/api";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ProductCard from "../components/ProductCard";
+import SectionHeading from "../components/SectionHeading";
 
 const WHATSAPP = "918657211339";
 const PHONE = "+918657211339";
@@ -15,6 +17,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
+  const [related, setRelated] = useState([]);
 
   useSEO({
     title: product?.name || "Product",
@@ -24,9 +27,29 @@ const ProductDetail = () => {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
+    setRelated([]);
+    window.scrollTo({ top: 0, behavior: "instant" });
     api
       .get(`/products/${id}`)
-      .then((r) => mounted && setProduct(r.data))
+      .then(async (r) => {
+        if (!mounted) return;
+        setProduct(r.data);
+        // Fetch similar: same category first, fallback to general products
+        try {
+          const sameCat = await api.get(`/categories/${r.data.category_id}/products`);
+          let pool = sameCat.data.filter((p) => p.id !== r.data.id);
+          if (pool.length < 4) {
+            const all = await api.get("/products");
+            const extras = all.data.filter(
+              (p) => p.id !== r.data.id && !pool.some((q) => q.id === p.id)
+            );
+            pool = [...pool, ...extras];
+          }
+          if (mounted) setRelated(pool.slice(0, 4));
+        } catch {
+          // ignore
+        }
+      })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));
     return () => {
@@ -190,6 +213,26 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {related.length > 0 && (
+        <section
+          className="relative py-24 md:py-32 px-6 lg:px-10 border-t border-[#D4AF37]/15 bg-[#080808]"
+          data-testid="related-products-section"
+        >
+          <div className="max-w-[1400px] mx-auto">
+            <SectionHeading
+              eyebrow="You may also like"
+              title="Suggested pieces"
+              subtitle="Other pieces from our atelier — handpicked alongside this one."
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="related-products-grid">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
