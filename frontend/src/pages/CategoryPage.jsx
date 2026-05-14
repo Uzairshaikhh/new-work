@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { api, resolveMedia } from "../lib/api";
+import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
@@ -11,6 +12,11 @@ const CategoryPage = () => {
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useSEO({
+    title: category?.name || "Collection",
+    description: category?.description || "Explore our luxury gift collection.",
+  });
 
   useEffect(() => {
     let mounted = true;

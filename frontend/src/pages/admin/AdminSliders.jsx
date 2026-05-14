@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, resolveMedia } from "../../lib/api";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ArrowUp, ArrowDown } from "lucide-react";
+import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
 const empty = { title: "", subtitle: "", image_url: "", cta_label: "Explore", cta_link: "#categories", order: 0 };
@@ -11,6 +12,7 @@ const AdminSliders = () => {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(empty);
+  const [reordering, setReordering] = useState(false);
 
   const load = () =>
     api
@@ -42,19 +44,53 @@ const AdminSliders = () => {
   const submit = async (e) => {
     e.preventDefault();
     const payload = { ...form, order: parseInt(form.order, 10) || 0 };
-    if (editing) {
-      await api.put(`/admin/sliders/${editing.id}`, payload);
-    } else {
-      await api.post("/admin/sliders", payload);
+    try {
+      if (editing) {
+        await api.put(`/admin/sliders/${editing.id}`, payload);
+        toast.success("Slider updated");
+      } else {
+        await api.post("/admin/sliders", payload);
+        toast.success("Slider created");
+      }
+      close();
+      load();
+    } catch {
+      toast.error("Could not save slider");
     }
-    close();
-    load();
   };
 
   const remove = async (id) => {
     if (!window.confirm("Delete this slider?")) return;
-    await api.delete(`/admin/sliders/${id}`);
-    load();
+    try {
+      await api.delete(`/admin/sliders/${id}`);
+      toast.success("Slider deleted");
+      load();
+    } catch {
+      toast.error("Could not delete slider");
+    }
+  };
+
+  const move = async (id, direction) => {
+    if (reordering) return;
+    const idx = items.findIndex((x) => x.id === id);
+    const swap = direction === "up" ? idx - 1 : idx + 1;
+    if (swap < 0 || swap >= items.length) return;
+    setReordering(true);
+    const a = items[idx];
+    const b = items[swap];
+    // Swap the order values, then persist both
+    try {
+      await Promise.all([
+        api.put(`/admin/sliders/${a.id}`, { ...a, order: b.order }),
+        api.put(`/admin/sliders/${b.id}`, { ...b, order: a.order }),
+      ]);
+      toast.success("Order updated");
+      await load();
+    } catch {
+      toast.error("Could not reorder");
+    } finally {
+      setReordering(false);
+    }
   };
 
   return (
@@ -81,7 +117,7 @@ const AdminSliders = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" data-testid="sliders-list">
-          {items.map((s) => (
+          {items.map((s, idx) => (
             <div
               key={s.id}
               className="bg-[#0e0e0e] border border-[#D4AF37]/15 overflow-hidden flex"
@@ -96,7 +132,25 @@ const AdminSliders = () => {
                 <div className="eyebrow text-[9px]">Order {s.order}</div>
                 <h3 className="font-display text-xl text-white mt-2 line-clamp-2">{s.title}</h3>
                 <p className="text-xs text-neutral-400 mt-2 line-clamp-2">{s.subtitle}</p>
-                <div className="mt-auto pt-3 flex gap-2">
+                <div className="mt-auto pt-3 flex gap-2 flex-wrap">
+                  <button
+                    onClick={() => move(s.id, "up")}
+                    disabled={idx === 0 || reordering}
+                    className="btn-ghost-gold !py-2 !px-3 !text-[10px] disabled:opacity-30 disabled:cursor-not-allowed"
+                    data-testid={`move-up-${s.id}`}
+                    aria-label="Move up"
+                  >
+                    <ArrowUp size={12} />
+                  </button>
+                  <button
+                    onClick={() => move(s.id, "down")}
+                    disabled={idx === items.length - 1 || reordering}
+                    className="btn-ghost-gold !py-2 !px-3 !text-[10px] disabled:opacity-30 disabled:cursor-not-allowed"
+                    data-testid={`move-down-${s.id}`}
+                    aria-label="Move down"
+                  >
+                    <ArrowDown size={12} />
+                  </button>
                   <button onClick={() => open(s)} className="btn-ghost-gold !py-2 !px-3 !text-[10px]" data-testid={`edit-slider-${s.id}`}>
                     <Pencil size={12} /> Edit
                   </button>

@@ -1,12 +1,28 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search as SearchIcon, X } from "lucide-react";
+import { Search as SearchIcon, X, Clock, Trash2 } from "lucide-react";
 import { api, resolveMedia } from "../lib/api";
+
+const HISTORY_KEY = "ag_search_history";
+const MAX_HISTORY = 6;
+
+const readHistory = () => {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+};
+
+const writeHistory = (terms) => {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(terms.slice(0, MAX_HISTORY)));
+};
 
 const SearchOverlay = ({ open, onClose }) => {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -14,6 +30,7 @@ const SearchOverlay = ({ open, onClose }) => {
       setQuery("");
       return;
     }
+    setHistory(readHistory());
     setLoading(true);
     Promise.all([api.get("/products"), api.get("/categories")])
       .then(([p, c]) => {
@@ -34,6 +51,19 @@ const SearchOverlay = ({ open, onClose }) => {
     };
   }, [open, onClose]);
 
+  // Save term to history when user stops typing (debounced ~ 1s)
+  useEffect(() => {
+    const q = query.trim();
+    if (!open || q.length < 2) return;
+    const t = setTimeout(() => {
+      const current = readHistory();
+      const next = [q, ...current.filter((x) => x.toLowerCase() !== q.toLowerCase())];
+      writeHistory(next);
+      setHistory(next.slice(0, MAX_HISTORY));
+    }, 900);
+    return () => clearTimeout(t);
+  }, [query, open]);
+
   const filteredProducts = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
@@ -49,10 +79,13 @@ const SearchOverlay = ({ open, onClose }) => {
   const filteredCategories = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return categories
-      .filter((c) => c.name.toLowerCase().includes(q))
-      .slice(0, 4);
+    return categories.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 4);
   }, [categories, query]);
+
+  const clearHistory = () => {
+    localStorage.removeItem(HISTORY_KEY);
+    setHistory([]);
+  };
 
   if (!open) return null;
 
@@ -85,7 +118,36 @@ const SearchOverlay = ({ open, onClose }) => {
         </div>
 
         <div className="mt-10 space-y-10">
-          {!query.trim() && !loading && (
+          {/* Recent searches when input is empty */}
+          {!query.trim() && history.length > 0 && (
+            <div data-testid="search-history">
+              <div className="flex items-center justify-between mb-4">
+                <div className="eyebrow">Recent searches</div>
+                <button
+                  onClick={clearHistory}
+                  className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-neutral-500 hover:text-[#D4AF37] transition-colors"
+                  data-testid="search-history-clear"
+                >
+                  <Trash2 size={12} /> Clear
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {history.map((h) => (
+                  <button
+                    key={h}
+                    onClick={() => setQuery(h)}
+                    className="flex items-center gap-2 px-4 py-2 border border-[#D4AF37]/20 hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/5 text-sm text-neutral-300 hover:text-white font-light transition-all"
+                    data-testid={`search-history-item-${h}`}
+                  >
+                    <Clock size={12} className="text-[#D4AF37]" />
+                    {h}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!query.trim() && history.length === 0 && !loading && (
             <p className="text-sm text-neutral-500 font-light text-center" data-testid="search-empty-hint">
               Start typing to find pieces and collections.
             </p>

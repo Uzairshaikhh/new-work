@@ -1,6 +1,7 @@
 import "@/index.css";
 import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
 import CategoryPage from "@/pages/CategoryPage";
@@ -16,6 +17,20 @@ function App() {
   return (
     <div className="App bg-[#0a0a0a] min-h-screen">
       <AuthProvider>
+        <Toaster
+          theme="dark"
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: "#0e0e0e",
+              border: "1px solid rgba(212, 175, 55, 0.3)",
+              color: "#ffffff",
+              fontFamily: "Outfit, sans-serif",
+              fontWeight: 300,
+              letterSpacing: "0.05em",
+            },
+          }}
+        />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />

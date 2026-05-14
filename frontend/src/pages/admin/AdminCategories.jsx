@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, resolveMedia } from "../../lib/api";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
 const empty = { name: "", description: "", image_url: "" };
@@ -26,15 +27,29 @@ const AdminCategories = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (editing) await api.put(`/admin/categories/${editing.id}`, form);
-    else await api.post("/admin/categories", form);
-    close(); load();
+    try {
+      if (editing) {
+        await api.put(`/admin/categories/${editing.id}`, form);
+        toast.success("Collection updated");
+      } else {
+        await api.post("/admin/categories", form);
+        toast.success("Collection created");
+      }
+      close(); load();
+    } catch {
+      toast.error("Could not save collection");
+    }
   };
 
   const remove = async (id) => {
     if (!window.confirm("Delete this category? All its products will be removed.")) return;
-    await api.delete(`/admin/categories/${id}`);
-    load();
+    try {
+      await api.delete(`/admin/categories/${id}`);
+      toast.success("Collection deleted");
+      load();
+    } catch {
+      toast.error("Could not delete collection");
+    }
   };
 
   return (

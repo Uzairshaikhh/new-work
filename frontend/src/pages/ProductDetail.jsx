@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft, MessageCircle, Phone, Play } from "lucide-react";
 import { api, resolveMedia } from "../lib/api";
+import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -14,6 +15,11 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
+
+  useSEO({
+    title: product?.name || "Product",
+    description: product?.description?.slice(0, 160) || "Handcrafted luxury gift from Amazing Groups Mumbai.",
+  });
 
   useEffect(() => {
     let mounted = true;

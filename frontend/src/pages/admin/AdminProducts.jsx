@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, resolveMedia } from "../../lib/api";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
 const empty = {
@@ -39,15 +40,29 @@ const AdminProducts = () => {
   const submit = async (e) => {
     e.preventDefault();
     const payload = { ...form };
-    if (editing) await api.put(`/admin/products/${editing.id}`, payload);
-    else await api.post("/admin/products", payload);
-    close(); load();
+    try {
+      if (editing) {
+        await api.put(`/admin/products/${editing.id}`, payload);
+        toast.success("Product updated");
+      } else {
+        await api.post("/admin/products", payload);
+        toast.success("Product created");
+      }
+      close(); load();
+    } catch {
+      toast.error("Could not save product");
+    }
   };
 
   const remove = async (id) => {
     if (!window.confirm("Delete this product?")) return;
-    await api.delete(`/admin/products/${id}`);
-    load();
+    try {
+      await api.delete(`/admin/products/${id}`);
+      toast.success("Product deleted");
+      load();
+    } catch {
+      toast.error("Could not delete product");
+    }
   };
 
   const addGalleryImg = (url) => {

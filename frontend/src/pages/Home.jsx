@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
+import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import HeroSlider from "../components/HeroSlider";
 import CategoryGrid from "../components/CategoryGrid";
@@ -13,6 +14,11 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useSEO({
+    title: "Bespoke Gifts, Crafted With Intention",
+    description: "Amazing Groups — handcrafted hampers, personalised keepsakes and luxury corporate gifting from Mumbai.",
+  });
 
   useEffect(() => {
     let mounted = true;

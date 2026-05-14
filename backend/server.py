@@ -225,11 +225,44 @@ async def get_product(product_id: str):
 
 # ---------- Auth Endpoints ----------
 
+LOCKOUT_THRESHOLD = 5
+LOCKOUT_MINUTES = 15
+
+
+async def _record_failure(username: str):
+    now = datetime.now(timezone.utc)
+    await db.login_attempts.update_one(
+        {"username": username},
+        {"$push": {"failures": now.isoformat()}, "$setOnInsert": {"username": username}},
+        upsert=True,
+    )
+
+
+async def _is_locked(username: str) -> bool:
+    rec = await db.login_attempts.find_one({"username": username})
+    if not rec:
+        return False
+    cutoff = datetime.now(timezone.utc) - timedelta(minutes=LOCKOUT_MINUTES)
+    recent = [f for f in rec.get("failures", []) if datetime.fromisoformat(f) > cutoff]
+    return len(recent) >= LOCKOUT_THRESHOLD
+
+
+async def _clear_failures(username: str):
+    await db.login_attempts.delete_one({"username": username})
+
+
 @api_router.post("/auth/login")
 async def login(payload: LoginInput):
+    if await _is_locked(payload.username):
+        raise HTTPException(
+            status_code=429,
+            detail=f"Too many failed attempts. Try again in {LOCKOUT_MINUTES} minutes.",
+        )
     user = await db.admins.find_one({"username": payload.username})
     if not user or not verify_password(payload.password, user["password_hash"]):
+        await _record_failure(payload.username)
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    await _clear_failures(payload.username)
     token = create_token(payload.username)
     return {"token": token, "username": payload.username, "role": "admin"}
 

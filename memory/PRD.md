@@ -26,14 +26,17 @@ Premium luxury website UI for a "Customized Gift Products" brand named **Amazing
 - Loading states + empty states
 
 ## What's Implemented (2026-02-14)
-- ✅ Backend: auth (JWT), CRUD endpoints for sliders/categories/products, object-storage upload, public catalog endpoints, admin stats
+- ✅ Backend: auth (JWT) + brute-force lockout (5 fails → 15 min), CRUD endpoints for sliders/categories/products, object-storage upload, public catalog endpoints, admin stats
 - ✅ Seed admin + sample sliders/categories/products on startup
-- ✅ Storefront: Home (hero slider, categories, featured), CategoryPage, ProductDetail, Contact, Footer
+- ✅ Storefront: Home, CategoryPage, ProductDetail, Contact, Footer
 - ✅ Admin: Login, Sidebar layout, Dashboard, Sliders/Categories/Products CRUD with media uploader
-- ✅ Auth via bearer token in localStorage
-- ✅ Working luxury search overlay (live filter across products + categories)
+- ✅ Working luxury search overlay with **recent search history** (last 6, persisted in localStorage)
 - ✅ "Bulk Order" navbar button → WhatsApp with prefilled bulk enquiry
-- ✅ "How To Order" 3-step process section + "once order placed, cannot be cancelled" policy callout
+- ✅ "How To Order" 3-step process + customisation cancellation policy callout
+- ✅ Navbar Categories + Contact links smooth-scroll to sections (works on home page AND when navigating from another page)
+- ✅ Sonner toast notifications for ALL admin CRUD actions (create/update/delete/reorder)
+- ✅ Up/Down reorder buttons for sliders (persisted via order field)
+- ✅ SEO meta tags per page via useSEO hook (title + description + og:title)
 
 ## Admin Credentials
 See `/app/memory/test_credentials.md`.
