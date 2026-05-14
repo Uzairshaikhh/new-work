@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { BRAND } from "../lib/brand";
 
 const Footer = () => {
   return (
@@ -7,10 +8,10 @@ const Footer = () => {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-11 h-11 bg-white text-navy flex items-center justify-center rounded-md font-display text-xl">AG</div>
+            <img src={BRAND.logoSrc} alt="Amazing Groups" className="w-12 h-12 rounded-md object-cover" />
             <div>
               <div className="font-display text-lg leading-none">Amazing Groups</div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-white/50 mt-1">Corporate Gifting</div>
+              <div className="text-[10px] uppercase tracking-[0.25em] text-white/50 mt-1">{BRAND.tagline}</div>
             </div>
           </div>
           <p className="text-sm text-white/70 leading-relaxed max-w-xs">
@@ -42,10 +43,24 @@ const Footer = () => {
         <div>
           <div className="text-xs uppercase tracking-wider text-amber-brand font-semibold mb-5">Contact</div>
           <ul className="space-y-3 text-sm text-white/70">
-            <li className="flex items-center gap-2"><Phone size={14} className="text-amber-brand" /> <a href="tel:+918657211339" className="hover:text-white">+91 8657 211 339</a></li>
-            <li className="flex items-center gap-2"><MessageCircle size={14} className="text-amber-brand" /> <a href="https://wa.me/918657211339" target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a></li>
-            <li className="flex items-start gap-2"><Mail size={14} className="text-amber-brand mt-0.5" /> <a href="mailto:amazinggroups51@gmail.com" className="hover:text-white break-all">amazinggroups51@gmail.com</a></li>
-            <li className="flex items-start gap-2"><MapPin size={14} className="text-amber-brand mt-0.5" /> Jogeshwari West, Mumbai</li>
+            <li className="flex items-center gap-2">
+              <Phone size={14} className="text-amber-brand" />
+              <a href={`tel:${BRAND.phoneTel}`} className="hover:text-white">{BRAND.phoneDisplay}</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <MessageCircle size={14} className="text-amber-brand" />
+              <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
+            </li>
+            <li className="flex items-start gap-2">
+              <Mail size={14} className="text-amber-brand mt-0.5" />
+              <a href={`mailto:${BRAND.email}`} className="hover:text-white break-all">{BRAND.email}</a>
+            </li>
+            <li className="flex items-start gap-2">
+              <MapPin size={14} className="text-amber-brand mt-0.5" />
+              <a href={BRAND.mapUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white">
+                {BRAND.locationLabel}
+              </a>
+            </li>
           </ul>
         </div>
       </div>

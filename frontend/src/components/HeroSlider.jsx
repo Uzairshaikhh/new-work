@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 import { resolveMedia } from "../lib/api";
+import { waLink } from "../lib/brand";
 
 const HeroSlider = ({ slides = [], loading = false }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 35 });
@@ -64,9 +65,7 @@ const HeroSlider = ({ slides = [], loading = false }) => {
                       Explore Products <ArrowRight size={16} />
                     </a>
                     <a
-                      href={`https://wa.me/918657211339?text=${encodeURIComponent(
-                        "Hi Amazing Groups, I'd like a bulk quote."
-                      )}`}
+                      href={waLink("Hi Amazing Groups, I'd like a bulk quote.")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-amber"

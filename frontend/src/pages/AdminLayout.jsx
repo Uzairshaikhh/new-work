@@ -24,9 +24,14 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex" data-testid="admin-layout">
       <aside className="w-64 border-r border-[#D4AF37]/15 bg-[#080808] flex flex-col" data-testid="admin-sidebar">
-        <Link to="/" className="block p-8 border-b border-[#D4AF37]/15">
-          <div className="font-display text-xl gold-text">Amazing Groups</div>
-          <div className="text-[9px] tracking-[0.4em] text-neutral-500 uppercase mt-1">Atelier Console</div>
+        <Link to="/" className="block p-6 border-b border-[#D4AF37]/15">
+          <div className="flex items-center gap-3">
+            <img src="/ag-logo.png" alt="Amazing Groups" className="w-11 h-11 rounded-md object-cover" />
+            <div>
+              <div className="font-display text-base gold-text leading-none">Amazing Groups</div>
+              <div className="text-[9px] tracking-[0.4em] text-neutral-500 uppercase mt-1">Atelier Console</div>
+            </div>
+          </div>
         </Link>
         <nav className="flex-1 py-6 px-4 space-y-1">
           {navItems.map((it) => {

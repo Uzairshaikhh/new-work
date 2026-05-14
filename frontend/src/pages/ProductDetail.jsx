@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft, MessageCircle, Phone, Play, ShieldCheck, Truck, Package } from "lucide-react";
 import { api, resolveMedia } from "../lib/api";
+import { BRAND, waLink } from "../lib/brand";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
-
-const WHATSAPP = "918657211339";
-const PHONE = "+918657211339";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -80,7 +78,7 @@ const ProductDetail = () => {
   }
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
-  const waText = encodeURIComponent(`Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`);
+  const waHref = waLink(`Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`);
 
   return (
     <div className="min-h-screen bg-white" data-testid="product-detail-page">
@@ -131,10 +129,10 @@ const ProductDetail = () => {
               <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-8 text-base">{product.description}</p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                <a href={`https://wa.me/${WHATSAPP}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-amber flex-1" data-testid="detail-whatsapp-btn">
+                <a href={waHref} target="_blank" rel="noopener noreferrer" className="btn-amber flex-1" data-testid="detail-whatsapp-btn">
                   <MessageCircle size={16} /> Enquire via WhatsApp
                 </a>
-                <a href={`tel:${PHONE}`} className="btn-primary flex-1" data-testid="detail-call-btn">
+                <a href={`tel:${BRAND.phoneTel}`} className="btn-primary flex-1" data-testid="detail-call-btn">
                   <Phone size={16} /> Call the Team
                 </a>
               </div>

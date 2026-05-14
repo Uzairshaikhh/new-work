@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, MessageCircle, Menu, X, Phone, Mail, ShieldCheck, Truck, Package } from "lucide-react";
 import SearchOverlay from "./SearchOverlay";
-
-const WHATSAPP = "918657211339";
-const PHONE_DISPLAY = "+91 8657 211 339";
-const EMAIL = "amazinggroups51@gmail.com";
+import { BRAND, waLink } from "../lib/brand";
 
 const Navbar = () => {
   const location = useLocation();
@@ -43,9 +40,9 @@ const Navbar = () => {
     { to: "/", label: "Contact", hash: "contact" },
   ];
 
-  const bulkOrderHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
+  const bulkOrderHref = waLink(
     "Hi Amazing Groups, I'd like a bulk / corporate quote. Could you share details on pricing and lead times?"
-  )}`;
+  );
 
   return (
     <header data-testid="site-navbar" className="sticky top-0 z-50 bg-white">
@@ -67,19 +64,19 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex items-center gap-5 text-white/90">
-            <a href={`tel:${WHATSAPP}`} className="flex items-center gap-1.5 hover:text-amber-brand transition-colors">
-              <Phone size={13} className="text-amber-brand" /> {PHONE_DISPLAY}
+            <a href={`tel:${BRAND.phoneTel}`} className="flex items-center gap-1.5 hover:text-amber-brand transition-colors">
+              <Phone size={13} className="text-amber-brand" /> {BRAND.phoneDisplay}
             </a>
             <a
-              href={`https://wa.me/${WHATSAPP}`}
+              href={waLink()}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 hover:text-amber-brand transition-colors"
             >
               <MessageCircle size={13} className="text-amber-brand" /> WhatsApp Us
             </a>
-            <a href={`mailto:${EMAIL}`} className="flex items-center gap-1.5 hover:text-amber-brand transition-colors">
-              <Mail size={13} className="text-amber-brand" /> {EMAIL}
+            <a href={`mailto:${BRAND.email}`} className="flex items-center gap-1.5 hover:text-amber-brand transition-colors">
+              <Mail size={13} className="text-amber-brand" /> {BRAND.email}
             </a>
           </div>
         </div>
@@ -89,13 +86,15 @@ const Navbar = () => {
       <div className="border-b border-gray-100 bg-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-4 flex items-center justify-between gap-6">
           <Link to="/" className="flex items-center gap-3" data-testid="brand-logo">
-            <div className="w-11 h-11 bg-navy text-amber-brand flex items-center justify-center rounded-md font-display text-xl shadow-md">
-              AG
-            </div>
+            <img
+              src={BRAND.logoSrc}
+              alt="Amazing Groups"
+              className="w-12 h-12 rounded-md object-cover shadow-md"
+            />
             <div>
               <div className="font-display text-lg leading-none text-navy">Amazing Groups</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mt-1">
-                Corporate Gifting Solutions
+                Amazing Make You Happy
               </div>
             </div>
           </Link>

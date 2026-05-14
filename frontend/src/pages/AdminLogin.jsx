@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Lock } from "lucide-react";
+import { BRAND } from "../lib/brand";
 
 const AdminLogin = () => {
   const { admin, login, checking } = useAuth();
@@ -33,7 +34,7 @@ const AdminLogin = () => {
     <div className="min-h-screen hero-gradient flex items-center justify-center px-6" data-testid="admin-login-page">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="w-14 h-14 mx-auto bg-navy text-amber-brand flex items-center justify-center rounded-xl font-display text-2xl mb-4 shadow-lg">AG</div>
+          <img src={BRAND.logoSrc} alt="Amazing Groups" className="w-16 h-16 mx-auto rounded-xl shadow-lg mb-4 object-cover" />
           <div className="font-display text-2xl text-navy">Amazing Groups</div>
           <div className="text-xs uppercase tracking-[0.3em] text-gray-500 mt-2">Admin Console</div>
         </div>

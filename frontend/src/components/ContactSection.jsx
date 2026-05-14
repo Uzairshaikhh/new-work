@@ -1,13 +1,12 @@
 import { Phone, Mail, MapPin, ExternalLink, Info } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import { BRAND } from "../lib/brand";
 
 const ContactSection = () => {
-  const mapUrl = "https://www.google.com/maps/search/?api=1&query=Jogeshwari+West+Mumbai";
-
   const items = [
-    { icon: Phone, label: "Call us", value: "+91 8657 211 339", href: "tel:+918657211339", testid: "contact-phone" },
-    { icon: Mail, label: "Email us", value: "amazinggroups51@gmail.com", href: "mailto:amazinggroups51@gmail.com", testid: "contact-email" },
-    { icon: MapPin, label: "Visit us", value: "Jogeshwari West, Mumbai", href: mapUrl, testid: "contact-location" },
+    { icon: Phone, label: "Call us", value: BRAND.phoneDisplay, href: `tel:${BRAND.phoneTel}`, testid: "contact-phone" },
+    { icon: Mail, label: "Email us", value: BRAND.email, href: `mailto:${BRAND.email}`, testid: "contact-email" },
+    { icon: MapPin, label: "Visit us", value: BRAND.locationLabel, href: BRAND.mapUrl, testid: "contact-location" },
   ];
 
   return (
@@ -44,7 +43,7 @@ const ContactSection = () => {
         </div>
 
         <div className="text-center">
-          <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" data-testid="contact-map-btn">
+          <a href={BRAND.mapUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" data-testid="contact-map-btn">
             <ExternalLink size={16} /> View on Map
           </a>
         </div>
@@ -53,7 +52,6 @@ const ContactSection = () => {
   );
 };
 
-// "How to Order" section split out for clarity
 export const HowToOrderSection = () => {
   const steps = [
     { n: "01", title: "Choose Product", body: "Browse our catalogue and pick the items you love." },

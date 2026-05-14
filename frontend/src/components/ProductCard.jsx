@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { MessageCircle, Phone } from "lucide-react";
 import { resolveMedia } from "../lib/api";
-
-const WHATSAPP = "918657211339";
-const PHONE = "+918657211339";
+import { BRAND, waLink } from "../lib/brand";
 
 const ProductCard = ({ product }) => {
-  const waText = encodeURIComponent(
+  const waHref = waLink(
     `Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`
   );
 
@@ -48,7 +46,7 @@ const ProductCard = ({ product }) => {
 
         <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-2">
           <a
-            href={`https://wa.me/${WHATSAPP}?text=${waText}`}
+            href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
@@ -57,7 +55,7 @@ const ProductCard = ({ product }) => {
             <MessageCircle size={13} /> WhatsApp
           </a>
           <a
-            href={`tel:${PHONE}`}
+            href={`tel:${BRAND.phoneTel}`}
             className="inline-flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold rounded-lg bg-navy text-white hover:bg-navy-900 transition-colors"
             data-testid={`product-call-${product.id}`}
           >

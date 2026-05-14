@@ -1,5 +1,6 @@
 import { Palette, Package, Boxes, Percent, MessageCircle } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import { waLink } from "../lib/brand";
 
 const FEATURES = [
   { icon: Palette, title: "Logo Printing", body: "High-quality branding on every piece." },
@@ -16,9 +17,7 @@ const TIERS = [
 ];
 
 const BulkPricing = () => {
-  const waHref = `https://wa.me/918657211339?text=${encodeURIComponent(
-    "Hi Amazing Groups, I'd like a custom bulk quote."
-  )}`;
+  const waHref = waLink("Hi Amazing Groups, I'd like a custom bulk quote.");
 
   return (
     <section className="py-20 md:py-28 px-6 lg:px-10 bg-white" data-testid="bulk-pricing-section">

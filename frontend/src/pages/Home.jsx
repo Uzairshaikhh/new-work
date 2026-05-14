@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { api } from "../lib/api";
+import { waLink } from "../lib/brand";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import HeroSlider from "../components/HeroSlider";
@@ -46,9 +47,7 @@ const Home = () => {
     };
   }, []);
 
-  const bulkCtaHref = `https://wa.me/918657211339?text=${encodeURIComponent(
-    "Hi Amazing Groups, I'd like a bulk quote."
-  )}`;
+  const bulkCtaHref = waLink("Hi Amazing Groups, I'd like a bulk quote.");
 
   return (
     <div className="min-h-screen bg-white" data-testid="home-page">
