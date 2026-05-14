@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ChevronLeft, MessageCircle, Phone, Play } from "lucide-react";
+import { ChevronLeft, MessageCircle, Phone, Play, ShieldCheck, Truck, Package } from "lucide-react";
 import { api, resolveMedia } from "../lib/api";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
@@ -21,7 +21,7 @@ const ProductDetail = () => {
 
   useSEO({
     title: product?.name || "Product",
-    description: product?.description?.slice(0, 160) || "Handcrafted luxury gift from Amazing Groups Mumbai.",
+    description: product?.description?.slice(0, 160) || "Premium corporate gift from Amazing Groups Mumbai.",
   });
 
   useEffect(() => {
@@ -29,45 +29,37 @@ const ProductDetail = () => {
     setLoading(true);
     setRelated([]);
     window.scrollTo({ top: 0, behavior: "instant" });
-    api
-      .get(`/products/${id}`)
+    api.get(`/products/${id}`)
       .then(async (r) => {
         if (!mounted) return;
         setProduct(r.data);
-        // Fetch similar: same category first, fallback to general products
         try {
           const sameCat = await api.get(`/categories/${r.data.category_id}/products`);
           let pool = sameCat.data.filter((p) => p.id !== r.data.id);
           if (pool.length < 4) {
             const all = await api.get("/products");
-            const extras = all.data.filter(
-              (p) => p.id !== r.data.id && !pool.some((q) => q.id === p.id)
-            );
+            const extras = all.data.filter((p) => p.id !== r.data.id && !pool.some((q) => q.id === p.id));
             pool = [...pool, ...extras];
           }
           if (mounted) setRelated(pool.slice(0, 4));
-        } catch {
-          // ignore
-        }
+        } catch {}
       })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [id]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="pt-32 px-6 lg:px-10 max-w-[1400px] mx-auto">
+        <div className="pt-12 px-6 lg:px-10 max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="aspect-[4/5] bg-[#141414] animate-pulse" />
+            <div className="aspect-square bg-gray-100 rounded-2xl animate-pulse" />
             <div className="space-y-6">
-              <div className="h-12 bg-[#141414] animate-pulse w-3/4" />
-              <div className="h-4 bg-[#141414] animate-pulse w-1/2" />
-              <div className="h-32 bg-[#141414] animate-pulse" />
+              <div className="h-12 bg-gray-100 animate-pulse rounded w-3/4" />
+              <div className="h-4 bg-gray-100 animate-pulse rounded w-1/2" />
+              <div className="h-32 bg-gray-100 animate-pulse rounded" />
             </div>
           </div>
         </div>
@@ -77,136 +69,105 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <div className="pt-40 text-center">
-          <p className="text-neutral-400 uppercase tracking-[0.3em] text-sm">Product not found</p>
-          <Link to="/" className="btn-ghost-gold mt-8 inline-flex">Return Home</Link>
+          <p className="text-gray-500 uppercase tracking-wider text-sm">Product not found</p>
+          <Link to="/" className="btn-primary mt-8 inline-flex">Return Home</Link>
         </div>
       </div>
     );
   }
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
-  const waText = encodeURIComponent(
-    `Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details?`
-  );
+  const waText = encodeURIComponent(`Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]" data-testid="product-detail-page">
+    <div className="min-h-screen bg-white" data-testid="product-detail-page">
       <Navbar />
 
-      <div className="pt-32 pb-24 px-6 lg:px-10">
+      <div className="py-12 px-6 lg:px-10">
         <div className="max-w-[1400px] mx-auto">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-neutral-300 hover:text-[#D4AF37] text-[10px] uppercase tracking-[0.3em] mb-10 transition-colors"
-            data-testid="back-link"
-          >
-            <ChevronLeft size={14} /> Back
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-navy hover:text-amber-brand mb-8 transition-colors" data-testid="back-link">
+            <ChevronLeft size={16} /> Back
           </Link>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-            {/* Gallery */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
             <div data-testid="product-gallery">
-              <div className="relative aspect-[4/5] overflow-hidden border border-[#D4AF37]/15">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-amber-cream">
                 {showVideo && product.video_url ? (
-                  <video
-                    src={resolveMedia(product.video_url)}
-                    controls
-                    autoPlay
-                    className="absolute inset-0 w-full h-full object-cover"
-                    data-testid="product-video"
-                  />
+                  <video src={resolveMedia(product.video_url)} controls autoPlay className="absolute inset-0 w-full h-full object-cover" data-testid="product-video" />
                 ) : (
-                  <img
-                    src={resolveMedia(images[activeImage])}
-                    alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  <img src={resolveMedia(images[activeImage])} alt={product.name} className="absolute inset-0 w-full h-full object-cover" />
                 )}
               </div>
               <div className="mt-4 flex gap-3 flex-wrap">
                 {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      setActiveImage(i);
-                      setShowVideo(false);
-                    }}
-                    className={`w-20 h-20 overflow-hidden border transition-all ${
-                      activeImage === i && !showVideo
-                        ? "border-[#D4AF37]"
-                        : "border-[#D4AF37]/15 hover:border-[#D4AF37]/40"
-                    }`}
-                    data-testid={`thumb-${i}`}
-                  >
+                  <button key={i} onClick={() => { setActiveImage(i); setShowVideo(false); }}
+                    className={`w-20 h-20 overflow-hidden rounded-lg border-2 transition-all ${activeImage === i && !showVideo ? "border-amber-brand" : "border-gray-100 hover:border-amber-brand/40"}`}
+                    data-testid={`thumb-${i}`}>
                     <img src={resolveMedia(img)} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
                 {product.video_url && (
-                  <button
-                    onClick={() => setShowVideo(true)}
-                    className={`w-20 h-20 flex items-center justify-center border transition-all ${
-                      showVideo
-                        ? "border-[#D4AF37] text-[#D4AF37]"
-                        : "border-[#D4AF37]/15 text-neutral-400 hover:border-[#D4AF37]/40"
-                    }`}
-                    data-testid="thumb-video"
-                  >
-                    <Play size={20} strokeWidth={1.5} />
+                  <button onClick={() => setShowVideo(true)}
+                    className={`w-20 h-20 flex items-center justify-center rounded-lg border-2 bg-cream transition-all ${showVideo ? "border-amber-brand text-amber-brand" : "border-gray-100 text-navy hover:border-amber-brand/40"}`}
+                    data-testid="thumb-video">
+                    <Play size={22} />
                   </button>
                 )}
               </div>
             </div>
 
-            {/* Info */}
             <div data-testid="product-info">
-              <div className="eyebrow mb-5">Amazing Groups</div>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05] mb-6">
-                {product.name}
-              </h1>
-              <div className="divider-gold mb-8" />
+              <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold mb-4">Amazing Groups</div>
+              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl text-navy leading-[1.1] mb-5">{product.name}</h1>
               {product.price && (
-                <div className="text-2xl font-display gold-text mb-6">{product.price}</div>
+                <div className="flex items-baseline gap-2 mb-5">
+                  <span className="text-sm text-gray-500">Starting from</span>
+                  <span className="font-display text-3xl text-amber-brand">{product.price}</span>
+                </div>
               )}
-              <p className="text-neutral-300 font-light text-base md:text-lg leading-relaxed mb-10 whitespace-pre-line">
-                {product.description}
-              </p>
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-8 text-base">{product.description}</p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href={`https://wa.me/${WHATSAPP}?text=${waText}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-gold flex-1"
-                  data-testid="detail-whatsapp-btn"
-                >
-                  <MessageCircle size={16} strokeWidth={1.8} />
-                  Enquire via WhatsApp
+              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                <a href={`https://wa.me/${WHATSAPP}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-amber flex-1" data-testid="detail-whatsapp-btn">
+                  <MessageCircle size={16} /> Enquire via WhatsApp
                 </a>
-                <a
-                  href={`tel:${PHONE}`}
-                  className="btn-ghost-gold flex-1"
-                  data-testid="detail-call-btn"
-                >
-                  <Phone size={16} strokeWidth={1.8} />
-                  Call the Atelier
+                <a href={`tel:${PHONE}`} className="btn-primary flex-1" data-testid="detail-call-btn">
+                  <Phone size={16} /> Call the Team
                 </a>
               </div>
 
-              <div className="mt-12 pt-8 border-t border-[#D4AF37]/15 space-y-3 text-sm font-light text-neutral-400">
+              <div className="grid grid-cols-3 gap-3 mb-8">
+                {[
+                  { icon: ShieldCheck, label: "GST Billing", sub: "Available" },
+                  { icon: Truck, label: "Pan-India", sub: "Delivery" },
+                  { icon: Package, label: "Bulk Orders", sub: "Welcome" },
+                ].map((b) => {
+                  const Icon = b.icon;
+                  return (
+                    <div key={b.label} className="bg-cream rounded-xl p-4 text-center border border-amber-soft/60">
+                      <Icon size={20} className="text-amber-brand mx-auto mb-2" />
+                      <div className="text-xs font-semibold text-navy">{b.label}</div>
+                      <div className="text-[10px] text-gray-500 uppercase tracking-wider">{b.sub}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="rounded-2xl border border-gray-100 p-6 bg-cream-soft space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="uppercase tracking-[0.2em] text-[10px] text-neutral-500">Crafted in</span>
-                  <span>Mumbai, India</span>
+                  <span className="text-gray-500">Crafted in</span>
+                  <span className="font-medium text-navy">Mumbai, India</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="uppercase tracking-[0.2em] text-[10px] text-neutral-500">Customisation</span>
-                  <span>Bespoke on request</span>
+                  <span className="text-gray-500">Customisation</span>
+                  <span className="font-medium text-navy">Logo, packaging, colour</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="uppercase tracking-[0.2em] text-[10px] text-neutral-500">Lead time</span>
-                  <span>3 – 14 days</span>
+                  <span className="text-gray-500">Lead time</span>
+                  <span className="font-medium text-navy">3 – 14 days</span>
                 </div>
               </div>
             </div>
@@ -215,20 +176,11 @@ const ProductDetail = () => {
       </div>
 
       {related.length > 0 && (
-        <section
-          className="relative py-24 md:py-32 px-6 lg:px-10 border-t border-[#D4AF37]/15 bg-[#080808]"
-          data-testid="related-products-section"
-        >
+        <section className="py-20 md:py-24 px-6 lg:px-10 bg-cream-soft" data-testid="related-products-section">
           <div className="max-w-[1400px] mx-auto">
-            <SectionHeading
-              eyebrow="You may also like"
-              title="Suggested pieces"
-              subtitle="Other pieces from our atelier — handpicked alongside this one."
-            />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="related-products-grid">
-              {related.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
+            <SectionHeading eyebrow="You may also like" title="Suggested products" subtitle="Other corporate-favourite picks from our atelier." />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5" data-testid="related-products-grid">
+              {related.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
         </section>

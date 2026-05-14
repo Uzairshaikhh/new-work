@@ -11,12 +11,8 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  if (checking) {
-    return <div className="min-h-screen bg-[#0a0a0a]" />;
-  }
-  if (admin) {
-    return <Navigate to="/admin-x9k2l-secret/dashboard" replace />;
-  }
+  if (checking) return <div className="min-h-screen bg-cream-soft" />;
+  if (admin) return <Navigate to="/admin-x9k2l-secret/dashboard" replace />;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -34,60 +30,38 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6 grain" data-testid="admin-login-page">
+    <div className="min-h-screen hero-gradient flex items-center justify-center px-6" data-testid="admin-login-page">
       <div className="w-full max-w-md">
-        <div className="text-center mb-12">
-          <div className="font-display text-3xl gold-text tracking-[0.05em]">Amazing Groups</div>
-          <div className="text-[10px] tracking-[0.45em] text-neutral-500 uppercase mt-2">
-            Private · Atelier Access
-          </div>
+        <div className="text-center mb-10">
+          <div className="w-14 h-14 mx-auto bg-navy text-amber-brand flex items-center justify-center rounded-xl font-display text-2xl mb-4 shadow-lg">AG</div>
+          <div className="font-display text-2xl text-navy">Amazing Groups</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-gray-500 mt-2">Admin Console</div>
         </div>
 
-        <div className="bg-[#0e0e0e] border border-[#D4AF37]/20 p-10 gold-glow">
-          <div className="flex items-center gap-3 mb-8">
-            <Lock size={18} strokeWidth={1.4} className="text-[#D4AF37]" />
-            <h1 className="font-display text-2xl text-white">Administrator Sign In</h1>
+        <div className="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-9 h-9 rounded-lg bg-amber-soft text-amber-brand flex items-center justify-center">
+              <Lock size={16} />
+            </div>
+            <h1 className="font-display text-xl text-navy">Administrator Sign In</h1>
           </div>
 
-          <form onSubmit={submit} className="space-y-5">
+          <form onSubmit={submit} className="space-y-4">
             <div>
-              <label className="eyebrow block mb-3">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                autoFocus
-                className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light tracking-wide transition-colors"
-                data-testid="admin-username-input"
-              />
+              <label className="text-xs uppercase tracking-wider text-gray-500 font-semibold block mb-2">Username</label>
+              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus
+                className="w-full bg-cream-soft border border-gray-200 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-navy"
+                data-testid="admin-username-input" />
             </div>
-
             <div>
-              <label className="eyebrow block mb-3">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light tracking-wide transition-colors"
-                data-testid="admin-password-input"
-              />
+              <label className="text-xs uppercase tracking-wider text-gray-500 font-semibold block mb-2">Password</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                className="w-full bg-cream-soft border border-gray-200 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-navy"
+                data-testid="admin-password-input" />
             </div>
-
-            {error && (
-              <div className="text-sm text-red-400 font-light" data-testid="admin-login-error">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-gold w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              data-testid="admin-login-submit"
-            >
-              {submitting ? "Authenticating..." : "Enter Atelier"}
+            {error && <div className="text-sm text-red-600" data-testid="admin-login-error">{error}</div>}
+            <button type="submit" disabled={submitting} className="btn-amber w-full mt-2 disabled:opacity-50" data-testid="admin-login-submit">
+              {submitting ? "Authenticating..." : "Enter Console"}
             </button>
           </form>
         </div>

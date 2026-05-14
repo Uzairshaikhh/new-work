@@ -7,56 +7,61 @@ const PHONE = "+918657211339";
 
 const ProductCard = ({ product }) => {
   const waText = encodeURIComponent(
-    `Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details?`
+    `Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`
   );
 
   return (
     <div
-      className="group relative bg-[#0e0e0e] border border-[#D4AF37]/15 hover:border-[#D4AF37]/45 transition-all duration-500 hover:gold-glow flex flex-col"
+      className="group bg-white border border-gray-100 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col"
       data-testid={`product-card-${product.id}`}
     >
-      <Link to={`/product/${product.id}`} className="block relative aspect-[4/5] overflow-hidden">
+      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-amber-cream">
         <img
           src={resolveMedia(product.image_url)}
           alt={product.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {product.featured && (
+          <span className="absolute top-3 left-3 bg-amber-brand text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+            Popular
+          </span>
+        )}
       </Link>
 
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-5 flex flex-col flex-1">
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display text-2xl text-white leading-tight hover:text-[#D4AF37] transition-colors">
+          <h3 className="font-display text-lg text-navy hover:text-amber-brand transition-colors leading-snug">
             {product.name}
           </h3>
         </Link>
         {product.price && (
-          <div className="eyebrow mt-2 text-neutral-500">{product.price}</div>
+          <div className="mt-2 flex items-baseline gap-1">
+            <span className="text-xs text-gray-500">From</span>
+            <span className="text-base font-bold text-amber-brand">{product.price}</span>
+          </div>
         )}
         {product.description && (
-          <p className="text-sm text-neutral-400 font-light mt-3 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-gray-600 mt-2 line-clamp-2 leading-relaxed">
             {product.description}
           </p>
         )}
 
-        <div className="mt-6 pt-5 border-t border-[#D4AF37]/10 flex gap-2">
+        <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-2">
           <a
             href={`https://wa.me/${WHATSAPP}?text=${waText}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost-gold flex-1 !px-3 !py-3 !text-[10px]"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
             data-testid={`product-whatsapp-${product.id}`}
           >
-            <MessageCircle size={14} strokeWidth={1.5} />
-            WhatsApp
+            <MessageCircle size={13} /> WhatsApp
           </a>
           <a
             href={`tel:${PHONE}`}
-            className="btn-gold flex-1 !px-3 !py-3 !text-[10px]"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold rounded-lg bg-navy text-white hover:bg-navy-900 transition-colors"
             data-testid={`product-call-${product.id}`}
           >
-            <Phone size={14} strokeWidth={1.8} />
-            Call
+            <Phone size={13} /> Call
           </a>
         </div>
       </div>

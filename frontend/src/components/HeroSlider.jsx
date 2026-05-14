@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 import { resolveMedia } from "../lib/api";
 
 const HeroSlider = ({ slides = [], loading = false }) => {
@@ -20,62 +20,107 @@ const HeroSlider = ({ slides = [], loading = false }) => {
 
   useEffect(() => {
     if (!emblaApi || slides.length <= 1) return;
-    const id = setInterval(() => emblaApi.scrollNext(), 6000);
+    const id = setInterval(() => emblaApi.scrollNext(), 6500);
     return () => clearInterval(id);
   }, [emblaApi, slides.length]);
 
   if (loading) {
-    return (
-      <div className="relative w-full h-[92vh] bg-[#111] animate-pulse" data-testid="hero-skeleton" />
-    );
-  }
-
-  if (slides.length === 0) {
-    return (
-      <div className="relative w-full h-[92vh] bg-[#0a0a0a] flex items-center justify-center grain" data-testid="hero-empty">
-        <div className="text-center px-6">
-          <div className="eyebrow mb-6">Amazing Groups</div>
-          <h1 className="font-display text-5xl md:text-7xl text-white">Bespoke Gifts, Crafted With Intention</h1>
-        </div>
-      </div>
-    );
+    return <div className="w-full h-[600px] hero-gradient animate-pulse" data-testid="hero-skeleton" />;
   }
 
   return (
-    <section className="relative w-full" data-testid="hero-slider">
+    <section className="relative hero-gradient overflow-hidden" data-testid="hero-slider">
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex">
-          {slides.map((s) => (
+          {(slides.length ? slides : [{ id: "fallback" }]).map((s) => (
             <div
               key={s.id}
-              className="relative flex-[0_0_100%] h-[92vh] min-h-[600px]"
+              className="relative flex-[0_0_100%]"
               data-testid={`hero-slide-${s.id}`}
             >
-              <img
-                src={resolveMedia(s.image_url)}
-                alt={s.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent" />
-              <div className="absolute inset-0 bg-[#0a0a0a]/40" />
-              <div className="relative h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex flex-col justify-center">
-                <div className="max-w-xl animate-fade-up">
-                  <div className="eyebrow mb-6">Amazing Groups · Mumbai</div>
-                  <h1 className="font-display text-5xl md:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">
-                    {s.title}
+              <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                {/* Left content */}
+                <div className="animate-fade-up">
+                  <div className="pill-badge mb-6">
+                    <ShieldCheck size={14} />
+                    India's Trusted B2B Gifting Partner
+                  </div>
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-navy leading-[1.05] mb-6">
+                    {s.title || "Premium Corporate Gifts"}{" "}
+                    <span className="text-amber-brand">
+                      {s.highlight || "with Your Brand Identity"}
+                    </span>
                   </h1>
-                  {s.subtitle && (
-                    <p className="text-base md:text-lg text-neutral-300 font-light leading-relaxed mb-10 max-w-md">
-                      {s.subtitle}
-                    </p>
-                  )}
-                  <a
-                    href={s.cta_link || "#categories"}
-                    className="btn-gold"
-                    data-testid={`hero-cta-${s.id}`}
-                  >
-                    {s.cta_label || "Explore"}
-                  </a>
+                  <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-10 max-w-lg">
+                    {s.subtitle ||
+                      "Custom printed wallets, bottles, diaries & more — perfect for bulk corporate orders. Premium quality, on-time delivery, and pan-India reach."}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href="#products"
+                      className="btn-primary"
+                      data-testid={`hero-cta-primary-${s.id}`}
+                    >
+                      Explore Products <ArrowRight size={16} />
+                    </a>
+                    <a
+                      href={`https://wa.me/918657211339?text=${encodeURIComponent(
+                        "Hi Amazing Groups, I'd like a bulk quote."
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-amber"
+                      data-testid={`hero-cta-secondary-${s.id}`}
+                    >
+                      Get Bulk Quote
+                    </a>
+                  </div>
+
+                  <div className="mt-10 flex items-center gap-4">
+                    <div className="flex -space-x-3">
+                      {[
+                        "https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?crop=entropy&cs=srgb&fm=jpg&w=80&q=80",
+                        "https://images.unsplash.com/photo-1770058428154-9eee8a6a1fbb?crop=entropy&cs=srgb&fm=jpg&w=80&q=80",
+                        "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=80&q=80",
+                      ].map((u, i) => (
+                        <img
+                          key={i}
+                          src={u}
+                          alt=""
+                          className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                        />
+                      ))}
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-navy">Trusted by 500+ Businesses</div>
+                      <div className="text-xs text-gray-500">From startups to Fortune 500</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right image card */}
+                <div className="relative animate-fade-up" style={{ animationDelay: "150ms" }}>
+                  <div className="relative aspect-[5/4] rounded-2xl overflow-hidden shadow-2xl shadow-navy/10">
+                    <img
+                      src={
+                        s.image_url
+                          ? resolveMedia(s.image_url)
+                          : "https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85"
+                      }
+                      alt={s.title || "Corporate gift"}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Floating starting price card */}
+                  <div className="absolute -bottom-6 left-6 bg-white rounded-xl px-5 py-4 shadow-xl card-shadow flex items-center gap-3" data-testid="hero-price-card">
+                    <Sparkles size={20} className="text-amber-brand" />
+                    <div>
+                      <div className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Starting from</div>
+                      <div className="text-xl font-display text-navy">
+                        ₹80 <span className="text-sm text-gray-500 font-medium">/piece</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,26 +134,26 @@ const HeroSlider = ({ slides = [], loading = false }) => {
             onClick={scrollPrev}
             aria-label="Previous"
             data-testid="hero-prev"
-            className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0a0a0a] transition-all duration-300"
+            className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-white rounded-full shadow-lg text-navy hover:text-amber-brand transition-colors"
           >
-            <ChevronLeft size={20} strokeWidth={1.5} />
+            <ChevronLeft size={20} />
           </button>
           <button
             onClick={scrollNext}
             aria-label="Next"
             data-testid="hero-next"
-            className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0a0a0a] transition-all duration-300"
+            className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-white rounded-full shadow-lg text-navy hover:text-amber-brand transition-colors"
           >
-            <ChevronRight size={20} strokeWidth={1.5} />
+            <ChevronRight size={20} />
           </button>
-          <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-3" data-testid="hero-dots">
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2" data-testid="hero-dots">
             {slides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollTo(i)}
                 aria-label={`Slide ${i + 1}`}
-                className={`h-[2px] transition-all duration-500 ${
-                  selectedIndex === i ? "w-12 bg-[#D4AF37]" : "w-6 bg-white/30"
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  selectedIndex === i ? "w-10 bg-amber-brand" : "w-3 bg-navy/20"
                 }`}
               />
             ))}

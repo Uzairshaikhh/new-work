@@ -1,13 +1,18 @@
 const SectionHeading = ({ eyebrow, title, subtitle, align = "center" }) => {
   return (
-    <div className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : "text-left"} mb-16`}>
-      {eyebrow && <div className="eyebrow mb-5">{eyebrow}</div>}
-      <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05] mb-6">
+    <div className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : "text-left"} mb-14`}>
+      {eyebrow && (
+        <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold mb-4">
+          {eyebrow}
+        </div>
+      )}
+      <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-navy leading-[1.15] underline-amber inline-block">
         {title}
       </h2>
-      <div className={`divider-gold ${align === "center" ? "mx-auto" : ""} mb-6`} />
       {subtitle && (
-        <p className="text-neutral-400 font-light text-base md:text-lg leading-relaxed">{subtitle}</p>
+        <p className="text-gray-600 text-base md:text-lg leading-relaxed mt-10 max-w-xl mx-auto">
+          {subtitle}
+        </p>
       )}
     </div>
   );

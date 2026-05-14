@@ -25,18 +25,25 @@ Premium luxury website UI for a "Customized Gift Products" brand named **Amazing
 - Same black/gold luxury aesthetic across storefront and admin
 - Loading states + empty states
 
-## What's Implemented (2026-02-14)
-- ✅ Backend: auth (JWT) + brute-force lockout (5 fails → 15 min), CRUD endpoints for sliders/categories/products, object-storage upload, public catalog endpoints, admin stats
-- ✅ Seed admin + sample sliders/categories/products on startup
-- ✅ Storefront: Home, CategoryPage, ProductDetail, Contact, Footer
-- ✅ Admin: Login, Sidebar layout, Dashboard, Sliders/Categories/Products CRUD with media uploader
-- ✅ Working luxury search overlay with **recent search history** (last 6, persisted in localStorage)
-- ✅ "Bulk Order" navbar button → WhatsApp with prefilled bulk enquiry
-- ✅ "How To Order" 3-step process + customisation cancellation policy callout
-- ✅ Navbar Categories + Contact links smooth-scroll to sections (works on home page AND when navigating from another page)
-- ✅ Sonner toast notifications for ALL admin CRUD actions (create/update/delete/reorder)
-- ✅ Up/Down reorder buttons for sliders (persisted via order field)
-- ✅ SEO meta tags per page via useSEO hook (title + description + og:title)
+## What's Implemented (2026-02-14, redesigned 2026-02-14)
+- ✅ **Complete redesign** to light B2B corporate aesthetic matching reference site (cream + navy + amber)
+- ✅ Typography: Plus Jakarta Sans (bold) — no more serif headings
+- ✅ Top utility bar (navy): GST Billing, Bulk Orders, Pan-India Delivery + phone/whatsapp/email
+- ✅ White navbar with AG logo, primary nav, search circle, amber "Get Bulk Quote" CTA
+- ✅ Hero with peach gradient bg, pill badge "India's Trusted B2B Gifting Partner", dual CTA, social proof avatars, floating "Starting from ₹80" price card
+- ✅ Shop By Category with white cards + amber "View Products" CTA
+- ✅ Popular Corporate Products grid (4-col) with "Popular" badges + green WhatsApp / navy Call CTAs
+- ✅ Bulk pricing tier table with "Most Popular" highlighted in navy
+- ✅ Customise features grid (Logo Printing / Custom Packaging / Multiple Colours / Bulk Discounts)
+- ✅ How To Order 4-step section + customisation cancellation policy callout
+- ✅ Trusted Clients marquee (TATA, Infosys, HDFC Bank, etc.)
+- ✅ Testimonials section (3 reviews with avatars)
+- ✅ Final navy CTA banner with WhatsApp + Contact buttons
+- ✅ Light cream contact section with white cards + navy "View on Map" CTA
+- ✅ Navy footer with 4 columns (brand, nav, services, contact)
+- ✅ Light theme also applied to: Category page (peach gradient hero), Product detail (white layout with cream trust badges), Search overlay, Admin Login
+- ✅ Admin panel CRUD still functional with backwards-compat CSS class aliases mapped to new amber/navy palette
+- ✅ All original features preserved: auth + brute-force lockout, CRUD, file upload, search history, toasts, reorder, SEO, related products, bulk-order WhatsApp deeplink
 
 ## Admin Credentials
 See `/app/memory/test_credentials.md`.
