@@ -20,7 +20,7 @@ const BulkPricing = () => {
   const waHref = waLink("Hi Amazing Groups, I'd like a custom bulk quote.");
 
   return (
-    <section className="py-20 md:py-28 px-6 lg:px-10 bg-white" data-testid="bulk-pricing-section">
+    <section className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="bulk-pricing-section">
       <div className="max-w-[1400px] mx-auto">
         <SectionHeading
           eyebrow="Volume Pricing"
@@ -36,7 +36,7 @@ const BulkPricing = () => {
               className={`relative rounded-2xl p-6 text-center transition-all ${
                 i === 2
                   ? "bg-navy text-white shadow-2xl shadow-navy/20 scale-[1.03]"
-                  : "bg-cream border border-amber-soft/60"
+                  : "bg-[#14141a] border border-amber-soft/60"
               }`}
               data-testid={`bulk-tier-${t.qty.replace(/\s+/g, "-")}`}
             >
@@ -48,7 +48,7 @@ const BulkPricing = () => {
               <div className={`text-xs uppercase tracking-wider font-semibold mb-2 ${i === 2 ? "text-amber-brand" : "text-gray-500"}`}>
                 {t.label}
               </div>
-              <div className={`font-display text-2xl mb-1 ${i === 2 ? "text-white" : "text-navy"}`}>
+              <div className={`font-display text-2xl mb-1 ${i === 2 ? "text-white" : "text-white"}`}>
                 {t.qty}
               </div>
               <div className={`text-[11px] uppercase tracking-wider mb-3 ${i === 2 ? "text-white/60" : "text-gray-500"}`}>
@@ -62,9 +62,9 @@ const BulkPricing = () => {
         </div>
 
         {/* Features */}
-        <div className="bg-cream-soft rounded-3xl p-8 md:p-12">
+        <div className="bg-[#0e0e13] rounded-3xl p-8 md:p-12">
           <div className="text-center mb-10">
-            <h3 className="font-display text-2xl md:text-3xl text-navy mb-3">
+            <h3 className="font-display text-2xl md:text-3xl text-white mb-3">
               Make it yours — customise your products
             </h3>
             <p className="text-gray-600 text-sm md:text-base max-w-xl mx-auto">
@@ -78,13 +78,13 @@ const BulkPricing = () => {
               return (
                 <div
                   key={f.title}
-                  className="bg-white rounded-2xl p-6 text-center card-shadow"
+                  className="bg-[#15151a] rounded-2xl p-6 text-center card-shadow"
                   data-testid={`customize-feature-${f.title.toLowerCase().replace(/\s+/g, "-")}`}
                 >
-                  <div className="w-12 h-12 mx-auto rounded-xl bg-amber-soft text-amber-brand flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 mx-auto rounded-xl bg-[#d4af37]/15 text-amber-brand flex items-center justify-center mb-4">
                     <Icon size={20} />
                   </div>
-                  <div className="font-display text-base text-navy mb-1">{f.title}</div>
+                  <div className="font-display text-base text-white mb-1">{f.title}</div>
                   <p className="text-xs text-gray-600 leading-relaxed">{f.body}</p>
                 </div>
               );

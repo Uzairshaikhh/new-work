@@ -34,14 +34,14 @@ const CategoryPage = () => {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-white" data-testid="category-page">
+    <div className="min-h-screen bg-[#15151a]" data-testid="category-page">
       <Navbar />
 
       <section className="hero-gradient py-16 px-6 lg:px-10">
         <div className="max-w-[1400px] mx-auto">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-navy hover:text-amber-brand mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-white hover:text-amber-brand mb-8 transition-colors"
             data-testid="back-to-home"
           >
             <ChevronLeft size={16} /> Back to Home
@@ -49,11 +49,11 @@ const CategoryPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
               <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold mb-4">Collection</div>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-navy leading-[1.05] mb-4">
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05] mb-4">
                 {category?.name || "Loading..."}
               </h1>
               {category?.description && (
-                <p className="text-gray-700 mt-5 max-w-lg text-base md:text-lg">{category.description}</p>
+                <p className="text-gray-200 mt-5 max-w-lg text-base md:text-lg">{category.description}</p>
               )}
             </div>
             {category?.image_url && (
@@ -70,11 +70,11 @@ const CategoryPage = () => {
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="aspect-[3/4] bg-gray-100 rounded-2xl animate-pulse" />
+                <div key={i} className="aspect-[3/4] bg-[#1a1a22] rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-20 border-2 border-dashed border-gray-200 rounded-2xl">
+            <div className="text-center py-20 border-2 border-dashed border-[#d4af37]/20 rounded-2xl">
               <p className="text-gray-500 text-sm uppercase tracking-wider">Pieces coming soon</p>
             </div>
           ) : (

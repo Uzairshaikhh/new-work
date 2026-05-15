@@ -6,7 +6,7 @@ const SectionHeading = ({ eyebrow, title, subtitle, align = "center" }) => {
           {eyebrow}
         </div>
       )}
-      <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-navy leading-[1.15] underline-amber inline-block">
+      <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-white leading-[1.15] underline-amber inline-block">
         {title}
       </h2>
       {subtitle && (

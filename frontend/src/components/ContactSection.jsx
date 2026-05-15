@@ -10,7 +10,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 md:py-28 px-6 lg:px-10 bg-amber-cream" data-testid="contact-section">
+    <section id="contact" className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="contact-section">
       <div className="max-w-[1400px] mx-auto">
         <SectionHeading
           eyebrow="Get In Touch"
@@ -28,13 +28,13 @@ const ContactSection = () => {
                 target={it.href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
                 data-testid={it.testid}
-                className="group bg-white rounded-2xl p-7 card-shadow card-shadow-hover border border-gray-100"
+                className="group bg-[#15151a] rounded-2xl p-7 card-shadow card-shadow-hover border border-[#d4af37]/15"
               >
-                <div className="w-12 h-12 rounded-xl bg-amber-soft text-amber-brand flex items-center justify-center mb-5">
+                <div className="w-12 h-12 rounded-xl bg-[#d4af37]/15 text-amber-brand flex items-center justify-center mb-5">
                   <Icon size={20} strokeWidth={2} />
                 </div>
                 <div className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">{it.label}</div>
-                <div className="font-display text-lg text-navy group-hover:text-amber-brand transition-colors break-words">
+                <div className="font-display text-lg text-white group-hover:text-amber-brand transition-colors break-words">
                   {it.value}
                 </div>
               </a>
@@ -61,7 +61,7 @@ export const HowToOrderSection = () => {
   ];
 
   return (
-    <section id="how-to-order" className="py-20 md:py-28 px-6 lg:px-10 bg-white" data-testid="how-to-order-section">
+    <section id="how-to-order" className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="how-to-order-section">
       <div className="max-w-[1400px] mx-auto">
         <SectionHeading
           eyebrow="How To Order"
@@ -71,11 +71,11 @@ export const HowToOrderSection = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {steps.map((s) => (
-            <div key={s.n} className="bg-cream rounded-2xl p-7 border border-amber-soft/60 hover:border-amber-brand/60 transition-colors" data-testid={`order-step-${s.n}`}>
+            <div key={s.n} className="bg-[#14141a] rounded-2xl p-7 border border-amber-soft/60 hover:border-amber-brand/60 transition-colors" data-testid={`order-step-${s.n}`}>
               <div className="w-14 h-14 rounded-xl bg-amber-brand text-white flex items-center justify-center font-display text-xl mb-5 shadow-md shadow-amber-brand/30">
                 {s.n}
               </div>
-              <h3 className="font-display text-lg text-navy mb-2">{s.title}</h3>
+              <h3 className="font-display text-lg text-white mb-2">{s.title}</h3>
               <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
             </div>
           ))}

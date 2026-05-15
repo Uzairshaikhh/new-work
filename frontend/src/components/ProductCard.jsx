@@ -10,10 +10,10 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="group bg-white border border-gray-100 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col"
+      className="group bg-[#15151a] border border-[#d4af37]/15 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col"
       data-testid={`product-card-${product.id}`}
     >
-      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-amber-cream">
+      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-[#15151a]">
         <img
           src={resolveMedia(product.image_url)}
           alt={product.name}
@@ -28,7 +28,7 @@ const ProductCard = ({ product }) => {
 
       <div className="p-5 flex flex-col flex-1">
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display text-lg text-navy hover:text-amber-brand transition-colors leading-snug">
+          <h3 className="font-display text-lg text-white hover:text-amber-brand transition-colors leading-snug">
             {product.name}
           </h3>
         </Link>
@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
           </p>
         )}
 
-        <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-2">
+        <div className="mt-4 pt-4 border-t border-[#d4af37]/15 grid grid-cols-2 gap-2">
           <a
             href={waHref}
             target="_blank"

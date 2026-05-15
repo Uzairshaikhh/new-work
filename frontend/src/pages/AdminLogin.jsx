@@ -12,7 +12,7 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  if (checking) return <div className="min-h-screen bg-cream-soft" />;
+  if (checking) return <div className="min-h-screen bg-[#0e0e13]" />;
   if (admin) return <Navigate to="/admin-x9k2l-secret/dashboard" replace />;
 
   const submit = async (e) => {
@@ -35,29 +35,29 @@ const AdminLogin = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <img src={BRAND.logoSrc} alt="Amazing Groups" className="w-16 h-16 mx-auto rounded-xl shadow-lg mb-4 object-cover" />
-          <div className="font-display text-2xl text-navy">Amazing Groups</div>
+          <div className="font-display text-2xl text-white">Amazing Groups</div>
           <div className="text-xs uppercase tracking-[0.3em] text-gray-500 mt-2">Admin Console</div>
         </div>
 
-        <div className="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+        <div className="bg-[#15151a] rounded-2xl card-shadow p-8 border border-[#d4af37]/15">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-lg bg-amber-soft text-amber-brand flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-[#d4af37]/15 text-amber-brand flex items-center justify-center">
               <Lock size={16} />
             </div>
-            <h1 className="font-display text-xl text-navy">Administrator Sign In</h1>
+            <h1 className="font-display text-xl text-white">Administrator Sign In</h1>
           </div>
 
           <form onSubmit={submit} className="space-y-4">
             <div>
               <label className="text-xs uppercase tracking-wider text-gray-500 font-semibold block mb-2">Username</label>
               <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus
-                className="w-full bg-cream-soft border border-gray-200 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-navy"
+                className="w-full bg-[#0e0e13] border border-[#d4af37]/20 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-white"
                 data-testid="admin-username-input" />
             </div>
             <div>
               <label className="text-xs uppercase tracking-wider text-gray-500 font-semibold block mb-2">Password</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
-                className="w-full bg-cream-soft border border-gray-200 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-navy"
+                className="w-full bg-[#0e0e13] border border-[#d4af37]/20 focus:border-amber-brand outline-none px-4 py-3 rounded-lg text-white"
                 data-testid="admin-password-input" />
             </div>
             {error && <div className="text-sm text-red-600" data-testid="admin-login-error">{error}</div>}

@@ -50,11 +50,11 @@ const Home = () => {
   const bulkCtaHref = waLink("Hi Amazing Groups, I'd like a bulk quote.");
 
   return (
-    <div className="min-h-screen bg-white" data-testid="home-page">
+    <div className="min-h-screen bg-[#15151a]" data-testid="home-page">
       <Navbar />
       <HeroSlider slides={sliders} loading={loading} />
 
-      <section id="categories" className="py-20 md:py-28 px-6 lg:px-10 bg-cream-soft" data-testid="categories-section">
+      <section id="categories" className="py-20 md:py-28 px-6 lg:px-10 bg-[#0e0e13]" data-testid="categories-section">
         <div className="max-w-[1400px] mx-auto">
           <SectionHeading
             eyebrow="Shop By Category"
@@ -65,14 +65,14 @@ const Home = () => {
         </div>
       </section>
 
-      <section id="products" className="py-20 md:py-28 px-6 lg:px-10 bg-white" data-testid="featured-section">
+      <section id="products" className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="featured-section">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
               <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold mb-3">
                 Popular Picks
               </div>
-              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-navy leading-[1.15]">
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-white leading-[1.15]">
                 Popular corporate products
               </h2>
             </div>
@@ -81,11 +81,11 @@ const Home = () => {
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="aspect-[3/4] bg-gray-100 rounded-2xl animate-pulse" />
+                <div key={i} className="aspect-[3/4] bg-[#1a1a22] rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : featured.length === 0 ? (
-            <div className="text-center py-16 border-2 border-dashed border-gray-200 rounded-2xl">
+            <div className="text-center py-16 border-2 border-dashed border-[#d4af37]/20 rounded-2xl">
               <p className="text-gray-500 text-sm uppercase tracking-wider">No products yet</p>
             </div>
           ) : (

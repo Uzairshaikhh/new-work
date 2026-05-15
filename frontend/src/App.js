@@ -15,7 +15,7 @@ import AdminProducts from "@/pages/admin/AdminProducts";
 
 function App() {
   return (
-    <div className="App bg-white min-h-screen text-navy">
+    <div className="App bg-[#0a0a0d] min-h-screen text-white">
       <AuthProvider>
         <Toaster
           theme="dark"

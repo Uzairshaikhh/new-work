@@ -46,13 +46,13 @@ const HeroSlider = ({ slides = [], loading = false }) => {
                     <ShieldCheck size={14} />
                     India's Trusted B2B Gifting Partner
                   </div>
-                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-navy leading-[1.05] mb-6">
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-6">
                     {s.title || "Premium Corporate Gifts"}{" "}
                     <span className="text-amber-brand">
                       {s.highlight || "with Your Brand Identity"}
                     </span>
                   </h1>
-                  <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-10 max-w-lg">
+                  <p className="text-gray-200 text-base md:text-lg leading-relaxed mb-10 max-w-lg">
                     {s.subtitle ||
                       "Custom printed wallets, bottles, diaries & more — perfect for bulk corporate orders. Premium quality, on-time delivery, and pan-India reach."}
                   </p>
@@ -91,7 +91,7 @@ const HeroSlider = ({ slides = [], loading = false }) => {
                       ))}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-navy">Trusted by 500+ Businesses</div>
+                      <div className="text-sm font-semibold text-white">Trusted by 500+ Businesses</div>
                       <div className="text-xs text-gray-500">From startups to Fortune 500</div>
                     </div>
                   </div>
@@ -111,11 +111,11 @@ const HeroSlider = ({ slides = [], loading = false }) => {
                     />
                   </div>
                   {/* Floating starting price card */}
-                  <div className="absolute -bottom-6 left-6 bg-white rounded-xl px-5 py-4 shadow-xl card-shadow flex items-center gap-3" data-testid="hero-price-card">
+                  <div className="absolute -bottom-6 left-6 bg-[#15151a] rounded-xl px-5 py-4 shadow-xl card-shadow flex items-center gap-3" data-testid="hero-price-card">
                     <Sparkles size={20} className="text-amber-brand" />
                     <div>
                       <div className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Starting from</div>
-                      <div className="text-xl font-display text-navy">
+                      <div className="text-xl font-display text-white">
                         ₹80 <span className="text-sm text-gray-500 font-medium">/piece</span>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ const HeroSlider = ({ slides = [], loading = false }) => {
             onClick={scrollPrev}
             aria-label="Previous"
             data-testid="hero-prev"
-            className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-white rounded-full shadow-lg text-navy hover:text-amber-brand transition-colors"
+            className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-[#15151a] rounded-full shadow-lg text-white hover:text-amber-brand transition-colors"
           >
             <ChevronLeft size={20} />
           </button>
@@ -141,7 +141,7 @@ const HeroSlider = ({ slides = [], loading = false }) => {
             onClick={scrollNext}
             aria-label="Next"
             data-testid="hero-next"
-            className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-white rounded-full shadow-lg text-navy hover:text-amber-brand transition-colors"
+            className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 items-center justify-center bg-[#15151a] rounded-full shadow-lg text-white hover:text-amber-brand transition-colors"
           >
             <ChevronRight size={20} />
           </button>

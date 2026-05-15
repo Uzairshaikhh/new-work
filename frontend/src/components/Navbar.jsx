@@ -45,7 +45,7 @@ const Navbar = () => {
   );
 
   return (
-    <header data-testid="site-navbar" className="sticky top-0 z-50 bg-white">
+    <header data-testid="site-navbar" className="sticky top-0 z-50 bg-[#15151a]">
       {/* Top utility bar */}
       <div className="bg-navy text-white text-[11px] md:text-xs hidden md:block" data-testid="utility-bar">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-2.5 flex items-center justify-between gap-6">
@@ -83,7 +83,7 @@ const Navbar = () => {
       </div>
 
       {/* Main bar */}
-      <div className="border-b border-gray-100 bg-white">
+      <div className="border-b border-[#d4af37]/15 bg-[#15151a]">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-4 flex items-center justify-between gap-6">
           <Link to="/" className="flex items-center gap-3" data-testid="brand-logo">
             <img
@@ -92,7 +92,7 @@ const Navbar = () => {
               className="w-12 h-12 rounded-md object-cover shadow-md"
             />
             <div>
-              <div className="font-display text-lg leading-none text-navy">Amazing Groups</div>
+              <div className="font-display text-lg leading-none text-white">Amazing Groups</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mt-1">
                 Amazing Make You Happy
               </div>
@@ -106,7 +106,7 @@ const Navbar = () => {
                 href={l.hash ? `/#${l.hash}` : l.to}
                 onClick={(e) => handleNavClick(e, l.to, l.hash)}
                 data-testid={`nav-link-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className="text-sm font-medium text-navy hover:text-amber-brand transition-colors"
+                className="text-sm font-medium text-white hover:text-amber-brand transition-colors"
               >
                 {l.label}
               </a>
@@ -117,7 +117,7 @@ const Navbar = () => {
             <button
               data-testid="nav-search-btn"
               onClick={() => setSearchOpen(true)}
-              className="hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-gray-200 text-navy hover:border-amber-brand hover:text-amber-brand transition-colors"
+              className="hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-[#d4af37]/20 text-white hover:border-amber-brand hover:text-amber-brand transition-colors"
               aria-label="Search"
             >
               <Search size={16} strokeWidth={2} />
@@ -132,7 +132,7 @@ const Navbar = () => {
               Get Bulk Quote
             </a>
             <button
-              className="lg:hidden text-navy"
+              className="lg:hidden text-white"
               onClick={() => setMobileOpen(!mobileOpen)}
               data-testid="mobile-menu-toggle"
             >
@@ -145,13 +145,13 @@ const Navbar = () => {
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-b border-gray-100 px-6 py-5 space-y-3" data-testid="mobile-menu">
+        <div className="lg:hidden bg-[#15151a] border-b border-[#d4af37]/15 px-6 py-5 space-y-3" data-testid="mobile-menu">
           {links.map((l) => (
             <a
               key={l.label}
               href={l.hash ? `/#${l.hash}` : l.to}
               onClick={(e) => handleNavClick(e, l.to, l.hash)}
-              className="block py-2 text-sm font-medium text-navy hover:text-amber-brand"
+              className="block py-2 text-sm font-medium text-white hover:text-amber-brand"
             >
               {l.label}
             </a>
@@ -161,7 +161,7 @@ const Navbar = () => {
               setMobileOpen(false);
               setSearchOpen(true);
             }}
-            className="block py-2 text-sm font-medium text-navy hover:text-amber-brand"
+            className="block py-2 text-sm font-medium text-white hover:text-amber-brand"
           >
             Search
           </button>

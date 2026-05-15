@@ -64,11 +64,11 @@ const SearchOverlay = ({ open, onClose }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-xl animate-fade-in" data-testid="search-overlay">
+    <div className="fixed inset-0 z-[100] bg-[#0a0a0d]/95 backdrop-blur-xl animate-fade-in" data-testid="search-overlay">
       <div className="max-w-3xl mx-auto px-6 pt-16 pb-12">
         <div className="flex items-center justify-between mb-8">
           <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold">Search the catalogue</div>
-          <button onClick={onClose} className="text-navy hover:text-amber-brand transition-colors" data-testid="search-close-btn" aria-label="Close search">
+          <button onClick={onClose} className="text-white hover:text-amber-brand transition-colors" data-testid="search-close-btn" aria-label="Close search">
             <X size={22} />
           </button>
         </div>
@@ -77,7 +77,7 @@ const SearchOverlay = ({ open, onClose }) => {
           <SearchIcon size={22} className="text-amber-brand" />
           <input type="text" autoFocus value={query} onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products, categories..."
-            className="flex-1 bg-transparent outline-none font-display text-xl md:text-3xl text-navy placeholder:text-gray-400"
+            className="flex-1 bg-transparent outline-none font-display text-xl md:text-3xl text-white placeholder:text-gray-500"
             data-testid="search-input" />
         </div>
 
@@ -93,7 +93,7 @@ const SearchOverlay = ({ open, onClose }) => {
               <div className="flex flex-wrap gap-2">
                 {history.map((h) => (
                   <button key={h} onClick={() => setQuery(h)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 hover:border-amber-brand hover:bg-amber-cream text-sm text-navy transition-all"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#d4af37]/20 hover:border-amber-brand hover:bg-[#15151a] text-sm text-white transition-all"
                     data-testid={`search-history-item-${h}`}>
                     <Clock size={12} className="text-amber-brand" /> {h}
                   </button>
@@ -115,9 +115,9 @@ const SearchOverlay = ({ open, onClose }) => {
               <div className="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">Categories</div>
               <div className="space-y-1">
                 {filteredCategories.map((c) => (
-                  <Link key={c.id} to={`/category/${c.id}`} onClick={onClose} className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream border border-transparent hover:border-amber-soft transition-all" data-testid={`search-cat-${c.id}`}>
+                  <Link key={c.id} to={`/category/${c.id}`} onClick={onClose} className="flex items-center gap-4 p-3 rounded-xl hover:bg-[#14141a] border border-transparent hover:border-amber-soft transition-all" data-testid={`search-cat-${c.id}`}>
                     <img src={resolveMedia(c.image_url)} alt="" className="w-12 h-12 object-cover rounded-lg" />
-                    <div className="font-display text-lg text-navy">{c.name}</div>
+                    <div className="font-display text-lg text-white">{c.name}</div>
                   </Link>
                 ))}
               </div>
@@ -129,10 +129,10 @@ const SearchOverlay = ({ open, onClose }) => {
               <div className="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">Products</div>
               <div className="space-y-1">
                 {filteredProducts.map((p) => (
-                  <Link key={p.id} to={`/product/${p.id}`} onClick={onClose} className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream border border-transparent hover:border-amber-soft transition-all" data-testid={`search-product-${p.id}`}>
+                  <Link key={p.id} to={`/product/${p.id}`} onClick={onClose} className="flex items-center gap-4 p-3 rounded-xl hover:bg-[#14141a] border border-transparent hover:border-amber-soft transition-all" data-testid={`search-product-${p.id}`}>
                     <img src={resolveMedia(p.image_url)} alt="" className="w-12 h-12 object-cover rounded-lg" />
                     <div className="flex-1 min-w-0">
-                      <div className="font-display text-base text-navy truncate">{p.name}</div>
+                      <div className="font-display text-base text-white truncate">{p.name}</div>
                       {p.description && <div className="text-xs text-gray-500 truncate">{p.description}</div>}
                     </div>
                   </Link>

@@ -24,7 +24,7 @@ const REVIEWS = [
 
 const Testimonials = () => {
   return (
-    <section className="py-20 md:py-24 px-6 lg:px-10 bg-cream" data-testid="testimonials-section">
+    <section className="py-20 md:py-24 px-6 lg:px-10 bg-[#14141a]" data-testid="testimonials-section">
       <div className="max-w-[1400px] mx-auto">
         <SectionHeading eyebrow="Client Stories" title="What our clients say" />
 
@@ -32,17 +32,17 @@ const Testimonials = () => {
           {REVIEWS.map((r) => (
             <div
               key={r.name}
-              className="bg-white rounded-2xl p-7 card-shadow border border-gray-100"
+              className="bg-[#15151a] rounded-2xl p-7 card-shadow border border-[#d4af37]/15"
               data-testid={`testimonial-${r.name.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <Quote size={28} className="text-amber-brand mb-4" />
-              <p className="text-gray-700 leading-relaxed text-[15px] mb-6">
+              <p className="text-gray-200 leading-relaxed text-[15px] mb-6">
                 "{r.body}"
               </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3 pt-4 border-t border-[#d4af37]/15">
                 <img src={r.avatar} alt={r.name} className="w-11 h-11 rounded-full object-cover" />
                 <div>
-                  <div className="font-semibold text-navy">{r.name}</div>
+                  <div className="font-semibold text-white">{r.name}</div>
                   <div className="text-xs text-gray-500">{r.role}</div>
                 </div>
               </div>
