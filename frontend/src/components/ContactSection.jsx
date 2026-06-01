@@ -10,15 +10,11 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="contact-section">
-      <div className="max-w-[1400px] mx-auto">
-        <SectionHeading
-          eyebrow="Get In Touch"
-          title="Let's start the conversation"
-          subtitle="Tell us about your gifting needs. Our team responds within hours during business days."
-        />
+    <section id="contact" className="py-10 px-6 lg:px-10" data-testid="contact-section">
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHeading eyebrow="Get In Touch" title="Contact Us" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {items.map((it) => {
             const Icon = it.icon;
             return (
@@ -28,14 +24,16 @@ const ContactSection = () => {
                 target={it.href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
                 data-testid={it.testid}
-                className="group bg-[#15151a] rounded-2xl p-7 card-shadow card-shadow-hover border border-[#d4af37]/15"
+                className="group bg-[#15151a] rounded-lg p-5 border border-[#d4af37]/15 hover:border-[#d4af37]/45 transition-all flex items-center gap-4"
               >
-                <div className="w-12 h-12 rounded-xl bg-[#d4af37]/15 text-amber-brand flex items-center justify-center mb-5">
-                  <Icon size={20} strokeWidth={2} />
+                <div className="w-10 h-10 rounded-md bg-[#d4af37]/12 text-amber-brand flex items-center justify-center flex-shrink-0">
+                  <Icon size={18} />
                 </div>
-                <div className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">{it.label}</div>
-                <div className="font-display text-lg text-white group-hover:text-amber-brand transition-colors break-words">
-                  {it.value}
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{it.label}</div>
+                  <div className="font-display text-sm text-white group-hover:text-amber-brand transition-colors break-words leading-tight mt-0.5">
+                    {it.value}
+                  </div>
                 </div>
               </a>
             );
@@ -43,8 +41,8 @@ const ContactSection = () => {
         </div>
 
         <div className="text-center">
-          <a href={BRAND.mapUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" data-testid="contact-map-btn">
-            <ExternalLink size={16} /> View on Map
+          <a href={BRAND.mapUrl} target="_blank" rel="noopener noreferrer" className="btn-primary !py-2.5 !px-5 !text-sm" data-testid="contact-map-btn">
+            <ExternalLink size={14} /> View on Map
           </a>
         </div>
       </div>
@@ -52,46 +50,8 @@ const ContactSection = () => {
   );
 };
 
-export const HowToOrderSection = () => {
-  const steps = [
-    { n: "01", title: "Choose Product", body: "Browse our catalogue and pick the items you love." },
-    { n: "02", title: "Share Requirements", body: "Send us your logo, design and quantity via WhatsApp or call." },
-    { n: "03", title: "Get Quote & Mockup", body: "Our team reverts with a quote and a visual mockup for approval." },
-    { n: "04", title: "Confirm & Delivery", body: "Approve, we craft your order, and ship pan-India." },
-  ];
-
-  return (
-    <section id="how-to-order" className="py-20 md:py-28 px-6 lg:px-10 bg-[#15151a]" data-testid="how-to-order-section">
-      <div className="max-w-[1400px] mx-auto">
-        <SectionHeading
-          eyebrow="How To Order"
-          title="A simple 4-step process"
-          subtitle="From your first message to delivery — straightforward and personally handled."
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {steps.map((s) => (
-            <div key={s.n} className="bg-[#14141a] rounded-2xl p-7 border border-amber-soft/60 hover:border-amber-brand/60 transition-colors" data-testid={`order-step-${s.n}`}>
-              <div className="w-14 h-14 rounded-xl bg-amber-brand text-white flex items-center justify-center font-display text-xl mb-5 shadow-md shadow-amber-brand/30">
-                {s.n}
-              </div>
-              <h3 className="font-display text-lg text-white mb-2">{s.title}</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 max-w-3xl mx-auto p-7 rounded-2xl bg-navy text-white flex items-start gap-4" data-testid="order-policy">
-          <Info size={22} className="text-amber-brand flex-shrink-0 mt-1" />
-          <p className="text-sm md:text-base leading-relaxed text-white/85">
-            <span className="font-semibold text-white">A note on customisation:</span> every piece is handcrafted to your specifications.{" "}
-            <span className="text-amber-brand font-semibold">Once an order is placed it cannot be cancelled.</span>{" "}
-            Please confirm all design, personalisation and quantity details with our team before committing.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
+// "How To Order" was moved into BulkPricing.jsx (the side-by-side panel).
+// We keep an empty wrapper here so existing imports keep working without errors.
+export const HowToOrderSection = () => null;
 
 export default ContactSection;

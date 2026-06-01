@@ -1,4 +1,4 @@
-import { Quote } from "lucide-react";
+import { Star } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 
 const REVIEWS = [
@@ -12,38 +12,40 @@ const REVIEWS = [
     name: "Priya Sharma",
     role: "HR Manager, Business Mart",
     avatar: "https://images.unsplash.com/photo-1770058428154-9eee8a6a1fbb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
-    body: "The customisation and packaging were perfect. Highly recommended for any team!",
+    body: "The customization and packaging were perfect. Highly recommended!",
   },
   {
     name: "Amit Verma",
     role: "Procurement Head, BuildMax",
     avatar: "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
-    body: "Great products at the best prices for bulk orders. Very satisfied with the experience.",
+    body: "Great products at the best prices for bulk orders. Very satisfied!",
   },
 ];
 
 const Testimonials = () => {
   return (
-    <section className="py-20 md:py-24 px-6 lg:px-10 bg-[#14141a]" data-testid="testimonials-section">
-      <div className="max-w-[1400px] mx-auto">
-        <SectionHeading eyebrow="Client Stories" title="What our clients say" />
+    <section className="py-10 px-6 lg:px-10" data-testid="testimonials-section">
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHeading eyebrow="Reviews" title="What Our Clients Say" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {REVIEWS.map((r) => (
             <div
               key={r.name}
-              className="bg-[#15151a] rounded-2xl p-7 card-shadow border border-[#d4af37]/15"
+              className="bg-[#15151a] rounded-lg p-5 border border-[#d4af37]/15"
               data-testid={`testimonial-${r.name.toLowerCase().replace(/\s+/g, "-")}`}
             >
-              <Quote size={28} className="text-amber-brand mb-4" />
-              <p className="text-gray-200 leading-relaxed text-[15px] mb-6">
-                "{r.body}"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[#d4af37]/15">
-                <img src={r.avatar} alt={r.name} className="w-11 h-11 rounded-full object-cover" />
+              <div className="flex gap-0.5 mb-3">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} size={12} className="fill-amber-brand text-amber-brand" />
+                ))}
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4 italic">"{r.body}"</p>
+              <div className="flex items-center gap-2.5 pt-3 border-t border-[#d4af37]/10">
+                <img src={r.avatar} alt={r.name} className="w-8 h-8 rounded-full object-cover" />
                 <div>
-                  <div className="font-semibold text-white">{r.name}</div>
-                  <div className="text-xs text-gray-500">{r.role}</div>
+                  <div className="text-xs font-semibold text-white">– {r.name}</div>
+                  <div className="text-[10px] text-gray-400">{r.role}</div>
                 </div>
               </div>
             </div>
