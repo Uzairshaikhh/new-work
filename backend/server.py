@@ -1,17 +1,16 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import os
-
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
 import logging
 import uuid
 import bcrypt
 import jwt
-import requests
+import mimetypes
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
+
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
 
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, UploadFile, File, Response, Header, Query
 from starlette.middleware.cors import CORSMiddleware
@@ -27,7 +26,7 @@ ADMIN_PASSWORD = os.environ['ADMIN_PASSWORD']
 EMERGENT_KEY = os.environ.get('EMERGENT_LLM_KEY')
 APP_NAME = os.environ.get('APP_NAME', 'amazing-groups')
 
-STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
+LOCAL_STORAGE_ROOT = ROOT_DIR / "storage"
 JWT_ALGORITHM = "HS256"
 
 client = AsyncIOMotorClient(MONGO_URL)
@@ -39,63 +38,25 @@ api_router = APIRouter(prefix="/api")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-storage_key: Optional[str] = None
-
 
 def init_storage():
-    global storage_key
-    if storage_key:
-        return storage_key
-    try:
-        resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
-        resp.raise_for_status()
-        storage_key = resp.json()["storage_key"]
-        logger.info("Object storage initialized")
-        return storage_key
-    except Exception as e:
-        logger.error(f"Storage init failed: {e}")
-        return None
+    logger.warning("Object storage integration disabled. Uploads will use local filesystem storage.")
+    return None
 
 
 def put_object(path: str, data: bytes, content_type: str) -> dict:
-    key = init_storage()
-    if not key:
-        raise HTTPException(status_code=500, detail="Storage not available")
-    resp = requests.put(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key, "Content-Type": content_type},
-        data=data, timeout=120,
-    )
-    if resp.status_code == 403:
-        # Re-init and retry once
-        global storage_key
-        storage_key = None
-        key = init_storage()
-        resp = requests.put(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key, "Content-Type": content_type},
-            data=data, timeout=120,
-        )
-    resp.raise_for_status()
-    return resp.json()
+    local_path = LOCAL_STORAGE_ROOT / path
+    local_path.parent.mkdir(parents=True, exist_ok=True)
+    local_path.write_bytes(data)
+    return {"path": path}
 
 
 def get_object(path: str):
-    key = init_storage()
-    resp = requests.get(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key}, timeout=60,
-    )
-    if resp.status_code == 403:
-        global storage_key
-        storage_key = None
-        key = init_storage()
-        resp = requests.get(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key}, timeout=60,
-        )
-    resp.raise_for_status()
-    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
+    local_path = LOCAL_STORAGE_ROOT / path
+    if not local_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    content_type = mimetypes.guess_type(str(local_path))[0] or "application/octet-stream"
+    return local_path.read_bytes(), content_type
 
 
 # ---------- Auth helpers ----------
@@ -587,12 +548,6 @@ async def verify_database_connection():
 async def startup_event():
     # Verify MongoDB connectivity before continuing
     await verify_database_connection()
-
-    # Init storage in background (non-blocking)
-    try:
-        init_storage()
-    except Exception as e:
-        logger.warning(f"Storage init at startup failed (will retry on demand): {e}")
 
     # Indexes
     await db.admins.create_index("username", unique=True)
