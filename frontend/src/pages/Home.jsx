@@ -11,9 +11,9 @@ import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
 import TrustedClients from "../components/TrustedClients";
+import SocialLinks from "../components/SocialLinks";
 import Testimonials from "../components/Testimonials";
 import BulkPricing from "../components/BulkPricing";
-import Newsletter from "../components/Newsletter";
 
 const Home = () => {
   const [sliders, setSliders] = useState([]);
@@ -91,6 +91,7 @@ const Home = () => {
       <BulkPricing />
 
       <TrustedClients />
+      <SocialLinks />
       <Testimonials />
 
       {/* CTA banner */}
@@ -115,7 +116,6 @@ const Home = () => {
         </div>
       </section>
 
-      <Newsletter />
       <ContactSection />
       <Footer />
     </div>

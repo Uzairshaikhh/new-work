@@ -158,19 +158,36 @@ class SliderIn(BaseModel):
 
 class CategoryIn(BaseModel):
     name: str
-    image_url: str
+    slug: Optional[str] = ""
     description: Optional[str] = ""
+    image_url: str
+    status: Optional[str] = "active"
+    sort_order: int = 0
+
+
+class SubcategoryIn(BaseModel):
+    category_id: str
+    name: str
+    slug: Optional[str] = ""
+    description: Optional[str] = ""
+    image_url: str
+    status: Optional[str] = "active"
+    sort_order: int = 0
 
 
 class ProductIn(BaseModel):
     category_id: str
+    subcategory_id: Optional[str] = ""
     name: str
+    slug: Optional[str] = ""
     description: str = ""
     image_url: str
     images: List[str] = []
     video_url: Optional[str] = ""
     price: Optional[str] = ""
     featured: bool = False
+    status: Optional[str] = "active"
+    sort_order: int = 0
 
 
 # ---------- Public Endpoints ----------
@@ -188,8 +205,16 @@ async def list_sliders():
 
 @api_router.get("/categories")
 async def list_categories():
-    items = await db.categories.find({}, {"_id": 0}).sort("created_at", 1).to_list(500)
+    items = await db.categories.find({}, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(500)
     return items
+
+
+@api_router.get("/categories/slug/{slug}")
+async def get_category_by_slug(slug: str):
+    item = await db.categories.find_one({"slug": slug}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return item
 
 
 @api_router.get("/categories/{category_id}")
@@ -202,17 +227,68 @@ async def get_category(category_id: str):
 
 @api_router.get("/categories/{category_id}/products")
 async def list_category_products(category_id: str):
-    items = await db.products.find({"category_id": category_id}, {"_id": 0}).sort("created_at", 1).to_list(500)
+    items = await db.products.find({"category_id": category_id}, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(500)
+    return items
+
+
+@api_router.get("/subcategories")
+async def list_subcategories():
+    items = await db.subcategories.find({}, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(500)
+    return items
+
+
+@api_router.get("/subcategories/category/{category_id}")
+async def list_subcategories_by_category(category_id: str):
+    items = await db.subcategories.find({"category_id": category_id}, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(500)
+    return items
+
+
+@api_router.get("/subcategories/slug/{slug}")
+async def get_subcategory_by_slug(slug: str):
+    item = await db.subcategories.find_one({"slug": slug}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    return item
+
+
+@api_router.get("/subcategories/{subcategory_id}")
+async def get_subcategory(subcategory_id: str):
+    item = await db.subcategories.find_one({"id": subcategory_id}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    return item
+
+
+@api_router.get("/subcategories/{subcategory_id}/products")
+async def list_subcategory_products(subcategory_id: str):
+    items = await db.products.find({"subcategory_id": subcategory_id}, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(500)
     return items
 
 
 @api_router.get("/products")
-async def list_products(featured: Optional[bool] = None, limit: int = 100):
+async def list_products(
+    featured: Optional[bool] = None,
+    category_id: Optional[str] = None,
+    subcategory_id: Optional[str] = None,
+    limit: int = 100,
+):
     q = {}
     if featured is not None:
         q["featured"] = featured
-    items = await db.products.find(q, {"_id": 0}).sort("created_at", 1).to_list(limit)
+    if category_id:
+        q["category_id"] = category_id
+    if subcategory_id:
+        q["subcategory_id"] = subcategory_id
+    items = await db.products.find(q, {"_id": 0}).sort([("sort_order", 1), ("created_at", 1)]).to_list(limit)
     return items
+
+
+@api_router.get("/products/slug/{slug}")
+async def get_product_by_slug(slug: str):
+    item = await db.products.find_one({"slug": slug}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return item
 
 
 @api_router.get("/products/{product_id}")
@@ -359,8 +435,39 @@ async def delete_category(category_id: str, admin=Depends(get_current_admin)):
     res = await db.categories.delete_one({"id": category_id})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Category not found")
-    # cascade delete products
+    # cascade delete products and subcategories
     await db.products.delete_many({"category_id": category_id})
+    await db.subcategories.delete_many({"category_id": category_id})
+    return {"ok": True}
+
+
+# ---------- Admin: Subcategories CRUD ----------
+
+@api_router.post("/admin/subcategories")
+async def create_subcategory(payload: SubcategoryIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.subcategories.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@api_router.put("/admin/subcategories/{subcategory_id}")
+async def update_subcategory(subcategory_id: str, payload: SubcategoryIn, admin=Depends(get_current_admin)):
+    res = await db.subcategories.update_one({"id": subcategory_id}, {"$set": payload.model_dump()})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    item = await db.subcategories.find_one({"id": subcategory_id}, {"_id": 0})
+    return item
+
+
+@api_router.delete("/admin/subcategories/{subcategory_id}")
+async def delete_subcategory(subcategory_id: str, admin=Depends(get_current_admin)):
+    res = await db.subcategories.delete_one({"id": subcategory_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    await db.products.delete_many({"subcategory_id": subcategory_id})
     return {"ok": True}
 
 
@@ -399,6 +506,7 @@ async def delete_product(product_id: str, admin=Depends(get_current_admin)):
 async def stats(admin=Depends(get_current_admin)):
     return {
         "categories": await db.categories.count_documents({}),
+        "subcategories": await db.subcategories.count_documents({}),
         "products": await db.products.count_documents({}),
         "sliders": await db.sliders.count_documents({}),
     }
@@ -466,8 +574,20 @@ SAMPLE_PRODUCTS = [
 ]
 
 
+async def verify_database_connection():
+    try:
+        await db.command("ping")
+    except Exception as exc:
+        logger.error("MongoDB connection failed at startup. Please ensure MongoDB is running and reachable at %s.", MONGO_URL)
+        logger.error("MongoDB startup error: %s", exc)
+        raise
+
+
 @app.on_event("startup")
 async def startup_event():
+    # Verify MongoDB connectivity before continuing
+    await verify_database_connection()
+
     # Init storage in background (non-blocking)
     try:
         init_storage()

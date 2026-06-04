@@ -177,8 +177,8 @@ const ProductDetail = () => {
         <section className="py-20 md:py-24 px-6 lg:px-10 bg-[#0e0e13]" data-testid="related-products-section">
           <div className="max-w-[1400px] mx-auto">
             <SectionHeading eyebrow="You may also like" title="Suggested products" subtitle="Other corporate-favourite picks from our atelier." />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5" data-testid="related-products-grid">
-              {related.map((p) => <ProductCard key={p.id} product={p} />)}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-testid="related-products-grid">
+              {related.map((p) => <ProductCard key={p.id} product={p} compact />)}
             </div>
           </div>
         </section>

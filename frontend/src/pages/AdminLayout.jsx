@@ -13,6 +13,7 @@ const AdminLayout = () => {
     { to: "/admin-x9k2l-secret/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
     { to: "/admin-x9k2l-secret/sliders", icon: Images, label: "Sliders" },
     { to: "/admin-x9k2l-secret/categories", icon: FolderTree, label: "Categories" },
+    { to: "/admin-x9k2l-secret/subcategories", icon: FolderTree, label: "Subcategories" },
     { to: "/admin-x9k2l-secret/products", icon: Package, label: "Products" },
   ];
 

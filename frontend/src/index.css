@@ -41,6 +41,11 @@
   }
   body { margin: 0; }
   ::selection { background: #d4af37; color: #0a0a0d; }
+  
+  /* Apply yellow/gold color filter permanently to brand logo */
+  img[src="/ag-logo.png"] {
+    filter: brightness(1.2) saturate(1.4) hue-rotate(-15deg) drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+  }
 }
 
 @layer utilities {
@@ -49,6 +54,13 @@
     font-weight: 800;
     letter-spacing: -0.02em;
   }
+  
+  /* Apply yellow/gold color filter permanently to all brand logos */
+  [data-testid="brand-logo"] img,
+  img[alt="Amazing Groups"] {
+    filter: brightness(1.4) saturate(1.8) hue-rotate(-8deg) contrast(1.2) drop-shadow(0 0 12px rgba(212, 175, 55, 0.5)) !important;
+  }
+  
   .text-navy { color: #f5f5f7; }
   .bg-navy { background-color: #08080b; }
   .text-amber-brand { color: #d4af37; }

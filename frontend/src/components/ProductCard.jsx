@@ -1,19 +1,21 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, Phone } from "lucide-react";
 import { resolveMedia } from "../lib/api";
-import { BRAND, waLink } from "../lib/brand";
+import { waLink } from "../lib/brand";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, compact = false }) => {
   const waHref = waLink(
     `Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`
   );
 
   return (
     <div
-      className="group bg-[#15151a] border border-[#d4af37]/15 rounded-lg overflow-hidden hover:border-[#d4af37]/45 transition-all flex flex-col"
+      className={`group bg-[#15151a] border border-[#d4af37]/15 rounded-lg overflow-hidden hover:border-[#d4af37]/45 transition-all flex flex-col ${compact ? "text-[9px]" : ""}`}
       data-testid={`product-card-${product.id}`}
     >
-      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-[#0e0e13]">
+      <Link
+        to={`/product/${product.id}`}
+        className={`block relative ${compact ? "aspect-[4/3]" : "aspect-square"} overflow-hidden bg-[#0e0e13]`}
+      >
         <img
           src={resolveMedia(product.image_url)}
           alt={product.name}
@@ -26,9 +28,9 @@ const ProductCard = ({ product }) => {
         )}
       </Link>
 
-      <div className="p-3 flex flex-col flex-1">
+      <div className={`${compact ? "p-2" : "p-3"} flex flex-col flex-1`}>
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display text-sm text-white hover:text-amber-brand transition-colors leading-tight line-clamp-1">
+          <h3 className={`font-display ${compact ? "text-xs" : "text-sm"} text-white hover:text-amber-brand transition-colors leading-tight line-clamp-1`}>
             {product.name}
           </h3>
         </Link>
@@ -43,7 +45,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-2.5 pt-2.5 border-t border-[#d4af37]/10 grid grid-cols-2 gap-1.5">
           <Link
             to={`/product/${product.id}`}
-            className="inline-flex items-center justify-center py-1.5 text-[10px] font-semibold rounded border border-[#d4af37]/30 text-amber-brand hover:bg-[#d4af37]/10 transition-colors"
+            className={`inline-flex items-center justify-center ${compact ? "py-1" : "py-1.5"} text-[10px] font-semibold rounded border border-[#d4af37]/30 text-amber-brand hover:bg-[#d4af37]/10 transition-colors`}
             data-testid={`product-view-${product.id}`}
           >
             View Details
@@ -52,7 +54,7 @@ const ProductCard = ({ product }) => {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center py-1.5 text-[10px] font-semibold rounded bg-amber-brand text-[#0a0a0d] hover:bg-[#e8c850] transition-colors"
+            className={`inline-flex items-center justify-center ${compact ? "py-1" : "py-1.5"} text-[10px] font-semibold rounded bg-amber-brand text-[#0a0a0d] hover:bg-[#e8c850] transition-colors`}
             data-testid={`product-whatsapp-${product.id}`}
           >
             Add to Inquiry

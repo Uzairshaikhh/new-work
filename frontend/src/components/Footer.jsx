@@ -5,12 +5,12 @@ import { BRAND } from "../lib/brand";
 const Footer = () => {
   return (
     <footer className="bg-navy text-white pt-16 pb-8 px-6 lg:px-10" data-testid="site-footer">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-5">
             <img src={BRAND.logoSrc} alt="Amazing Groups" className="w-12 h-12 rounded-md object-cover" />
             <div>
-              <div className="font-display text-lg leading-none">Amazing Groups</div>
+              <div className="font-display text-lg leading-none text-amber-brand">Amazing Groups</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-white/50 mt-1">{BRAND.tagline}</div>
             </div>
           </div>
@@ -26,6 +26,16 @@ const Footer = () => {
             <li><a href="/#categories" className="hover:text-amber-brand transition-colors">Categories</a></li>
             <li><a href="/#products" className="hover:text-amber-brand transition-colors">Products</a></li>
             <li><a href="/#how-to-order" className="hover:text-amber-brand transition-colors">How To Order</a></li>
+            <li><Link to="/" className="hover:text-amber-brand transition-colors">Contact</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="text-xs uppercase tracking-wider text-amber-brand font-semibold mb-5">Legal</div>
+          <ul className="space-y-3 text-sm text-white/70">
+            <li><Link to="/about-us" className="hover:text-amber-brand transition-colors">About Us</Link></li>
+            <li><Link to="/privacy-policy" className="hover:text-amber-brand transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/terms-and-conditions" className="hover:text-amber-brand transition-colors">Terms & Conditions</Link></li>
           </ul>
         </div>
 

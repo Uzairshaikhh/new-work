@@ -34,6 +34,7 @@ const Navbar = () => {
 
   const links = [
     { to: "/", label: "Home", hash: null },
+    { to: "/about-us", label: "About Us", hash: null },
     { to: "/", label: "Categories", hash: "categories" },
     { to: "/", label: "Products", hash: "products" },
     { to: "/", label: "How To Order", hash: "how-to-order" },
@@ -92,7 +93,7 @@ const Navbar = () => {
               className="w-12 h-12 rounded-md object-cover shadow-md"
             />
             <div>
-              <div className="font-display text-lg leading-none text-white">Amazing Groups</div>
+              <div className="font-display text-lg leading-none text-amber-brand transition-colors">Amazing Groups</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mt-1">
                 Amazing Make You Happy
               </div>
