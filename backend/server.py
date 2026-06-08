@@ -6,6 +6,8 @@ import uuid
 import bcrypt
 import jwt
 import mimetypes
+import cloudinary
+import cloudinary.uploader
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
 
@@ -26,7 +28,13 @@ ADMIN_PASSWORD = os.environ['ADMIN_PASSWORD']
 EMERGENT_KEY = os.environ.get('EMERGENT_LLM_KEY')
 APP_NAME = os.environ.get('APP_NAME', 'amazing-groups')
 
-LOCAL_STORAGE_ROOT = ROOT_DIR / "storage"
+cloudinary.config(
+    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"],
+    secure=True
+)
+
 JWT_ALGORITHM = "HS256"
 
 client = AsyncIOMotorClient(MONGO_URL)
@@ -45,18 +53,24 @@ def init_storage():
 
 
 def put_object(path: str, data: bytes, content_type: str) -> dict:
-    local_path = LOCAL_STORAGE_ROOT / path
-    local_path.parent.mkdir(parents=True, exist_ok=True)
-    local_path.write_bytes(data)
-    return {"path": path}
+    upload_result = cloudinary.uploader.upload(
+        data,
+        public_id=path,
+        resource_type="auto",
+        overwrite=True
+    )
+
+    return {
+        "path": upload_result["public_id"],
+        "url": upload_result["secure_url"]
+    }
 
 
 def get_object(path: str):
-    local_path = LOCAL_STORAGE_ROOT / path
-    if not local_path.exists():
-        raise HTTPException(status_code=404, detail="File not found")
-    content_type = mimetypes.guess_type(str(local_path))[0] or "application/octet-stream"
-    return local_path.read_bytes(), content_type
+    raise HTTPException(
+        status_code=410,
+        detail="Local file storage disabled. Use Cloudinary URLs."
+    )
 
 
 # ---------- Auth helpers ----------
@@ -312,25 +326,33 @@ async def me(admin=Depends(get_current_admin)):
 # ---------- File Upload ----------
 
 @api_router.post("/admin/upload")
-async def upload_file(file: UploadFile = File(...), admin=Depends(get_current_admin)):
+async def upload_file(
+    file: UploadFile = File(...),
+    admin=Depends(get_current_admin)
+):
     ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else "bin"
     file_id = str(uuid.uuid4())
     path = f"{APP_NAME}/uploads/{file_id}.{ext}"
+
     data = await file.read()
     content_type = file.content_type or "application/octet-stream"
+
     result = put_object(path, data, content_type)
+
     await db.files.insert_one({
         "id": file_id,
         "storage_path": result["path"],
         "original_filename": file.filename,
         "content_type": content_type,
-        "size": result.get("size", len(data)),
+        "size": len(data),
         "is_deleted": False,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    # Public URL via our proxy endpoint
-    return {"url": f"/api/files/{result['path']}", "path": result["path"]}
 
+    return {
+        "url": result["url"],
+        "path": result["path"]
+    }
 
 @api_router.get("/files/{path:path}")
 async def get_file(path: str):
