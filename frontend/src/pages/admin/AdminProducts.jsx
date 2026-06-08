@@ -4,29 +4,47 @@ import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
-const empty = {
-  category_id: "",
-  name: "",
-  description: "",
-  image_url: "",
-  images: [],
-  video_url: "",
-  price: "",
-  featured: false,
+const open = (item) => {
+  if (item) {
+    setEditing(item);
+    setForm({
+      ...empty,
+      ...item,
+      images: item.images || [],
+      subcategory_id: item.subcategory_id || "",
+    });
+  } else {
+    setEditing(null);
+    setForm({
+      ...empty,
+      category_id: categories[0]?.id || "",
+      subcategory_id: "",
+    });
+  }
+  setShowForm(true);
 };
 
 const AdminProducts = () => {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(empty);
 
-  const load = () =>
-    Promise.all([api.get("/products"), api.get("/categories")])
-      .then(([p, c]) => { setItems(p.data); setCategories(c.data); })
-      .finally(() => setLoading(false));
+ const load = () =>
+  Promise.all([
+    api.get("/products"),
+    api.get("/categories"),
+    api.get("/subcategories")
+  ])
+  .then(([p, c, s]) => {
+    setItems(p.data);
+    setCategories(c.data);
+    setSubcategories(s.data);
+  })
+  .finally(() => setLoading(false));
 
   useEffect(() => { load(); }, []);
 
@@ -155,6 +173,35 @@ const AdminProducts = () => {
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
+              <div>
+  <label className="eyebrow block mb-3">Subcategory</label>
+
+  <select
+    value={form.subcategory_id || ""}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        subcategory_id: e.target.value,
+      })
+    }
+    className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light"
+  >
+    <option value="">Select Subcategory</option>
+
+    {subcategories
+      .filter((s) => s.category_id === form.category_id)
+      .map((s) => (
+        <option key={s.id} value={s.id}>
+          {s.name}
+        </option>
+      ))}
+  </select>
+</div>
+
+<div>
+  <label className="eyebrow block mb-3">Name</label>
+  ...
+</div>
               <div>
                 <label className="eyebrow block mb-3">Name</label>
                 <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
