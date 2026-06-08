@@ -9,22 +9,31 @@ const FileUploader = ({ value, onChange, accept = "image/*", label = "Media", te
   const [error, setError] = useState("");
   const inputRef = useRef(null);
 
-  const upload = async (file) => {
-    setError("");
-    setUploading(true);
-    try {
+const upload = async (files) => {
+  setError("");
+  setUploading(true);
+
+  try {
+    const urls = [];
+
+    for (const file of files) {
       const fd = new FormData();
       fd.append("file", file);
+
       const { data } = await api.post("/admin/upload", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      onChange(data.url);
-    } catch (e) {
-      setError("Upload failed. Try a smaller file or use an external URL.");
-    } finally {
-      setUploading(false);
+
+      urls.push(data.url);
     }
-  };
+
+    onChange(urls.length === 1 ? urls[0] : urls);
+  } catch (e) {
+    setError("Upload failed. Try a smaller file or use an external URL.");
+  } finally {
+    setUploading(false);
+  }
+};
 
   return (
     <div data-testid={testid}>
@@ -48,17 +57,22 @@ const FileUploader = ({ value, onChange, accept = "image/*", label = "Media", te
           {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
           {uploading ? "Uploading" : "Upload"}
         </button>
-        <input
-          ref={inputRef}
-          type="file"
-          accept={accept}
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) upload(f);
-            e.target.value = "";
-          }}
-        />
+       <input
+  ref={inputRef}
+  type="file"
+  multiple
+  accept={accept}
+  className="hidden"
+  onChange={(e) => {
+    const files = Array.from(e.target.files || []);
+
+    if (files.length > 0) {
+      upload(files);
+    }
+
+    e.target.value = "";
+  }}
+/>
       </div>
       {error && <div className="text-xs text-red-400 mt-2">{error}</div>}
       {value && (

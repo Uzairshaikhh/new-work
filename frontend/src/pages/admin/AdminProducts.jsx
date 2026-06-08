@@ -65,10 +65,17 @@ const AdminProducts = () => {
     }
   };
 
-  const addGalleryImg = (url) => {
-    if (!url) return;
-    setForm({ ...form, images: [...form.images, url] });
-  };
+  const addGalleryImg = (urls) => {
+  if (!urls) return;
+
+  const arr = Array.isArray(urls) ? urls : [urls];
+
+  setForm({
+    ...form,
+    images: [...form.images, ...arr]
+  });
+};
+
   const removeGalleryImg = (i) => {
     setForm({ ...form, images: form.images.filter((_, idx) => idx !== i) });
   };
