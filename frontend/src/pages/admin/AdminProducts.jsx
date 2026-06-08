@@ -172,8 +172,9 @@ const AdminProducts = () => {
                   <option value="" disabled>Select a collection</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
-              </div>
-              <div>
+</div>
+
+<div>
   <label className="eyebrow block mb-3">Subcategory</label>
 
   <select
@@ -195,14 +196,10 @@ const AdminProducts = () => {
           {s.name}
         </option>
       ))}
-  </select>
-</div>
-
-<div>
-  <label className="eyebrow block mb-3">Name</label>
-  ...
-</div>
-              <div>
+                  </select>
+              </div>
+              
+               <div>
                 <label className="eyebrow block mb-3">Name</label>
                 <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light"
