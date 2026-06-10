@@ -171,6 +171,11 @@ class SiteSettingsIn(BaseModel):
     trusted_clients_stats: str = (
         "We've served 500+ companies for bulk gifting needs."
     )
+    whatsapp_url: str = ""
+    facebook_url: str = ""
+    instagram_url: str = ""
+    linkedin_url: str = ""
+    youtube_url: str = ""
 
 
 class ProductIn(BaseModel):
@@ -329,8 +334,14 @@ async def get_settings():
         ],
 
         "trusted_clients_stats":
-            "We've served 500+ companies for bulk gifting needs."
-    }
+    "We've served 500+ companies for bulk gifting needs.",
+
+"whatsapp_url": "",
+"facebook_url": "https://facebook.com/amazinggroups",
+"instagram_url": "https://www.instagram.com/amazing_groups_/",
+"linkedin_url": "https://linkedin.com/company/amazinggroups",
+"youtube_url": "https://youtube.com/@amazing_groups?si=fqIoaVZJfSzqcdzY",
+}
 
     return settings
 
@@ -355,6 +366,13 @@ async def update_settings(
     "trusted_clients_brands": payload.trusted_clients_brands,
 
     "trusted_clients_stats": payload.trusted_clients_stats,
+
+    "whatsapp_url": payload.whatsapp_url,
+"facebook_url": payload.facebook_url,
+"instagram_url": payload.instagram_url,
+"linkedin_url": payload.linkedin_url,
+"youtube_url": payload.youtube_url,
+
 }
         },
         upsert=True,
