@@ -344,9 +344,18 @@ async def update_settings(
         {"key": "site_settings"},
         {
             "$set": {
-                "key": "site_settings",
-                "bulk_pricing": [tier.model_dump() for tier in payload.bulk_pricing],
-            }
+    "key": "site_settings",
+
+    "bulk_pricing": [
+        tier.model_dump() for tier in payload.bulk_pricing
+    ],
+
+    "trusted_clients_title": payload.trusted_clients_title,
+
+    "trusted_clients_brands": payload.trusted_clients_brands,
+
+    "trusted_clients_stats": payload.trusted_clients_stats,
+}
         },
         upsert=True,
     )
