@@ -311,6 +311,17 @@ async def update_settings(
     payload: SiteSettingsIn,
     admin=Depends(get_current_admin)
 ):
+    await db.settings.update_one(
+        {"key": "site_settings"},
+        {
+            "$set": {
+                "key": "site_settings",
+                "bulk_pricing": payload.bulk_pricing,
+            }
+        },
+        upsert=True,
+    )
+
     return {"ok": True}
 
 
