@@ -157,6 +157,21 @@ class PriceTier(BaseModel):
 class SiteSettingsIn(BaseModel):
     bulk_pricing: List[PriceTier] = []
 
+    trusted_clients_title: str = "Trusted by Businesses Across India"
+
+    trusted_clients_brands: List[str] = [
+        "TATA",
+        "Infosys",
+        "HDFC BANK",
+        "ICICI Bank",
+        "Deloitte",
+        "Wipro",
+    ]
+
+    trusted_clients_stats: str = (
+        "We've served 500+ companies for bulk gifting needs."
+    )
+
 
 class ProductIn(BaseModel):
     category_id: str
@@ -294,14 +309,28 @@ async def get_settings():
     )
 
     if not settings:
-        return {
-            "bulk_pricing": [
-                {"qty": "100+ pcs", "price": "₹120"},
-                {"qty": "500+ pcs", "price": "₹95"},
-                {"qty": "1000+ pcs", "price": "₹80"},
-                {"qty": "5000+ pcs", "price": "₹65"},
-            ]
-        }
+     return {
+        "bulk_pricing": [
+            {"qty": "100+ pcs", "price": "₹120"},
+            {"qty": "500+ pcs", "price": "₹95"},
+            {"qty": "1000+ pcs", "price": "₹80"},
+            {"qty": "5000+ pcs", "price": "₹65"},
+        ],
+
+        "trusted_clients_title": "Trusted by Businesses Across India",
+
+        "trusted_clients_brands": [
+            "TATA",
+            "Infosys",
+            "HDFC BANK",
+            "ICICI Bank",
+            "Deloitte",
+            "Wipro",
+        ],
+
+        "trusted_clients_stats":
+            "We've served 500+ companies for bulk gifting needs."
+    }
 
     return settings
 
