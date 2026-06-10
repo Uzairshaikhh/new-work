@@ -285,16 +285,23 @@ async def get_product(product_id: str):
         raise HTTPException(status_code=404, detail="Product not found")
     return item
 
-@api_router.get("/settings")
-async def get_settings():
-    return {
-        "bulk_pricing": [
-            {"qty": "100+ pcs", "price": "₹120"},
-            {"qty": "500+ pcs", "price": "₹95"},
-            {"qty": "1000+ pcs", "price": "₹80"},
-            {"qty": "5000+ pcs", "price": "₹65"},
-        ]
-    }
+@api_router.put("/admin/settings")
+async def update_settings(
+    payload: SiteSettingsIn,
+    admin=Depends(get_current_admin)
+):
+    await db.settings.update_one(
+        {"key": "site_settings"},
+        {
+            "$set": {
+                "key": "site_settings",
+                "bulk_pricing": payload.bulk_pricing,
+            }
+        },
+        upsert=True,
+    )
+
+    return {"ok": True}
 
 
 # ---------- Auth Endpoints ----------
@@ -384,25 +391,6 @@ async def get_file(path: str):
         raise HTTPException(status_code=404, detail="File not found")
     data, content_type = get_object(path)
     return Response(content=data, media_type=record.get("content_type", content_type))
-
-@api_router.put("/admin/settings")
-async def update_settings(
-    payload: SiteSettingsIn,
-    admin=Depends(get_current_admin)
-):
-    data = {
-        "key": "site_settings",
-        "bulk_pricing": payload.bulk_pricing,
-    }
-
-    await db.settings.update_one(
-        {"key": "site_settings"},
-        {"$set": data},
-        upsert=True,
-    )
-
-    return data
-
 
 # ---------- Admin: Sliders CRUD ----------
 
