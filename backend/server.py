@@ -316,7 +316,7 @@ async def update_settings(
         {
             "$set": {
                 "key": "site_settings",
-                "bulk_pricing": payload.bulk_pricing,
+                "bulk_pricing": [tier.model_dump() for tier in payload.bulk_pricing],
             }
         },
         upsert=True,
