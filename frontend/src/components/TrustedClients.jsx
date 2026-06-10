@@ -1,29 +1,63 @@
-const CLIENTS = [
-  "TATA", "Infosys", "HDFC BANK", "ICICI Bank", "Deloitte", "Wipro",
-];
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
 
 const TrustedClients = () => {
+  const [title, setTitle] = useState(
+    "Trusted by Businesses Across India"
+  );
+
+  const [stats, setStats] = useState(
+    "We've served 500+ companies for bulk gifting needs."
+  );
+
+  const [brands, setBrands] = useState([
+    "TATA",
+    "Infosys",
+    "HDFC BANK",
+    "ICICI Bank",
+    "Deloitte",
+    "Wipro",
+  ]);
+
+  useEffect(() => {
+    api.get("/settings").then((r) => {
+      if (r.data?.trusted_clients_title) {
+        setTitle(r.data.trusted_clients_title);
+      }
+
+      if (r.data?.trusted_clients_stats) {
+        setStats(r.data.trusted_clients_stats);
+      }
+
+      if (r.data?.trusted_clients_brands) {
+        setBrands(r.data.trusted_clients_brands);
+      }
+    });
+  }, []);
+
   return (
-    <section className="py-8 px-6 lg:px-10" data-testid="trusted-clients-section">
+    <section className="py-8 px-6 lg:px-10">
       <div className="max-w-[1280px] mx-auto rounded-lg border border-[#d4af37]/20 bg-[#15151a] py-5 px-6 md:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="text-center md:text-left flex-shrink-0">
             <div className="font-display text-base text-white leading-tight">
-              Trusted by Businesses<br />Across India
+              {title}
             </div>
           </div>
+
           <div className="flex items-center gap-6 md:gap-8 flex-wrap justify-center flex-1">
-            {CLIENTS.map((c) => (
+            {brands.map((brand) => (
               <div
-                key={c}
+                key={brand}
                 className="font-display font-bold text-base md:text-lg text-gray-500 hover:text-amber-brand transition-colors whitespace-nowrap tracking-tight"
               >
-                {c}
+                {brand}
               </div>
             ))}
           </div>
+
           <div className="text-[11px] text-gray-400 text-center md:text-right flex-shrink-0 max-w-[140px] leading-relaxed">
-            We've served <span className="text-amber-brand font-semibold">500+</span> companies for bulk gifting needs.
+            {stats}
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ import AdminSliders from "@/pages/admin/AdminSliders";
 import AdminCategories from "@/pages/admin/AdminCategories";
 import AdminSubcategories from "@/pages/admin/AdminSubcategories";
 import AdminProducts from "@/pages/admin/AdminProducts";
+import AdminSettings from "@/pages/admin/AdminSettings";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -63,6 +64,7 @@ function App() {
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="subcategories" element={<AdminSubcategories />} />
                 <Route path="products" element={<AdminProducts />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Route>
           </Routes>

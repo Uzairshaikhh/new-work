@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LayoutDashboard, Images, FolderTree, Package, LogOut } from "lucide-react";
+import { LayoutDashboard, Images, FolderTree, Package, Settings, LogOut } from "lucide-react";
 
 const AdminLayout = () => {
   const { admin, checking, logout } = useAuth();
@@ -10,12 +10,13 @@ const AdminLayout = () => {
   if (!admin) return <Navigate to="/admin-x9k2l-secret" replace />;
 
   const navItems = [
-    { to: "/admin-x9k2l-secret/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
-    { to: "/admin-x9k2l-secret/sliders", icon: Images, label: "Sliders" },
-    { to: "/admin-x9k2l-secret/categories", icon: FolderTree, label: "Categories" },
-    { to: "/admin-x9k2l-secret/subcategories", icon: FolderTree, label: "Subcategories" },
-    { to: "/admin-x9k2l-secret/products", icon: Package, label: "Products" },
-  ];
+  { to: "/admin-x9k2l-secret/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
+  { to: "/admin-x9k2l-secret/sliders", icon: Images, label: "Sliders" },
+  { to: "/admin-x9k2l-secret/categories", icon: FolderTree, label: "Categories" },
+  { to: "/admin-x9k2l-secret/subcategories", icon: FolderTree, label: "Subcategories" },
+  { to: "/admin-x9k2l-secret/products", icon: Package, label: "Products" },
+  { to: "/admin-x9k2l-secret/settings", icon: Settings, label: "Settings" },
+];
 
   const onLogout = () => {
     logout();

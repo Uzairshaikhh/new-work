@@ -1,35 +1,26 @@
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import SectionHeading from "./SectionHeading";
-
-const REVIEWS = [
-  {
-    name: "Rahul Mehta",
-    role: "Marketing Head, TechCorp",
-    avatar: "https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
-    body: "Excellent quality and on-time delivery. Our go-to partner for corporate gifting!",
-  },
-  {
-    name: "Priya Sharma",
-    role: "HR Manager, Business Mart",
-    avatar: "https://images.unsplash.com/photo-1770058428154-9eee8a6a1fbb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
-    body: "The customization and packaging were perfect. Highly recommended!",
-  },
-  {
-    name: "Amit Verma",
-    role: "Procurement Head, BuildMax",
-    avatar: "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
-    body: "Great products at the best prices for bulk orders. Very satisfied!",
-  },
-];
+import { api } from "../lib/api";
 
 const Testimonials = () => {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    api.get("/settings").then((r) => {
+      if (r.data?.testimonials) {
+        setReviews(r.data.testimonials);
+      }
+    });
+  }, []);
+
   return (
     <section className="py-10 px-6 lg:px-10" data-testid="testimonials-section">
       <div className="max-w-[1280px] mx-auto">
         <SectionHeading eyebrow="Reviews" title="What Our Clients Say" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {REVIEWS.map((r) => (
+         {reviews.map((r) => (
             <div
               key={r.name}
               className="bg-[#15151a] rounded-lg p-5 border border-[#d4af37]/15"

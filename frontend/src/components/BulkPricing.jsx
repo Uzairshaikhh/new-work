@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
 import { Palette, Package, Boxes, Percent, MessageCircle, ArrowRight } from "lucide-react";
 import { waLink } from "../lib/brand";
 
@@ -15,14 +17,18 @@ const STEPS = [
   { n: "4", title: "Confirm & Delivery", body: "Confirm order & get fast delivery" },
 ];
 
-const TIERS = [
-  { qty: "100+ pcs", price: "₹120" },
-  { qty: "500+ pcs", price: "₹95" },
-  { qty: "1000+ pcs", price: "₹80" },
-  { qty: "5000+ pcs", price: "₹65" },
-];
+
 
 const BulkPricing = () => {
+  const [tiers, setTiers] = useState([]);
+
+useEffect(() => {
+  api.get("/settings").then((r) => {
+    if (r.data?.bulk_pricing) {
+      setTiers(r.data.bulk_pricing);
+    }
+  });
+}, []);
   const waHref = waLink("Hi Amazing Groups, I'd like a custom bulk quote.");
 
   return (
@@ -44,7 +50,7 @@ const BulkPricing = () => {
                 <div className="bg-[#0e0e13] py-3 px-3 text-[10px] uppercase tracking-wider text-amber-brand font-semibold text-center border-r border-[#d4af37]/20">
                   Quantity
                 </div>
-                {TIERS.map((t) => (
+                {tiers.map((t) => (
                   <div key={t.qty} className="bg-[#0e0e13] py-3 px-2 text-xs text-white text-center font-semibold border-r border-[#d4af37]/20 last:border-r-0">
                     {t.qty}
                   </div>
@@ -52,7 +58,7 @@ const BulkPricing = () => {
                 <div className="py-3 px-3 text-[10px] uppercase tracking-wider text-gray-400 font-semibold text-center border-r border-t border-[#d4af37]/20">
                   Price / Piece
                 </div>
-                {TIERS.map((t) => (
+                {tiers.map((t) => (
                   <div key={t.price} className="py-3 px-2 text-amber-brand text-center font-display text-sm border-r border-t border-[#d4af37]/20 last:border-r-0">
                     {t.price}
                   </div>

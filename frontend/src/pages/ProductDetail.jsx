@@ -78,8 +78,11 @@ const ProductDetail = () => {
   }
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
-  const waHref = waLink(`Hi Amazing Groups, I'm interested in "${product.name}". Could you share more details and bulk pricing?`);
-
+const waHref = waLink(
+  `Hi Amazing Groups, I'm interested in "${product.name}" (MOQ: ${
+    product.moq || 1
+  } pieces). Could you share more details and bulk pricing?`
+);
   return (
     <div className="min-h-screen bg-[#15151a]" data-testid="product-detail-page">
       <Navbar />
@@ -154,20 +157,57 @@ const ProductDetail = () => {
                 })}
               </div>
 
-              <div className="rounded-2xl border border-[#d4af37]/15 p-6 bg-[#0e0e13] space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Crafted in</span>
-                  <span className="font-medium text-white">Mumbai, India</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Customisation</span>
-                  <span className="font-medium text-white">Logo, packaging, colour</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Lead time</span>
-                  <span className="font-medium text-white">3 – 14 days</span>
-                </div>
-              </div>
+             <div className="rounded-2xl border border-[#d4af37]/15 p-6 bg-[#0e0e13] space-y-3 text-sm">
+  <div className="flex justify-between">
+    <span className="text-gray-500">MOQ</span>
+    <span className="font-medium text-white">
+      {product.moq || 1} Pieces
+    </span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-gray-500">Crafted in</span>
+    <span className="font-medium text-white">Mumbai, India</span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-gray-500">Customisation</span>
+    <span className="font-medium text-white">
+      Logo, packaging, colour
+    </span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-gray-500">Lead time</span>
+    <span className="font-medium text-white">
+      3 – 14 days
+    </span>
+  </div>
+</div>
+{product.bulk_pricing?.length > 0 && (
+  <div className="mt-6 rounded-2xl border border-[#d4af37]/15 bg-[#0e0e13] p-6">
+    <h3 className="text-lg font-semibold text-white mb-4">
+      Bulk Pricing
+    </h3>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {product.bulk_pricing.map((tier, index) => (
+        <div
+          key={index}
+          className="border border-[#d4af37]/15 rounded-xl p-4 text-center"
+        >
+          <div className="text-xs text-gray-500 mb-2">
+            {tier.qty}+ pcs
+          </div>
+
+          <div className="text-xl font-semibold text-amber-brand">
+            {tier.price}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
             </div>
           </div>
         </div>

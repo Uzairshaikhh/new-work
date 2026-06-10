@@ -4,24 +4,27 @@ import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
-const open = (item) => {
-  if (item) {
-    setEditing(item);
-    setForm({
-      ...empty,
-      ...item,
-      images: item.images || [],
-      subcategory_id: item.subcategory_id || "",
-    });
-  } else {
-    setEditing(null);
-    setForm({
-      ...empty,
-      category_id: categories[0]?.id || "",
-      subcategory_id: "",
-    });
-  }
-  setShowForm(true);
+
+const empty = {
+  category_id: "",
+  subcategory_id: "",
+  name: "",
+  description: "",
+  price: "",
+
+  moq: 1,
+
+  bulk_pricing: [
+    {
+      qty: 100,
+      price: "₹120",
+    },
+  ],
+
+  image_url: "",
+  video_url: "",
+  images: [],
+  featured: false,
 };
 
 const AdminProducts = () => {
@@ -94,11 +97,31 @@ const AdminProducts = () => {
   });
 };
 
-  const removeGalleryImg = (i) => {
-    setForm({ ...form, images: form.images.filter((_, idx) => idx !== i) });
-  };
+const removeGalleryImg = (i) => {
+  setForm({ ...form, images: form.images.filter((_, idx) => idx !== i) });
+};
 
-  const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
+const addPriceTier = () => {
+  setForm({
+    ...form,
+    bulk_pricing: [
+      ...(form.bulk_pricing || []),
+      {
+        qty: "",
+        price: "",
+      },
+    ],
+  });
+};
+
+const removePriceTier = (index) => {
+  setForm({
+    ...form,
+    bulk_pricing: form.bulk_pricing.filter((_, i) => i !== index),
+  });
+};
+
+const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
 
   return (
     <div className="p-10 lg:p-14" data-testid="admin-products-page">
@@ -216,6 +239,84 @@ const AdminProducts = () => {
                 <input type="text" placeholder="₹ On Request" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })}
                   className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light" />
               </div>
+              <div>
+  <label className="eyebrow block mb-3">
+    MOQ (Minimum Order Quantity)
+  </label>
+
+  <input
+    type="number"
+    min="1"
+    value={form.moq || 1}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        moq: Number(e.target.value),
+      })
+    }
+    className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light"
+  />
+</div>
+
+<div>
+  <label className="eyebrow block mb-3">
+    Bulk Pricing
+  </label>
+
+  {(form.bulk_pricing || []).map((tier, index) => (
+    <div key={index} className="grid grid-cols-2 gap-3 mb-3">
+      <input
+        type="number"
+        placeholder="Quantity"
+        value={tier.qty}
+        onChange={(e) => {
+          const updated = [...form.bulk_pricing];
+          updated[index].qty = Number(e.target.value);
+
+          setForm({
+            ...form,
+            bulk_pricing: updated,
+          });
+        }}
+        className="bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
+      />
+
+      <div className="flex gap-2">
+        <input
+          type="text"
+          placeholder="₹ Price"
+          value={tier.price}
+          onChange={(e) => {
+            const updated = [...form.bulk_pricing];
+            updated[index].price = e.target.value;
+
+            setForm({
+              ...form,
+              bulk_pricing: updated,
+            });
+          }}
+          className="flex-1 bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
+        />
+
+        <button
+          type="button"
+          onClick={() => removePriceTier(index)}
+          className="px-3 border border-red-500 text-red-500"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={addPriceTier}
+    className="btn-ghost-gold"
+  >
+    + Add Pricing Tier
+  </button>
+</div>
               <FileUploader value={form.image_url} onChange={(v) => setForm({ ...form, image_url: v })} label="Main Image" testid="product-image" />
 
               <div data-testid="product-gallery-section">
