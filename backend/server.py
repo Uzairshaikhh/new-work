@@ -154,6 +154,12 @@ class PriceTier(BaseModel):
     price: str
 
 
+class Testimonial(BaseModel):
+    name: str
+    role: str
+    avatar: str
+    body: str
+
 class SiteSettingsIn(BaseModel):
     bulk_pricing: List[PriceTier] = []
 
@@ -176,6 +182,27 @@ class SiteSettingsIn(BaseModel):
     instagram_url: str = ""
     linkedin_url: str = ""
     youtube_url: str = ""
+
+    testimonials: List[Testimonial] = [
+        Testimonial(
+        name="Rahul Mehta",
+        role="Marketing Head, TechCorp",
+        avatar="https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+        body="Excellent quality and on-time delivery. Our go-to partner for corporate gifting!"
+        ),
+        Testimonial(
+            name="Priya Sharma",
+            role="HR Manager, Business Mart",
+            avatar="https://images.unsplash.com/photo-1770058428154-9eee8a6a1fbb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+            body="The customization and packaging were perfect. Highly recommended!"
+        ),
+        Testimonial(
+            name="Amit Verma",
+            role="Procurement Head, BuildMax",
+            avatar="https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+            body="Great products at the best prices for bulk orders. Very satisfied!"
+        ),
+    ]
 
 
 class ProductIn(BaseModel):
@@ -334,13 +361,34 @@ async def get_settings():
         ],
 
         "trusted_clients_stats":
-    "We've served 500+ companies for bulk gifting needs.",
+             "We've served 500+ companies for bulk gifting needs.",
 
-"whatsapp_url": "",
+     "whatsapp_url": "",
 "facebook_url": "https://facebook.com/amazinggroups",
 "instagram_url": "https://www.instagram.com/amazing_groups_/",
 "linkedin_url": "https://linkedin.com/company/amazinggroups",
 "youtube_url": "https://youtube.com/@amazing_groups?si=fqIoaVZJfSzqcdzY",
+
+"testimonials": [
+    {
+        "name": "Rahul Mehta",
+        "role": "Marketing Head, TechCorp",
+        "avatar": "https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+        "body": "Excellent quality and on-time delivery. Our go-to partner for corporate gifting!"
+    },
+    {
+        "name": "Priya Sharma",
+        "role": "HR Manager, Business Mart",
+        "avatar": "https://images.unsplash.com/photo-1770058428154-9eee8a6a1fbb?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+        "body": "The customization and packaging were perfect. Highly recommended!"
+    },
+    {
+        "name": "Amit Verma",
+        "role": "Procurement Head, BuildMax",
+        "avatar": "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
+        "body": "Great products at the best prices for bulk orders. Very satisfied!"
+    }
+]
 }
 
     return settings
@@ -372,6 +420,10 @@ async def update_settings(
 "instagram_url": payload.instagram_url,
 "linkedin_url": payload.linkedin_url,
 "youtube_url": payload.youtube_url,
+
+"testimonials": [
+    t.model_dump() for t in payload.testimonials
+],
 
 }
         },
