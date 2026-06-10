@@ -139,7 +139,6 @@ class CategoryIn(BaseModel):
     status: Optional[str] = "active"
     sort_order: int = 0
 
-
 class SubcategoryIn(BaseModel):
     category_id: str
     name: str
@@ -148,6 +147,15 @@ class SubcategoryIn(BaseModel):
     image_url: str
     status: Optional[str] = "active"
     sort_order: int = 0
+
+
+class PriceTier(BaseModel):
+    qty: int
+    price: str
+
+
+class SiteSettingsIn(BaseModel):
+    bulk_pricing: List[PriceTier] = []
 
 
 class ProductIn(BaseModel):
@@ -160,6 +168,10 @@ class ProductIn(BaseModel):
     images: List[str] = []
     video_url: Optional[str] = ""
     price: Optional[str] = ""
+
+    moq: int = 1
+    bulk_pricing: List[PriceTier] = []
+
     featured: bool = False
     status: Optional[str] = "active"
     sort_order: int = 0
@@ -273,6 +285,17 @@ async def get_product(product_id: str):
         raise HTTPException(status_code=404, detail="Product not found")
     return item
 
+@api_router.get("/settings")
+async def get_settings():
+    return {
+        "bulk_pricing": [
+            {"qty": "100+ pcs", "price": "₹120"},
+            {"qty": "500+ pcs", "price": "₹95"},
+            {"qty": "1000+ pcs", "price": "₹80"},
+            {"qty": "5000+ pcs", "price": "₹65"},
+        ]
+    }
+
 
 # ---------- Auth Endpoints ----------
 
@@ -361,6 +384,24 @@ async def get_file(path: str):
         raise HTTPException(status_code=404, detail="File not found")
     data, content_type = get_object(path)
     return Response(content=data, media_type=record.get("content_type", content_type))
+
+@api_router.put("/admin/settings")
+async def update_settings(
+    payload: SiteSettingsIn,
+    admin=Depends(get_current_admin)
+):
+    data = {
+        "key": "site_settings",
+        "bulk_pricing": payload.bulk_pricing,
+    }
+
+    await db.settings.update_one(
+        {"key": "site_settings"},
+        {"$set": data},
+        upsert=True,
+    )
+
+    return data
 
 
 # ---------- Admin: Sliders CRUD ----------
@@ -576,6 +617,7 @@ async def startup_event():
     await db.categories.create_index("id", unique=True)
     await db.products.create_index("id", unique=True)
     await db.sliders.create_index("id", unique=True)
+    await db.settings.create_index("key", unique=True)
 
     # Seed admin
     existing = await db.admins.find_one({"username": ADMIN_USERNAME})
