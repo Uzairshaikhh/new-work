@@ -150,7 +150,7 @@ class SubcategoryIn(BaseModel):
 
 
 class PriceTier(BaseModel):
-    qty: int
+    qty: str
     price: str
 
 
