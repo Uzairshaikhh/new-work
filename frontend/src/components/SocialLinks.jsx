@@ -1,36 +1,39 @@
-import { useEffect, useState } from "react";
 import { SOCIAL_LINKS } from "../lib/socialLinks";
-import { api } from "../lib/api";
 
-const SocialLinks = () => {
-  const [links, setLinks] = useState(SOCIAL_LINKS);
+const SocialLinks = ({ settings }) => {
+  const links = SOCIAL_LINKS.map((link) => {
+  if (link.id === "whatsapp")
+    return {
+      ...link,
+      url: settings?.whatsapp_url || link.url,
+    };
 
-  useEffect(() => {
-    api.get("/settings").then((r) => {
-      const data = r.data || {};
+  if (link.id === "facebook")
+    return {
+      ...link,
+      url: settings?.facebook_url || link.url,
+    };
 
-      setLinks(
-        SOCIAL_LINKS.map((link) => {
-          if (link.id === "whatsapp")
-            return { ...link, url: data.whatsapp_url || link.url };
+  if (link.id === "instagram")
+    return {
+      ...link,
+      url: settings?.instagram_url || link.url,
+    };
 
-          if (link.id === "facebook")
-            return { ...link, url: data.facebook_url || link.url };
+  if (link.id === "linkedin")
+    return {
+      ...link,
+      url: settings?.linkedin_url || link.url,
+    };
 
-          if (link.id === "instagram")
-            return { ...link, url: data.instagram_url || link.url };
+  if (link.id === "youtube")
+    return {
+      ...link,
+      url: settings?.youtube_url || link.url,
+    };
 
-          if (link.id === "linkedin")
-            return { ...link, url: data.linkedin_url || link.url };
-
-          if (link.id === "youtube")
-            return { ...link, url: data.youtube_url || link.url };
-
-          return link;
-        })
-      );
-    });
-  }, []);
+  return link;
+});
   return (
     <section className="py-6 px-6 lg:px-10" data-testid="social-links-section">
       <div className="max-w-[1280px] mx-auto">

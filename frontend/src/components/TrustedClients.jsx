@@ -1,39 +1,23 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
+import { Palette, Package, Boxes, Percent, MessageCircle, ArrowRight } from "lucide-react";
 
-const TrustedClients = () => {
-  const [title, setTitle] = useState(
-    "Trusted by Businesses Across India"
-  );
+const TrustedClients = ({ settings }) => {
+  const title =
+  settings?.trusted_clients_title ||
+  "Trusted by Businesses Across India";
 
-  const [stats, setStats] = useState(
-    "We've served 500+ companies for bulk gifting needs."
-  );
+const stats =
+  settings?.trusted_clients_stats ||
+  "We've served 500+ companies for bulk gifting needs.";
 
-  const [brands, setBrands] = useState([
+const brands =
+  settings?.trusted_clients_brands || [
     "TATA",
     "Infosys",
     "HDFC BANK",
     "ICICI Bank",
     "Deloitte",
     "Wipro",
-  ]);
-
-  useEffect(() => {
-    api.get("/settings").then((r) => {
-      if (r.data?.trusted_clients_title) {
-        setTitle(r.data.trusted_clients_title);
-      }
-
-      if (r.data?.trusted_clients_stats) {
-        setStats(r.data.trusted_clients_stats);
-      }
-
-      if (r.data?.trusted_clients_brands) {
-        setBrands(r.data.trusted_clients_brands);
-      }
-    });
-  }, []);
+  ];
 
   return (
     <section className="py-8 px-6 lg:px-10">

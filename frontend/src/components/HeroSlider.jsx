@@ -83,14 +83,17 @@ const HeroSlider = ({ slides = [], loading = false }) => {
                 <div className="lg:col-span-6 relative animate-fade-up" style={{ animationDelay: "150ms" }}>
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-2xl border border-[#d4af37]/20">
                     <img
-                      src={
-                        s.image_url
-                          ? resolveMedia(s.image_url)
-                          : "https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85"
-                      }
-                      alt={s.title || "Corporate gift"}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+  src={
+    s.image_url
+      ? resolveMedia(s.image_url)
+      : "https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85"
+  }
+  alt={s.title || "Corporate gift"}
+  loading="eager"
+  fetchPriority="high"
+  decoding="async"
+  className="absolute inset-0 w-full h-full object-cover"
+/>
                   </div>
                   <div
                     className="absolute -bottom-4 left-4 bg-[#15151a] rounded-lg px-3.5 py-2.5 shadow-xl border border-[#d4af37]/30 flex items-center gap-2"

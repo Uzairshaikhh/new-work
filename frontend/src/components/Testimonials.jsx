@@ -1,18 +1,8 @@
-import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import SectionHeading from "./SectionHeading";
-import { api } from "../lib/api";
 
-const Testimonials = () => {
-  const [reviews, setReviews] = useState([]);
-
-  useEffect(() => {
-    api.get("/settings").then((r) => {
-      if (r.data?.testimonials) {
-        setReviews(r.data.testimonials);
-      }
-    });
-  }, []);
+const Testimonials = ({ settings }) => {
+  const reviews = settings?.testimonials || [];
 
   return (
     <section className="py-10 px-6 lg:px-10" data-testid="testimonials-section">

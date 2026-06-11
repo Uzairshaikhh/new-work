@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
 import { Palette, Package, Boxes, Percent, MessageCircle, ArrowRight } from "lucide-react";
 import { waLink } from "../lib/brand";
 
@@ -19,16 +17,8 @@ const STEPS = [
 
 
 
-const BulkPricing = () => {
-  const [tiers, setTiers] = useState([]);
-
-useEffect(() => {
-  api.get("/settings").then((r) => {
-    if (r.data?.bulk_pricing) {
-      setTiers(r.data.bulk_pricing);
-    }
-  });
-}, []);
+const BulkPricing = ({ settings }) => {
+  const tiers = settings?.bulk_pricing || [];
   const waHref = waLink("Hi Amazing Groups, I'd like a custom bulk quote.");
 
   return (

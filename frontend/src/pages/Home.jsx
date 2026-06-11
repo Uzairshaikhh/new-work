@@ -20,6 +20,7 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(null);
 
   useSEO({
     title: "Premium Corporate Gifts with Your Brand Identity",
@@ -29,11 +30,18 @@ const Home = () => {
   useEffect(() => {
     let mounted = true;
     Promise.all([api.get("/sliders"), api.get("/categories"), api.get("/products")])
-      .then(([s, c, p]) => {
+    Promise.all([
+  api.get("/sliders"),
+  api.get("/categories"),
+  api.get("/products"),
+  api.get("/settings"),
+])
+      .then(([s, c, p, st]) => {
         if (!mounted) return;
         setSliders(s.data);
         setCategories(c.data);
         setFeatured(p.data.slice(0, 5));
+        setSettings(st.data);
       })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));
@@ -88,11 +96,11 @@ const Home = () => {
       </section>
 
       {/* Bulk Pricing + Customize + How to Order (single component) */}
-      <BulkPricing />
+      <BulkPricing settings={settings} />
 
-      <TrustedClients />
-      <SocialLinks />
-      <Testimonials />
+<TrustedClients settings={settings} />
+<SocialLinks settings={settings} />
+<Testimonials settings={settings} />
 
       {/* CTA banner */}
       <section className="py-8 px-6 lg:px-10" data-testid="final-cta-section">
