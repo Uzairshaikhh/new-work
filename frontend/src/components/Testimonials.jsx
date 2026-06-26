@@ -23,7 +23,15 @@ const Testimonials = ({ settings }) => {
               </div>
               <p className="text-gray-300 text-sm leading-relaxed mb-4 italic">"{r.body}"</p>
               <div className="flex items-center gap-2.5 pt-3 border-t border-[#d4af37]/10">
-                <img src={r.avatar} alt={r.name} className="w-8 h-8 rounded-full object-cover" />
+                <img
+  src={r.avatar}
+  alt={r.name}
+  loading="lazy"
+  decoding="async"
+  width="32"
+  height="32"
+  className="w-8 h-8 rounded-full object-cover"
+/>
                 <div>
                   <div className="text-xs font-semibold text-white">– {r.name}</div>
                   <div className="text-[10px] text-gray-400">{r.role}</div>

@@ -33,14 +33,14 @@ const Home = () => {
     Promise.all([
   api.get("/sliders"),
   api.get("/categories"),
-  api.get("/products"),
+  api.get("/products?limit=5"),
   api.get("/settings"),
 ])
       .then(([s, c, p, st]) => {
         if (!mounted) return;
         setSliders(s.data);
         setCategories(c.data);
-        setFeatured(p.data.slice(0, 5));
+        setFeatured(p.data);
         setSettings(st.data);
       })
       .catch(() => {})

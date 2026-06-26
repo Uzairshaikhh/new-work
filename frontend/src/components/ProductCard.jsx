@@ -17,10 +17,14 @@ const ProductCard = ({ product, compact = false }) => {
         className={`block relative ${compact ? "aspect-[4/3]" : "aspect-square"} overflow-hidden bg-[#0e0e13]`}
       >
         <img
-          src={resolveMedia(product.image_url)}
-          alt={product.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+  src={resolveMedia(product.image_url)}
+  alt={product.name}
+  loading="lazy"
+  decoding="async"
+  width="400"
+  height="400"
+  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+/>
         {product.featured && (
           <span className="absolute top-2 left-2 bg-amber-brand text-[#0a0a0d] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
             Popular
