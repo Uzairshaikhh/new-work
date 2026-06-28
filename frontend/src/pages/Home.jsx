@@ -28,7 +28,7 @@ const Home = () => {
     description: "Amazing Groups — India's trusted B2B gifting partner. Custom wallets, bottles, diaries & more. Premium quality, on-time delivery, pan-India reach.",
   });
 
-  useEffect(() => {
+  const fetchData = () => {
     let mounted = true;
     Promise.all([
       api.get("/sliders"),
@@ -45,9 +45,19 @@ const Home = () => {
       })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));
+    return () => { mounted = false; };
+  };
+
+  useEffect(() => {
+    const cleanup = fetchData();
+    // Re-fetch when user switches back to this tab (e.g. after saving in admin)
+    const onVisible = () => { if (document.visibilityState === "visible") fetchData(); };
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
-      mounted = false;
+      cleanup?.();
+      document.removeEventListener("visibilitychange", onVisible);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const bulkCtaHref = waLink("Hi Amazing Groups, I'd like a bulk quote.");

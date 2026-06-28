@@ -5,6 +5,10 @@ export const API_BASE = `${BACKEND_URL}/api`;
 
 export const api = axios.create({
   baseURL: API_BASE,
+  headers: {
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+  },
 });
 
 api.interceptors.request.use((config) => {
