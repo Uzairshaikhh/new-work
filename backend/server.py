@@ -124,6 +124,7 @@ class LoginInput(BaseModel):
 
 class SliderIn(BaseModel):
     title: str
+    highlight: Optional[str] = ""
     subtitle: Optional[str] = ""
     image_url: str
     cta_label: Optional[str] = "Explore"

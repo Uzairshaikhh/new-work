@@ -4,7 +4,7 @@ import { Plus, Pencil, Trash2, X, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
-const empty = { title: "", subtitle: "", image_url: "", cta_label: "Explore", cta_link: "#categories", order: 0 };
+const empty = { title: "", highlight: "", subtitle: "", image_url: "", cta_label: "Explore", cta_link: "#categories", order: 0 };
 
 const AdminSliders = () => {
   const [items, setItems] = useState([]);
@@ -130,7 +130,10 @@ const AdminSliders = () => {
               </div>
               <div className="flex-1 p-5 flex flex-col">
                 <div className="eyebrow text-[9px]">Order {s.order}</div>
-                <h3 className="font-display text-xl text-white mt-2 line-clamp-2">{s.title}</h3>
+                <h3 className="font-display text-xl mt-2 line-clamp-2 leading-snug">
+                  <span className="text-white">{s.title} </span>
+                  {s.highlight && <span className="text-[#D4AF37]">{s.highlight}</span>}
+                </h3>
                 <p className="text-xs text-neutral-400 mt-2 line-clamp-2">{s.subtitle}</p>
                 <div className="mt-auto pt-3 flex gap-2 flex-wrap">
                   <button
@@ -173,9 +176,25 @@ const AdminSliders = () => {
             </div>
             <form onSubmit={submit} className="space-y-5">
               <div>
-                <label className="eyebrow block mb-3">Title</label>
+                <label className="eyebrow block mb-3">Title (White Text)</label>
                 <input type="text" required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
                   className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light" data-testid="slider-title-input" />
+              </div>
+              <div>
+                <label className="eyebrow block mb-3">Highlight Text (Gold)</label>
+                <input type="text" value={form.highlight} onChange={(e) => setForm({ ...form, highlight: e.target.value })}
+                  placeholder="e.g. with Your Brand Identity"
+                  className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light" data-testid="slider-highlight-input" />
+                {/* Live preview */}
+                {(form.title || form.highlight) && (
+                  <div className="mt-3 px-4 py-3 bg-[#15151a] border border-[#D4AF37]/15 rounded">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Preview</p>
+                    <p className="font-bold text-lg leading-snug">
+                      <span className="text-white">{form.title || "Title"} </span>
+                      <span className="text-[#D4AF37]">{form.highlight || ""}</span>
+                    </p>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="eyebrow block mb-3">Subtitle</label>
