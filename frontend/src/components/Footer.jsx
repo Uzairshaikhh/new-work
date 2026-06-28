@@ -24,9 +24,9 @@ const Footer = () => {
           <ul className="space-y-3 text-sm text-white/70">
             <li><Link to="/" className="hover:text-amber-brand transition-colors">Home</Link></li>
             <li><a href="/#categories" className="hover:text-amber-brand transition-colors">Categories</a></li>
-            <li><a href="/#products" className="hover:text-amber-brand transition-colors">Products</a></li>
+            <li><Link to="/products" className="hover:text-amber-brand transition-colors">All Products</Link></li>
             <li><a href="/#how-to-order" className="hover:text-amber-brand transition-colors">How To Order</a></li>
-            <li><Link to="/" className="hover:text-amber-brand transition-colors">Contact</Link></li>
+            <li><a href="/#contact" className="hover:text-amber-brand transition-colors">Contact</a></li>
           </ul>
         </div>
 

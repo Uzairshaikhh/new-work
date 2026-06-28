@@ -10,6 +10,7 @@ import ProductDetail from "@/pages/ProductDetail";
 import AboutUs from "@/pages/AboutUs";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsAndConditions from "@/pages/TermsAndConditions";
+import AllProducts from "@/pages/AllProducts";
 
 const AdminLogin = lazy(() => import("@/pages/AdminLogin"));
 const AdminLayout = lazy(() => import("@/pages/AdminLayout"));
@@ -52,6 +53,7 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<AllProducts />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

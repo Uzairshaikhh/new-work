@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
 import { api } from "../lib/api";
 import { waLink } from "../lib/brand";
@@ -71,9 +72,9 @@ const Home = () => {
             <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white leading-tight">
               Popular Corporate Products
             </h2>
-            <a href="#products" className="text-xs font-semibold text-amber-brand hover:underline flex items-center gap-1">
+            <Link to="/products" className="text-xs font-semibold text-amber-brand hover:underline flex items-center gap-1">
               View All Products →
-            </a>
+            </Link>
           </div>
 
           {loading ? (
