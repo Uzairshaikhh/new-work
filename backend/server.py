@@ -804,6 +804,20 @@ async def shutdown_db_client():
 
 app.include_router(api_router)
 
+@app.middleware("http")
+async def cache_public_get(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    # Cache public read-only endpoints for 5 minutes; allow stale for 10 minutes while revalidating
+    if (
+        request.method == "GET"
+        and "/admin" not in path
+        and "/auth" not in path
+        and "/files" not in path
+    ):
+        response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=600"
+    return response
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,

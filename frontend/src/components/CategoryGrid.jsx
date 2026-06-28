@@ -32,10 +32,12 @@ const CategoryGrid = ({ categories = [], loading = false }) => {
         >
           <div className="relative aspect-square rounded-md overflow-hidden bg-[#0e0e13] mb-3">
             <img
-              src={resolveMedia(c.image_url)}
+              src={resolveMedia(c.image_url, 400)}
               alt={c.name}
               loading="lazy"
               decoding="async"
+              width={400}
+              height={400}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>

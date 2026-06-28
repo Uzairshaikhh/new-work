@@ -7,8 +7,12 @@
         <meta name="description" content="A product of emergent.sh" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="preconnect" href="https://res.cloudinary.com">
-        <link rel="dns-prefetch" href="https://res.cloudinary.com">
+        <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+        <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <!-- Preload LCP hero image so browser starts fetching before JS runs -->
+        <link rel="preload" as="image" href="https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=800&q=70" fetchpriority="high" />
         <link rel="icon" type="image/png" href="%PUBLIC_URL%/ag-logo.png" />
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/ag-logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
