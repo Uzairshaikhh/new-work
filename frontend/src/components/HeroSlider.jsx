@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShieldCheck, ArrowRight } from "lucide-react";
 import { resolveMedia } from "../lib/api";
 import { waLink } from "../lib/brand";
 
@@ -97,18 +97,6 @@ const HeroSlider = ({ slides = [] }) => {
                       height={600}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
-                  </div>
-                  <div
-                    className="absolute -bottom-4 left-4 bg-[#15151a] rounded-lg px-3.5 py-2.5 shadow-xl border border-[#d4af37]/30 flex items-center gap-2"
-                    data-testid="hero-price-card"
-                  >
-                    <Sparkles size={16} className="text-amber-brand" />
-                    <div>
-                      <div className="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Starting from</div>
-                      <div className="text-base font-display text-white">
-                        ₹80 <span className="text-xs text-gray-400 font-medium">/piece</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

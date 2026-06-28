@@ -1,6 +1,57 @@
-import { useEffect, useState } from "react";
-import { api } from "../../lib/api";
+import { useEffect, useState, useRef } from "react";
+import { api, resolveMedia } from "../../lib/api";
 import { toast } from "sonner";
+import { Upload, Loader2 } from "lucide-react";
+
+const AvatarUpload = ({ value, onChange }) => {
+  const [uploading, setUploading] = useState(false);
+  const ref = useRef(null);
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const { data } = await api.post("/admin/upload", fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      onChange(data.url);
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-3 mb-3">
+      {value ? (
+        <img
+          src={resolveMedia(value, 120)}
+          alt=""
+          className="w-14 h-14 rounded-full object-cover border-2 border-[#D4AF37]/40"
+        />
+      ) : (
+        <div className="w-14 h-14 rounded-full bg-[#15151a] border-2 border-dashed border-[#D4AF37]/30 flex items-center justify-center">
+          <Upload size={16} className="text-gray-500" />
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        disabled={uploading}
+        className="btn-ghost-gold !py-2 !px-4 !text-xs disabled:opacity-50"
+      >
+        {uploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+        {uploading ? "Uploading…" : value ? "Change Photo" : "Upload Photo"}
+      </button>
+      <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+    </div>
+  );
+};
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
@@ -282,15 +333,13 @@ if (r.data?.testimonials) {
       className="w-full mb-3 bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
     />
 
-    <input
+    <AvatarUpload
       value={t.avatar}
-      onChange={(e) => {
+      onChange={(url) => {
         const updated = [...testimonials];
-        updated[index].avatar = e.target.value;
+        updated[index].avatar = url;
         setTestimonials(updated);
       }}
-      placeholder="Avatar URL"
-      className="w-full mb-3 bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
     />
 
     <textarea

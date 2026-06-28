@@ -38,7 +38,6 @@ const ProductCard = ({ product, compact = false }) => {
             {product.name}
           </h3>
         </Link>
-        <div className="text-[10px] text-gray-400 mt-1">MOQ: 100 pcs</div>
         {product.price && (
           <div className="mt-1 flex items-baseline gap-1">
             <span className="text-[10px] text-gray-400">From</span>
