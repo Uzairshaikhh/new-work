@@ -81,8 +81,8 @@ const AdminSliders = () => {
     // Swap the order values, then persist both
     try {
       await Promise.all([
-        api.put(`/admin/sliders/${a.id}`, { ...a, order: b.order }),
-        api.put(`/admin/sliders/${b.id}`, { ...b, order: a.order }),
+        api.put(`/admin/sliders/${a.id}`, { ...a, highlight: a.highlight ?? "", order: b.order }),
+        api.put(`/admin/sliders/${b.id}`, { ...b, highlight: b.highlight ?? "", order: a.order }),
       ]);
       toast.success("Order updated");
       await load();
