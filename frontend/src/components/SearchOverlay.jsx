@@ -22,7 +22,7 @@ const SearchOverlay = ({ open, onClose }) => {
     if (!open) { setQuery(""); return; }
     setHistory(readHistory());
     setLoading(true);
-    Promise.all([api.get("/products"), api.get("/categories")])
+    Promise.all([api.get("/products?limit=100"), api.get("/categories")])
       .then(([p, c]) => { setProducts(p.data); setCategories(c.data); })
       .finally(() => setLoading(false));
   }, [open]);

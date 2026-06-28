@@ -1,7 +1,7 @@
 import "@/index.css";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
@@ -10,14 +10,15 @@ import ProductDetail from "@/pages/ProductDetail";
 import AboutUs from "@/pages/AboutUs";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsAndConditions from "@/pages/TermsAndConditions";
-import AdminLogin from "@/pages/AdminLogin";
-import AdminLayout from "@/pages/AdminLayout";
-import AdminDashboard from "@/pages/AdminDashboard";
-import AdminSliders from "@/pages/admin/AdminSliders";
-import AdminCategories from "@/pages/admin/AdminCategories";
-import AdminSubcategories from "@/pages/admin/AdminSubcategories";
-import AdminProducts from "@/pages/admin/AdminProducts";
-import AdminSettings from "@/pages/admin/AdminSettings";
+
+const AdminLogin = lazy(() => import("@/pages/AdminLogin"));
+const AdminLayout = lazy(() => import("@/pages/AdminLayout"));
+const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const AdminSliders = lazy(() => import("@/pages/admin/AdminSliders"));
+const AdminCategories = lazy(() => import("@/pages/admin/AdminCategories"));
+const AdminSubcategories = lazy(() => import("@/pages/admin/AdminSubcategories"));
+const AdminProducts = lazy(() => import("@/pages/admin/AdminProducts"));
+const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -57,14 +58,14 @@ function App() {
             <Route path="/category/:id" element={<CategoryPage />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/admin-x9k2l-secret">
-              <Route index element={<AdminLogin />} />
-              <Route element={<AdminLayout />}>
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="sliders" element={<AdminSliders />} />
-                <Route path="categories" element={<AdminCategories />} />
-                <Route path="subcategories" element={<AdminSubcategories />} />
-                <Route path="products" element={<AdminProducts />} />
-                <Route path="settings" element={<AdminSettings />} />
+              <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
+              <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
+                <Route path="dashboard" element={<Suspense fallback={null}><AdminDashboard /></Suspense>} />
+                <Route path="sliders" element={<Suspense fallback={null}><AdminSliders /></Suspense>} />
+                <Route path="categories" element={<Suspense fallback={null}><AdminCategories /></Suspense>} />
+                <Route path="subcategories" element={<Suspense fallback={null}><AdminSubcategories /></Suspense>} />
+                <Route path="products" element={<Suspense fallback={null}><AdminProducts /></Suspense>} />
+                <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>
           </Routes>

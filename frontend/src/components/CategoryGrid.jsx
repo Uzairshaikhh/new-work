@@ -34,6 +34,8 @@ const CategoryGrid = ({ categories = [], loading = false }) => {
             <img
               src={resolveMedia(c.image_url)}
               alt={c.name}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>

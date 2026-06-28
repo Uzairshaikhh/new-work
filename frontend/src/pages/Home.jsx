@@ -29,13 +29,12 @@ const Home = () => {
 
   useEffect(() => {
     let mounted = true;
-    Promise.all([api.get("/sliders"), api.get("/categories"), api.get("/products")])
     Promise.all([
-  api.get("/sliders"),
-  api.get("/categories"),
-  api.get("/products?limit=5"),
-  api.get("/settings"),
-])
+      api.get("/sliders"),
+      api.get("/categories"),
+      api.get("/products?limit=5"),
+      api.get("/settings"),
+    ])
       .then(([s, c, p, st]) => {
         if (!mounted) return;
         setSliders(s.data);
