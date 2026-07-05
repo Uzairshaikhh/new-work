@@ -124,9 +124,13 @@ const Home = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-2.5 justify-center">
-            <a href="#contact" className="btn-primary !py-2.5 !px-5 !text-sm" data-testid="final-cta-quote">
+            <button
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              className="btn-primary !py-2.5 !px-5 !text-sm"
+              data-testid="final-cta-quote"
+            >
               Get Instant Quote
-            </a>
+            </button>
             <a href={bulkCtaHref} target="_blank" rel="noopener noreferrer" className="btn-amber !py-2.5 !px-5 !text-sm" data-testid="final-cta-whatsapp">
               <MessageCircle size={14} /> WhatsApp Now
             </a>
