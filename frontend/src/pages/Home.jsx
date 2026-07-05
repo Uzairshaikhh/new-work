@@ -24,7 +24,7 @@ const Home = () => {
   const [settings, setSettings] = useState(null);
 
   useSEO({
-    title: "Premium Corporate Gifts with Your Brand Identity",
+    title: "Amazing Groups | Complete Corporate & Personalized Gifting Manufacturer & Supplier",
     description: "Amazing Groups — India's trusted B2B gifting partner. Custom wallets, bottles, diaries & more. Premium quality, on-time delivery, pan-India reach.",
   });
 
