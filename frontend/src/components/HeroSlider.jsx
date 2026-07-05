@@ -41,7 +41,7 @@ const HeroSlider = ({ slides = [] }) => {
           {displaySlides.map((s) => (
             <div key={s.id} className="relative flex-[0_0_100%]" data-testid={`hero-slide-${s.id}`}>
               <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-6 animate-fade-up">
+                <div className="lg:col-span-6">
                   <div className="pill-badge mb-4">
                     <ShieldCheck size={12} /> India's Trusted B2B Gifting Partner
                   </div>
@@ -85,7 +85,7 @@ const HeroSlider = ({ slides = [] }) => {
                   </div>
                 </div>
 
-                <div className="lg:col-span-6 relative animate-fade-up" style={{ animationDelay: "150ms" }}>
+                <div className="lg:col-span-6 relative">
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-2xl border border-[#d4af37]/20">
                     <img
                       src={s.image_url ? resolveMedia(s.image_url, 1200) : FALLBACK_IMAGE}

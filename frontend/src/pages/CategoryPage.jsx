@@ -6,6 +6,7 @@ import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
+import ScrollablePills from "../components/ScrollablePills";
 
 const CategoryPage = () => {
   const { id } = useParams();
@@ -111,38 +112,34 @@ const CategoryPage = () => {
 
       {/* Subcategory filter pills — only shown when subcategories exist */}
       {!loading && subcategories.length > 0 && (
-        <section className="border-b border-[#d4af37]/10 bg-[#0a0a0d] px-6 lg:px-10 py-3">
-          <div
-            className="max-w-[1280px] mx-auto flex items-center gap-2.5 overflow-x-auto"
-            style={{ scrollbarWidth: "none" }}
-            data-testid="subcategory-filters"
-          >
-            {/* All pill */}
-            <button
-              onClick={() => setActiveSubcat("")}
-              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                !activeSubcat
-                  ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
-                  : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
-              }`}
-            >
-              All
-            </button>
-
-            {subcategories.map((s) => (
+        <section className="border-b border-[#d4af37]/10 bg-[#0a0a0d] px-6 lg:px-10 py-3" data-testid="subcategory-filters">
+          <div className="max-w-[1280px] mx-auto">
+            <ScrollablePills>
               <button
-                key={s.id}
-                onClick={() => setActiveSubcat(s.id)}
-                data-testid={`subcat-filter-${s.id}`}
+                onClick={() => setActiveSubcat("")}
                 className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  activeSubcat === s.id
+                  !activeSubcat
                     ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
                     : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
                 }`}
               >
-                {s.name}
+                All
               </button>
-            ))}
+              {subcategories.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setActiveSubcat(s.id)}
+                  data-testid={`subcat-filter-${s.id}`}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    activeSubcat === s.id
+                      ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
+                      : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
+                  }`}
+                >
+                  {s.name}
+                </button>
+              ))}
+            </ScrollablePills>
           </div>
         </section>
       )}

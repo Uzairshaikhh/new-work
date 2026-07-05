@@ -6,6 +6,7 @@ import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
+import ScrollablePills from "../components/ScrollablePills";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -80,8 +81,8 @@ const AllProducts = () => {
 
       {/* Filters bar */}
       <section className="border-b border-[#d4af37]/10 bg-[#0a0a0d] px-6 lg:px-10 py-3">
-        <div className="max-w-[1280px] mx-auto flex items-center gap-2.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-          {/* Search */}
+        <div className="max-w-[1280px] mx-auto flex items-center gap-2.5">
+          {/* Search — fixed, doesn't scroll */}
           <div className="relative flex-shrink-0">
             <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
             <input
@@ -105,32 +106,34 @@ const AllProducts = () => {
           {/* Divider */}
           <div className="h-5 w-px bg-[#d4af37]/15 flex-shrink-0" />
 
-          {/* All pill */}
-          <button
-            onClick={() => setCategory("")}
-            className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-              !activeCat
-                ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
-                : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
-            }`}
-          >
-            All
-          </button>
-
-          {/* Category pills */}
-          {categories.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setCategory(c.id)}
-              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                activeCat === c.id
-                  ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
-                  : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
-              }`}
-            >
-              {c.name}
-            </button>
-          ))}
+          {/* Scrollable category pills */}
+          <div className="flex-1 min-w-0">
+            <ScrollablePills>
+              <button
+                onClick={() => setCategory("")}
+                className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                  !activeCat
+                    ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
+                    : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
+                }`}
+              >
+                All
+              </button>
+              {categories.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => setCategory(c.id)}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    activeCat === c.id
+                      ? "bg-amber-brand text-[#0a0a0d] border-amber-brand"
+                      : "bg-transparent text-white/70 border-[#d4af37]/25 hover:border-amber-brand hover:text-white"
+                  }`}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </ScrollablePills>
+          </div>
         </div>
       </section>
 

@@ -15,7 +15,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-sm text-white/70 leading-relaxed max-w-xs">
-            India's trusted B2B gifting partner. Premium quality, on-time delivery and pan-India reach.
+            India's trusted B2B corporate gifting partner, delivering premium-quality customized gifts for businesses across India and globally. With expert branding solutions, bulk order support, and reliable on-time delivery, we help brands create lasting impressions through thoughtful, professional, and personalized gifting solutions.
           </p>
         </div>
 
