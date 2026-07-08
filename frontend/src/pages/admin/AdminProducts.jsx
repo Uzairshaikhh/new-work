@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { api, resolveMedia } from "../../lib/api";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Search } from "lucide-react";
 import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
@@ -35,10 +35,11 @@ const AdminProducts = () => {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(empty);
+  const [query, setQuery] = useState("");
 
  const load = () =>
   Promise.all([
-    api.get("/products"),
+    api.get("/products?limit=1000"),
     api.get("/categories"),
     api.get("/subcategories")
   ])
@@ -123,9 +124,21 @@ const removePriceTier = (index) => {
 
 const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const filtered = useMemo(() => {
+    if (!query.trim()) return items;
+    const q = query.trim().toLowerCase();
+    return items.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description || "").toLowerCase().includes(q) ||
+        catName(p.category_id).toLowerCase().includes(q)
+    );
+  }, [items, query]);
+
   return (
     <div className="p-10 lg:p-14" data-testid="admin-products-page">
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <div className="eyebrow mb-3">Catalogue</div>
           <h1 className="font-display text-4xl md:text-5xl text-white">Products</h1>
@@ -140,6 +153,29 @@ const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
         </button>
       </div>
 
+      <div className="flex items-center gap-3 mb-8">
+        <div className="relative flex-1 max-w-sm">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search products by name, category..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-[#0e0e0e] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none pl-9 pr-9 py-2.5 text-sm text-white placeholder:text-neutral-600"
+          />
+          {query && (
+            <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white">
+              <X size={13} />
+            </button>
+          )}
+        </div>
+        {!loading && (
+          <span className="text-xs text-neutral-500">
+            {filtered.length} of {items.length} product{items.length !== 1 ? "s" : ""}
+          </span>
+        )}
+      </div>
+
       {categories.length === 0 && !loading && (
         <div className="mb-8 p-5 border border-[#D4AF37]/30 bg-[#D4AF37]/5 text-sm text-neutral-300">
           Create a collection first before adding products.
@@ -150,13 +186,20 @@ const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-72 bg-[#141414] animate-pulse" />)}
         </div>
-      ) : items.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="text-center py-20 border border-dashed border-[#D4AF37]/20">
-          <p className="text-neutral-400 text-sm uppercase tracking-[0.3em]">No products yet</p>
+          <p className="text-neutral-400 text-sm uppercase tracking-[0.3em]">
+            {query ? "No products match your search" : "No products yet"}
+          </p>
+          {query && (
+            <button onClick={() => setQuery("")} className="mt-4 text-xs text-[#D4AF37] hover:underline">
+              Clear search
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="products-list">
-          {items.map((p) => (
+          {filtered.map((p) => (
             <div key={p.id} className="bg-[#0e0e0e] border border-[#D4AF37]/15 flex" data-testid={`product-row-${p.id}`}>
               <div className="w-32 h-full min-h-[10rem] flex-shrink-0 bg-[#080808]">
                 {p.image_url && <img src={resolveMedia(p.image_url)} alt={p.name} className="w-full h-full object-cover" />}
