@@ -51,6 +51,36 @@ let webpackConfig = {
         ],
       };
 
+      // Split vendor libraries into separate cached chunks (production only)
+      if (webpackConfig.mode === "production") {
+        webpackConfig.optimization = {
+          ...webpackConfig.optimization,
+          splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+              react: {
+                test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom)[\\/]/,
+                name: "vendor-react",
+                chunks: "all",
+                priority: 40,
+              },
+              ui: {
+                test: /[\\/]node_modules[\\/](lucide-react|sonner|embla-carousel)[\\/]/,
+                name: "vendor-ui",
+                chunks: "all",
+                priority: 30,
+              },
+              vendors: {
+                test: /[\\/]node_modules[\\/]/,
+                name: "vendor",
+                chunks: "all",
+                priority: 10,
+              },
+            },
+          },
+        };
+      }
+
       // Add health check plugin to webpack if enabled
       if (config.enableHealthCheck && healthPluginInstance) {
         webpackConfig.plugins.push(healthPluginInstance);
