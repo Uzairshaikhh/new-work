@@ -5,12 +5,14 @@ import { useEffect, lazy, Suspense } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
-import CategoryPage from "@/pages/CategoryPage";
-import ProductDetail from "@/pages/ProductDetail";
-import AboutUs from "@/pages/AboutUs";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import TermsAndConditions from "@/pages/TermsAndConditions";
-import AllProducts from "@/pages/AllProducts";
+
+// Lazy-load all non-home pages so the initial bundle only contains what's needed for the landing page
+const CategoryPage = lazy(() => import("@/pages/CategoryPage"));
+const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
+const AboutUs = lazy(() => import("@/pages/AboutUs"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
+const AllProducts = lazy(() => import("@/pages/AllProducts"));
 
 const AdminLogin = lazy(() => import("@/pages/AdminLogin"));
 const AdminLayout = lazy(() => import("@/pages/AdminLayout"));
@@ -53,12 +55,12 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/products" element={<AllProducts />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-            <Route path="/category/:id" element={<CategoryPage />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/products" element={<Suspense fallback={null}><AllProducts /></Suspense>} />
+            <Route path="/about-us" element={<Suspense fallback={null}><AboutUs /></Suspense>} />
+            <Route path="/privacy-policy" element={<Suspense fallback={null}><PrivacyPolicy /></Suspense>} />
+            <Route path="/terms-and-conditions" element={<Suspense fallback={null}><TermsAndConditions /></Suspense>} />
+            <Route path="/category/:id" element={<Suspense fallback={null}><CategoryPage /></Suspense>} />
+            <Route path="/product/:id" element={<Suspense fallback={null}><ProductDetail /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
               <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
               <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>

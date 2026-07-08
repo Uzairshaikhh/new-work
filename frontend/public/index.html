@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
-        <meta name="description" content="A product of emergent.sh" />
+        <meta name="description" content="Amazing Groups — India's trusted B2B corporate gifting partner. Premium quality customized gifts, bulk orders, expert branding, pan-India delivery." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
@@ -30,11 +30,49 @@
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
         <title>Amazing Groups | Complete Corporate &amp; Personalized Gifting Manufacturer &amp; Supplier</title>
+        <!-- Inline critical styles: dark background immediately, before any JS or CSS loads -->
+        <style>
+          html,body{margin:0;padding:0;background:#0a0a0d;color:#f5f5f7;font-family:"Plus Jakarta Sans",system-ui,sans-serif;}
+          #root{min-height:100vh;}
+          #ag-preload{display:flex;flex-direction:column;min-height:100vh;background:#0a0a0d;}
+          #ag-nav{height:60px;background:#0a0a0d;border-bottom:1px solid rgba(212,175,55,0.12);display:flex;align-items:center;padding:0 40px;}
+          #ag-nav-dot{width:36px;height:36px;border-radius:6px;background:#1a1a22;}
+          #ag-nav-line{height:10px;width:120px;background:#1a1a22;border-radius:4px;margin-left:12px;}
+          #ag-hero{flex:1;display:flex;align-items:center;padding:48px 40px;gap:40px;max-width:1280px;margin:0 auto;width:100%;box-sizing:border-box;}
+          #ag-hero-text{flex:1;}
+          .ag-skel{background:linear-gradient(90deg,#14141a 25%,#1c1c24 50%,#14141a 75%);background-size:200% 100%;animation:ag-shimmer 1.4s infinite;border-radius:6px;}
+          @keyframes ag-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+          #ag-h1-1{height:28px;width:75%;margin-bottom:12px;}
+          #ag-h1-2{height:28px;width:55%;margin-bottom:24px;}
+          #ag-sub-1{height:14px;width:85%;margin-bottom:8px;}
+          #ag-sub-2{height:14px;width:65%;margin-bottom:32px;}
+          #ag-btn{height:44px;width:160px;border-radius:8px;}
+          #ag-hero-img{width:45%;aspect-ratio:4/3;border-radius:12px;border:1px solid rgba(212,175,55,0.15);}
+          @media(max-width:768px){#ag-hero{flex-direction:column;padding:32px 20px;}#ag-hero-img{width:100%;}#ag-nav{padding:0 20px;}}
+        </style>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
+        <!-- Pre-render skeleton: visible immediately, replaced the moment React boots -->
+        <div id="root">
+          <div id="ag-preload">
+            <div id="ag-nav">
+              <div id="ag-nav-dot" class="ag-skel"></div>
+              <div id="ag-nav-line" class="ag-skel"></div>
+            </div>
+            <div id="ag-hero">
+              <div id="ag-hero-text">
+                <div id="ag-h1-1" class="ag-skel"></div>
+                <div id="ag-h1-2" class="ag-skel"></div>
+                <div id="ag-sub-1" class="ag-skel"></div>
+                <div id="ag-sub-2" class="ag-skel"></div>
+                <div id="ag-btn" class="ag-skel"></div>
+              </div>
+              <div id="ag-hero-img" class="ag-skel"></div>
+            </div>
+          </div>
+        </div>
         <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
