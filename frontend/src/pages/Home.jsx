@@ -16,12 +16,23 @@ import SocialLinks from "../components/SocialLinks";
 import Testimonials from "../components/Testimonials";
 import BulkPricing from "../components/BulkPricing";
 
+const CACHE_KEY = "ag_home_v1";
+
+const readCache = () => {
+  try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; }
+};
+const writeCache = (data) => {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {}
+};
+
 const Home = () => {
-  const [sliders, setSliders] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [featured, setFeatured] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState(null);
+  const cache = readCache();
+  const [sliders, setSliders] = useState(cache?.sliders || []);
+  const [categories, setCategories] = useState(cache?.categories || []);
+  const [featured, setFeatured] = useState(cache?.featured || []);
+  const [settings, setSettings] = useState(cache?.settings || null);
+  // Skip loading skeleton entirely when we have cached data to show immediately
+  const [loading, setLoading] = useState(!cache);
 
   useSEO({
     title: "Amazing Groups | Complete Corporate & Personalized Gifting Manufacturer & Supplier",
@@ -42,6 +53,7 @@ const Home = () => {
         setCategories(c.data);
         setFeatured(p.data);
         setSettings(st.data);
+        writeCache({ sliders: s.data, categories: c.data, featured: p.data, settings: st.data });
       })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));
@@ -50,8 +62,13 @@ const Home = () => {
 
   useEffect(() => {
     const cleanup = fetchData();
-    // Re-fetch when user switches back to this tab (e.g. after saving in admin)
-    const onVisible = () => { if (document.visibilityState === "visible") fetchData(); };
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        // Clear stale cache so fresh API data is always written on next fetch
+        try { localStorage.removeItem(CACHE_KEY); } catch {}
+        fetchData();
+      }
+    };
     document.addEventListener("visibilitychange", onVisible);
     return () => {
       cleanup?.();
