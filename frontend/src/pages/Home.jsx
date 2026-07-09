@@ -16,6 +16,7 @@ import SocialLinks from "../components/SocialLinks";
 import Testimonials from "../components/Testimonials";
 import BulkPricing from "../components/BulkPricing";
 import FAQ from "../components/FAQ";
+import StatsCounter from "../components/StatsCounter";
 
 const CACHE_KEY = "ag_home_v1";
 
@@ -84,6 +85,7 @@ const Home = () => {
     <div className="min-h-screen bg-[#0a0a0d]" data-testid="home-page">
       <Navbar />
       <HeroSlider slides={sliders} loading={loading} />
+      <StatsCounter settings={settings} />
 
       {/* Categories */}
       <section id="categories" className="py-10 px-6 lg:px-10" data-testid="categories-section">

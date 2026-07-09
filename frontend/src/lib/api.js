@@ -20,6 +20,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Fire-and-forget analytics event — never blocks UI
+export const track = (event_type, extra = {}) => {
+  try { api.post("/analytics/event", { event_type, ...extra }).catch(() => {}); } catch {}
+};
+
 // Resolve file URLs and auto-optimize Cloudinary images (WebP, auto quality, constrained width)
 export const resolveMedia = (url, width = 800) => {
   if (!url) return "";

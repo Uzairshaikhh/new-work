@@ -26,6 +26,10 @@ const AdminSubcategories = lazy(() => import("@/pages/admin/AdminSubcategories")
 const AdminProducts = lazy(() => import("@/pages/admin/AdminProducts"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const AdminFAQs = lazy(() => import("@/pages/admin/AdminFAQs"));
+const AdminGallery = lazy(() => import("@/pages/admin/AdminGallery"));
+
+const Gallery = lazy(() => import("@/pages/Gallery"));
+const Corporate = lazy(() => import("@/pages/Corporate"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -77,6 +81,8 @@ function App() {
             <Route path="/terms-and-conditions" element={<Suspense fallback={null}><TermsAndConditions /></Suspense>} />
             <Route path="/category/:id" element={<Suspense fallback={null}><CategoryPage /></Suspense>} />
             <Route path="/product/:id" element={<Suspense fallback={null}><ProductDetail /></Suspense>} />
+            <Route path="/gallery" element={<Suspense fallback={null}><Gallery /></Suspense>} />
+            <Route path="/corporate" element={<Suspense fallback={null}><Corporate /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
               <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
               <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
@@ -86,6 +92,7 @@ function App() {
                 <Route path="subcategories" element={<Suspense fallback={null}><AdminSubcategories /></Suspense>} />
                 <Route path="products" element={<Suspense fallback={null}><AdminProducts /></Suspense>} />
                 <Route path="faqs" element={<Suspense fallback={null}><AdminFAQs /></Suspense>} />
+                <Route path="gallery" element={<Suspense fallback={null}><AdminGallery /></Suspense>} />
                 <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>

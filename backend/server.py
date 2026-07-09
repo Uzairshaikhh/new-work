@@ -207,12 +207,31 @@ class SiteSettingsIn(BaseModel):
     announcement_bar_enabled: bool = False
     announcement_bar_text: str = ""
     announcement_bar_color: str = "gold"
+    stats_clients: str = "500+"
+    stats_years: str = "10+"
+    stats_products: str = "1000+"
+    stats_cities: str = "50+"
 
 
 class FAQIn(BaseModel):
     question: str
     answer: str
     order: int = 0
+
+
+class GalleryItemIn(BaseModel):
+    title: str
+    description: Optional[str] = ""
+    image_url: str
+    section: str = "general"
+    order: int = 0
+
+
+class AnalyticsEventIn(BaseModel):
+    event_type: str
+    product_id: Optional[str] = None
+    product_name: Optional[str] = None
+    page: Optional[str] = None
 
 
 class ProductIn(BaseModel):
@@ -403,6 +422,10 @@ async def get_settings():
 "announcement_bar_enabled": False,
 "announcement_bar_text": "",
 "announcement_bar_color": "gold",
+"stats_clients": "500+",
+"stats_years": "10+",
+"stats_products": "1000+",
+"stats_cities": "50+",
 }
 
     return settings
@@ -442,6 +465,10 @@ async def update_settings(
 "announcement_bar_enabled": payload.announcement_bar_enabled,
 "announcement_bar_text": payload.announcement_bar_text,
 "announcement_bar_color": payload.announcement_bar_color,
+"stats_clients": payload.stats_clients,
+"stats_years": payload.stats_years,
+"stats_products": payload.stats_products,
+"stats_cities": payload.stats_cities,
 
 }
         },
@@ -696,6 +723,86 @@ async def delete_faq(faq_id: str, admin=Depends(get_current_admin)):
     return {"ok": True}
 
 
+# ---------- Public: Gallery ----------
+
+@api_router.get("/gallery")
+async def list_gallery(section: Optional[str] = None):
+    q = {}
+    if section and section != "all":
+        q["section"] = section
+    items = await db.gallery.find(q, {"_id": 0}).sort("order", 1).to_list(500)
+    return items
+
+
+# ---------- Admin: Gallery CRUD ----------
+
+@api_router.post("/admin/gallery")
+async def create_gallery_item(payload: GalleryItemIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.gallery.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@api_router.put("/admin/gallery/{item_id}")
+async def update_gallery_item(item_id: str, payload: GalleryItemIn, admin=Depends(get_current_admin)):
+    res = await db.gallery.update_one({"id": item_id}, {"$set": payload.model_dump()})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Gallery item not found")
+    item = await db.gallery.find_one({"id": item_id}, {"_id": 0})
+    return item
+
+
+@api_router.delete("/admin/gallery/{item_id}")
+async def delete_gallery_item(item_id: str, admin=Depends(get_current_admin)):
+    res = await db.gallery.delete_one({"id": item_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Gallery item not found")
+    return {"ok": True}
+
+
+# ---------- Public: Analytics ----------
+
+@api_router.post("/analytics/event")
+async def track_event(payload: AnalyticsEventIn, request: Request):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.analytics.insert_one(doc)
+    return {"ok": True}
+
+
+# ---------- Admin: Analytics ----------
+
+@api_router.get("/admin/analytics")
+async def get_analytics(admin=Depends(get_current_admin)):
+    by_type_cursor = db.analytics.aggregate([
+        {"$group": {"_id": "$event_type", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}}
+    ])
+    by_type_raw = await by_type_cursor.to_list(20)
+    by_type = {item["_id"]: item["count"] for item in by_type_raw}
+
+    top_products_cursor = db.analytics.aggregate([
+        {"$match": {"event_type": "product_view", "product_id": {"$ne": None}}},
+        {"$group": {"_id": "$product_id", "name": {"$first": "$product_name"}, "views": {"$sum": 1}}},
+        {"$sort": {"views": -1}},
+        {"$limit": 5}
+    ])
+    top_products = await top_products_cursor.to_list(5)
+
+    recent = await db.analytics.find({}, {"_id": 0}).sort("created_at", -1).to_list(10)
+
+    return {
+        "by_type": by_type,
+        "top_products": top_products,
+        "recent": recent,
+        "total": await db.analytics.count_documents({}),
+    }
+
+
 # ---------- Admin: Stats ----------
 
 @api_router.get("/admin/stats")
@@ -706,6 +813,7 @@ async def stats(admin=Depends(get_current_admin)):
         "products": await db.products.count_documents({}),
         "sliders": await db.sliders.count_documents({}),
         "faqs": await db.faqs.count_documents({}),
+        "gallery": await db.gallery.count_documents({}),
     }
 
 

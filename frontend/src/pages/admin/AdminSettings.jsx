@@ -58,6 +58,10 @@ const AdminSettings = () => {
   const [announcementEnabled, setAnnouncementEnabled] = useState(false);
   const [announcementText, setAnnouncementText] = useState("");
   const [announcementColor, setAnnouncementColor] = useState("gold");
+  const [statsClients, setStatsClients] = useState("500+");
+  const [statsYears, setStatsYears] = useState("10+");
+  const [statsProducts, setStatsProducts] = useState("1000+");
+  const [statsCities, setStatsCities] = useState("50+");
 
   const [tiers, setTiers] = useState([
     { qty: 100, price: "₹120" },
@@ -119,6 +123,10 @@ if (r.data?.trusted_clients_brands) {
 if (r.data?.announcement_bar_enabled !== undefined) setAnnouncementEnabled(r.data.announcement_bar_enabled);
 if (r.data?.announcement_bar_text) setAnnouncementText(r.data.announcement_bar_text);
 if (r.data?.announcement_bar_color) setAnnouncementColor(r.data.announcement_bar_color);
+if (r.data?.stats_clients) setStatsClients(r.data.stats_clients);
+if (r.data?.stats_years) setStatsYears(r.data.stats_years);
+if (r.data?.stats_products) setStatsProducts(r.data.stats_products);
+if (r.data?.stats_cities) setStatsCities(r.data.stats_cities);
 if (r.data?.whatsapp_url) setWhatsappUrl(r.data.whatsapp_url);
 if (r.data?.facebook_url) setFacebookUrl(r.data.facebook_url);
 if (r.data?.instagram_url) setInstagramUrl(r.data.instagram_url);
@@ -168,6 +176,10 @@ if (r.data?.testimonials) {
   announcement_bar_enabled: announcementEnabled,
   announcement_bar_text: announcementText,
   announcement_bar_color: announcementColor,
+  stats_clients: statsClients,
+  stats_years: statsYears,
+  stats_products: statsProducts,
+  stats_cities: statsCities,
 });
       toast.success("Settings saved");
     } catch (err) {
@@ -423,6 +435,22 @@ if (r.data?.testimonials) {
     <option value="green">Green</option>
     <option value="blue">Blue</option>
   </select>
+</div>
+
+<h2 className="text-2xl text-white mt-12 mb-2">Stats Counter</h2>
+<p className="text-xs text-neutral-400 mb-6">Numbers displayed in the animated stats section on the homepage (e.g. "500+", "10+").</p>
+<div className="grid grid-cols-2 gap-4 mb-4">
+  {[
+    { label: "Happy Clients", val: statsClients, set: setStatsClients, ph: "500+" },
+    { label: "Years Experience", val: statsYears, set: setStatsYears, ph: "10+" },
+    { label: "Products Delivered", val: statsProducts, set: setStatsProducts, ph: "1000+" },
+    { label: "Cities Covered", val: statsCities, set: setStatsCities, ph: "50+" },
+  ].map((s) => (
+    <div key={s.label}>
+      <label className="eyebrow block mb-2">{s.label}</label>
+      <input value={s.val} onChange={(e) => s.set(e.target.value)} placeholder={s.ph} className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white" />
+    </div>
+  ))}
 </div>
 
       <div className="flex gap-4 mt-6">
