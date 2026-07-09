@@ -234,6 +234,34 @@ class AnalyticsEventIn(BaseModel):
     page: Optional[str] = None
 
 
+class CollectionIn(BaseModel):
+    title: str
+    type: str = "custom"          # festival | corporate | industry | custom
+    description: Optional[str] = ""
+    image_url: Optional[str] = ""
+    badge: Optional[str] = ""     # e.g. "Diwali 2025", "New"
+    product_ids: List[str] = []
+    active: bool = True
+    order: int = 0
+
+
+class PopupIn(BaseModel):
+    enabled: bool = False
+    title: str = ""
+    description: str = ""
+    image_url: Optional[str] = ""
+    cta_text: str = "WhatsApp Us"
+    cta_url: str = ""
+    delay_ms: int = 3000
+
+
+class CallbackRequestIn(BaseModel):
+    name: str
+    phone: str
+    preferred_time: Optional[str] = ""
+    note: Optional[str] = ""
+
+
 class ProductIn(BaseModel):
     category_id: str
     subcategory_id: Optional[str] = ""
@@ -797,10 +825,116 @@ async def get_analytics(admin=Depends(get_current_admin)):
 
     return {
         "by_type": by_type,
-        "top_products": top_products,
+        "top_products": [{"product_id": p["_id"], "product_name": p["name"], "count": p["views"]} for p in top_products],
         "recent": recent,
         "total": await db.analytics.count_documents({}),
+        "product_views": by_type.get("product_view", 0),
+        "whatsapp_clicks": by_type.get("whatsapp_click", 0),
+        "call_clicks": by_type.get("call_click", 0),
     }
+
+
+# ---------- Public: Collections ----------
+
+@api_router.get("/collections")
+async def list_collections(type: Optional[str] = None):
+    q = {"active": True}
+    if type:
+        q["type"] = type
+    docs = await db.collections.find(q, {"_id": 0}).sort("order", 1).to_list(50)
+    return docs
+
+
+# ---------- Admin: Collections ----------
+
+@api_router.post("/admin/collections")
+async def create_collection(payload: CollectionIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.collections.insert_one(doc)
+    return {k: v for k, v in doc.items() if k != "_id"}
+
+
+@api_router.put("/admin/collections/{col_id}")
+async def update_collection(col_id: str, payload: CollectionIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    res = await db.collections.update_one({"id": col_id}, {"$set": doc})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    return {"ok": True}
+
+
+@api_router.delete("/admin/collections/{col_id}")
+async def delete_collection(col_id: str, admin=Depends(get_current_admin)):
+    res = await db.collections.delete_one({"id": col_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    return {"ok": True}
+
+
+# ---------- Public: Popup ----------
+
+@api_router.get("/popup")
+async def get_popup():
+    doc = await db.popup.find_one({}, {"_id": 0})
+    if not doc:
+        return {"enabled": False}
+    return doc
+
+
+# ---------- Admin: Popup ----------
+
+@api_router.put("/admin/popup")
+async def update_popup(payload: PopupIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.popup.update_one({}, {"$set": doc}, upsert=True)
+    return {"ok": True}
+
+
+# ---------- Public: Callback Request ----------
+
+@api_router.post("/callback-request")
+async def create_callback_request(payload: CallbackRequestIn):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    doc["status"] = "pending"
+    await db.callback_requests.insert_one(doc)
+    return {"ok": True}
+
+
+# ---------- Admin: Callback Requests ----------
+
+@api_router.get("/admin/callback-requests")
+async def list_callback_requests(admin=Depends(get_current_admin)):
+    docs = await db.callback_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return docs
+
+
+@api_router.put("/admin/callback-requests/{req_id}/status")
+async def update_callback_status(req_id: str, status: str, admin=Depends(get_current_admin)):
+    await db.callback_requests.update_one({"id": req_id}, {"$set": {"status": status}})
+    return {"ok": True}
+
+
+# ---------- Admin: Duplicate Product ----------
+
+@api_router.post("/admin/products/{product_id}/duplicate")
+async def duplicate_product(product_id: str, admin=Depends(get_current_admin)):
+    original = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not original:
+        raise HTTPException(status_code=404, detail="Product not found")
+    copy = {**original}
+    copy["id"] = str(uuid.uuid4())
+    copy["name"] = f"Copy of {original['name']}"
+    copy["slug"] = f"copy-of-{original.get('slug', product_id)}"
+    copy["created_at"] = datetime.now(timezone.utc).isoformat()
+    copy["featured"] = False
+    await db.products.insert_one(copy)
+    return {k: v for k, v in copy.items() if k != "_id"}
 
 
 # ---------- Admin: Stats ----------
@@ -814,6 +948,8 @@ async def stats(admin=Depends(get_current_admin)):
         "sliders": await db.sliders.count_documents({}),
         "faqs": await db.faqs.count_documents({}),
         "gallery": await db.gallery.count_documents({}),
+        "collections": await db.collections.count_documents({}),
+        "callback_requests": await db.callback_requests.count_documents({"status": "pending"}),
     }
 
 

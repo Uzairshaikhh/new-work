@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LayoutDashboard, Images, FolderTree, Package, Settings, LogOut, HelpCircle, GalleryHorizontal } from "lucide-react";
+import { LayoutDashboard, Images, FolderTree, Package, Settings, LogOut, HelpCircle, GalleryHorizontal, Layers, Megaphone, Phone } from "lucide-react";
 
 const AdminLayout = () => {
   const { admin, checking, logout } = useAuth();
@@ -17,6 +17,9 @@ const AdminLayout = () => {
   { to: "/admin-x9k2l-secret/products", icon: Package, label: "Products" },
   { to: "/admin-x9k2l-secret/faqs", icon: HelpCircle, label: "FAQs" },
   { to: "/admin-x9k2l-secret/gallery", icon: GalleryHorizontal, label: "Gallery" },
+  { to: "/admin-x9k2l-secret/collections", icon: Layers, label: "Collections" },
+  { to: "/admin-x9k2l-secret/callbacks", icon: Phone, label: "Callbacks" },
+  { to: "/admin-x9k2l-secret/popup", icon: Megaphone, label: "Popup" },
   { to: "/admin-x9k2l-secret/settings", icon: Settings, label: "Settings" },
 ];
 

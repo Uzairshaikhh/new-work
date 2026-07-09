@@ -8,6 +8,8 @@ import Home from "@/pages/Home";
 import FloatingDock from "@/components/FloatingDock";
 import BackToTop from "@/components/BackToTop";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import ScrollProgress from "@/components/ScrollProgress";
+import PopupManager from "@/components/PopupManager";
 
 // Lazy-load all non-home pages so the initial bundle only contains what's needed for the landing page
 const CategoryPage = lazy(() => import("@/pages/CategoryPage"));
@@ -30,6 +32,13 @@ const AdminGallery = lazy(() => import("@/pages/admin/AdminGallery"));
 
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const Corporate = lazy(() => import("@/pages/Corporate"));
+const Collections = lazy(() => import("@/pages/Collections"));
+const CollectionView = lazy(() => import("@/pages/CollectionView"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+
+const AdminCollections = lazy(() => import("@/pages/admin/AdminCollections"));
+const AdminPopup = lazy(() => import("@/pages/admin/AdminPopup"));
+const AdminCallbacks = lazy(() => import("@/pages/admin/AdminCallbacks"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -45,12 +54,15 @@ const GlobalUI = () => {
   if (isAdmin) return null;
   return (
     <>
+      <ScrollProgress />
       <AnnouncementBar />
       <FloatingDock />
       <BackToTop />
+      <PopupManager />
     </>
   );
 };
+
 
 function App() {
   return (
@@ -83,6 +95,9 @@ function App() {
             <Route path="/product/:id" element={<Suspense fallback={null}><ProductDetail /></Suspense>} />
             <Route path="/gallery" element={<Suspense fallback={null}><Gallery /></Suspense>} />
             <Route path="/corporate" element={<Suspense fallback={null}><Corporate /></Suspense>} />
+            <Route path="/collections" element={<Suspense fallback={null}><Collections /></Suspense>} />
+            <Route path="/collections/:id" element={<Suspense fallback={null}><CollectionView /></Suspense>} />
+            <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
               <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
               <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
@@ -93,6 +108,9 @@ function App() {
                 <Route path="products" element={<Suspense fallback={null}><AdminProducts /></Suspense>} />
                 <Route path="faqs" element={<Suspense fallback={null}><AdminFAQs /></Suspense>} />
                 <Route path="gallery" element={<Suspense fallback={null}><AdminGallery /></Suspense>} />
+                <Route path="collections" element={<Suspense fallback={null}><AdminCollections /></Suspense>} />
+                <Route path="popup" element={<Suspense fallback={null}><AdminPopup /></Suspense>} />
+                <Route path="callbacks" element={<Suspense fallback={null}><AdminCallbacks /></Suspense>} />
                 <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>

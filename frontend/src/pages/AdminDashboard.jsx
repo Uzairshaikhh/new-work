@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
-import { Images, FolderTree, Package, HelpCircle, GalleryHorizontal, MessageCircle, Phone, Eye } from "lucide-react";
+import { Images, FolderTree, Package, HelpCircle, GalleryHorizontal, MessageCircle, Phone, Eye, Layers, PhoneCall } from "lucide-react";
 
 const StatCard = ({ icon: Icon, label, value, testid, sub }) => (
   <div className="bg-[#0e0e0e] border border-[#D4AF37]/15 p-8 hover:border-[#D4AF37]/40 transition-all duration-500" data-testid={testid}>
@@ -37,12 +37,14 @@ const AdminDashboard = () => {
 
       {/* Content stats */}
       <div className="eyebrow mb-4 text-neutral-500">Content</div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-10">
         <StatCard icon={Images}            label="Sliders"    value={val(stats.sliders)}    testid="stat-sliders" />
         <StatCard icon={FolderTree}        label="Categories" value={val(stats.categories)}  testid="stat-categories" />
         <StatCard icon={Package}           label="Products"   value={val(stats.products)}    testid="stat-products" />
-        <StatCard icon={HelpCircle}        label="FAQs"       value={val(stats.faqs)}        testid="stat-faqs" />
-        <StatCard icon={GalleryHorizontal} label="Gallery"    value={val(stats.gallery)}     testid="stat-gallery" />
+        <StatCard icon={HelpCircle}        label="FAQs"       value={val(stats.faqs)}              testid="stat-faqs" />
+        <StatCard icon={GalleryHorizontal} label="Gallery"    value={val(stats.gallery)}           testid="stat-gallery" />
+        <StatCard icon={Layers}            label="Collections" value={val(stats.collections)}      testid="stat-collections" />
+        <StatCard icon={PhoneCall}         label="Callbacks"  value={val(stats.callback_requests)} testid="stat-callbacks" sub="pending" />
       </div>
 
       {/* Analytics stats */}

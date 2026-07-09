@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { api, resolveMedia } from "../../lib/api";
-import { Plus, Pencil, Trash2, X, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Search, Copy } from "lucide-react";
 import { toast } from "sonner";
 import FileUploader from "../../components/FileUploader";
 
@@ -77,6 +77,16 @@ const AdminProducts = () => {
       load();
     } catch {
       toast.error("Could not delete product");
+    }
+  };
+
+  const duplicate = async (id) => {
+    try {
+      await api.post(`/admin/products/${id}/duplicate`);
+      toast.success("Product duplicated");
+      load();
+    } catch {
+      toast.error("Could not duplicate");
     }
   };
 
@@ -204,6 +214,9 @@ const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
                 <div className="mt-auto pt-3 flex gap-2">
                   <button onClick={() => open(p)} className="btn-ghost-gold !py-2 !px-3 !text-[10px]" data-testid={`edit-product-${p.id}`}>
                     <Pencil size={12} /> Edit
+                  </button>
+                  <button onClick={() => duplicate(p.id)} className="btn-ghost-gold !py-2 !px-3 !text-[10px]" title="Duplicate product">
+                    <Copy size={12} /> Copy
                   </button>
                   <button onClick={() => remove(p.id)} className="btn-ghost-gold !py-2 !px-3 !text-[10px] !text-red-400 !border-red-900" data-testid={`delete-product-${p.id}`}>
                     <Trash2 size={12} /> Delete

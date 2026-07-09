@@ -17,6 +17,7 @@ import Testimonials from "../components/Testimonials";
 import BulkPricing from "../components/BulkPricing";
 import FAQ from "../components/FAQ";
 import StatsCounter from "../components/StatsCounter";
+import CollectionsSection from "../components/CollectionsSection";
 
 const CACHE_KEY = "ag_home_v1";
 
@@ -158,6 +159,7 @@ const Home = () => {
         </div>
       </section>
 
+      <CollectionsSection />
       <FAQ />
       <ContactSection />
       <Footer />

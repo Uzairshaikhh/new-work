@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft, MessageCircle, Phone, Play, ShieldCheck, Truck, Package, Share2, Expand, X } from "lucide-react";
-import { api, resolveMedia } from "../lib/api";
-import { track } from "../lib/api";
+import { api, resolveMedia, track } from "../lib/api";
 import { BRAND, waLink } from "../lib/brand";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
@@ -10,6 +9,7 @@ import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
 import ImageLightbox from "../components/ImageLightbox";
+import RecentlyViewed, { pushRecentlyViewed } from "../components/RecentlyViewed";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -38,6 +38,7 @@ const ProductDetail = () => {
         if (!mounted) return;
         setProduct(r.data);
         track("product_view", { product_id: id, product_name: r.data.name });
+        pushRecentlyViewed(r.data);
         try {
           const sameCat = await api.get(`/categories/${r.data.category_id}/products`);
           let pool = sameCat.data.filter((p) => p.id !== r.data.id);
@@ -246,6 +247,8 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
+
+      <RecentlyViewed excludeId={id} />
 
       <Footer />
 
