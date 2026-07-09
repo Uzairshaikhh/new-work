@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, MessageCircle, Menu, X, Phone, Mail, ShieldCheck, Truck, Package, ChevronDown, Command } from "lucide-react";
 import SearchOverlay from "./SearchOverlay";

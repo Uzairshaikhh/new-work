@@ -97,7 +97,6 @@ function App() {
             <Route path="/corporate" element={<Suspense fallback={null}><Corporate /></Suspense>} />
             <Route path="/collections" element={<Suspense fallback={null}><Collections /></Suspense>} />
             <Route path="/collections/:id" element={<Suspense fallback={null}><CollectionView /></Suspense>} />
-            <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
               <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
               <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
@@ -114,6 +113,7 @@ function App() {
                 <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>
+            <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

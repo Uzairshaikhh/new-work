@@ -127,7 +127,6 @@ const removePriceTier = (index) => {
 
 const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const filtered = useMemo(() => {
     if (!query.trim()) return items;
     const q = query.trim().toLowerCase();
@@ -135,9 +134,9 @@ const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
       (p) =>
         p.name.toLowerCase().includes(q) ||
         (p.description || "").toLowerCase().includes(q) ||
-        catName(p.category_id).toLowerCase().includes(q)
+        (categories.find((c) => c.id === p.category_id)?.name || "").toLowerCase().includes(q)
     );
-  }, [items, query]);
+  }, [items, query, categories]);
 
   return (
     <div className="p-10 lg:p-14" data-testid="admin-products-page">
