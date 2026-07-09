@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MessageCircle, Phone, CheckCircle, Users, Award, Truck, Clock, Package, Star, Gift, Building2, Briefcase, PartyPopper, HeartHandshake } from "lucide-react";
-import { api } from "../lib/api";
+import { MessageCircle, Phone, CheckCircle, Award, Truck, Clock, Package, Star, Building2, ArrowRight } from "lucide-react";
+import { api, resolveMedia } from "../lib/api";
 import { BRAND, waLink } from "../lib/brand";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CategoryGrid from "../components/CategoryGrid";
-
-const SERVICES = [
-  { icon: Users,        title: "Employee Welcome Kits",      desc: "Make every new joiner feel special with branded onboarding kits tailored to your company culture." },
-  { icon: Briefcase,    title: "Corporate Gift Hampers",      desc: "Premium hampers for clients, partners, and executives — curated for maximum brand impact." },
-  { icon: PartyPopper,  title: "Event & Conference Merch",    desc: "Branded merchandise for product launches, trade shows, and corporate events." },
-  { icon: Gift,         title: "Festive & Seasonal Gifting",  desc: "Diwali, Christmas, New Year — bulk seasonal gifting that every recipient will remember." },
-  { icon: Building2,    title: "Promotional Products",        desc: "Logo-branded everyday items that keep your brand visible long after the gift is given." },
-  { icon: HeartHandshake, title: "Client Appreciation Gifts", desc: "Thoughtful premium gifts that strengthen business relationships and drive loyalty." },
-];
 
 const WHY = [
   { icon: Award,    title: "Premium Quality",     desc: "Every product meets our strict quality standards before it reaches your doorstep." },
@@ -35,6 +26,8 @@ const PROCESS = [
 
 const Corporate = () => {
   const [categories, setCategories] = useState([]);
+  const [corpCats, setCorpCats] = useState([]);
+  const [corpLoading, setCorpLoading] = useState(true);
   const waHref = waLink("Hi Amazing Groups, I'd like to discuss corporate gifting for my organisation. Could you help?");
 
   useSEO({
@@ -44,6 +37,10 @@ const Corporate = () => {
 
   useEffect(() => {
     api.get("/categories").then((r) => setCategories(r.data.slice(0, 8))).catch(() => {});
+    api.get("/corporate-categories?homepage_only=true")
+      .then((r) => setCorpCats(r.data))
+      .catch(() => {})
+      .finally(() => setCorpLoading(false));
   }, []);
 
   return (
@@ -73,27 +70,66 @@ const Corporate = () => {
         </div>
       </section>
 
-      {/* Services */}
+      {/* Corporate Categories — dynamic */}
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-12">
             <div className="text-xs uppercase tracking-[0.3em] text-amber-brand font-semibold mb-3">What We Offer</div>
             <h2 className="font-display text-3xl md:text-4xl text-white">Corporate Gifting Services</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES.map((s) => {
-              const Icon = s.icon;
-              return (
+          {corpLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-40 bg-[#15151a] animate-pulse rounded-xl" />
+              ))}
+            </div>
+          ) : corpCats.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {corpCats.map((cat) => (
+                <Link key={cat.id} to={`/corporate/${cat.slug}`} className="group block bg-[#15151a] border border-[#d4af37]/15 rounded-xl overflow-hidden hover:border-[#d4af37]/40 transition-all hover:-translate-y-0.5">
+                  {cat.cover_image ? (
+                    <div className="h-36 overflow-hidden">
+                      <img src={resolveMedia(cat.cover_image, 600)} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  ) : (
+                    <div className="h-36 bg-[#0e0e13] flex items-center justify-center">
+                      <span className="text-4xl">{cat.icon || "🎁"}</span>
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="font-display text-lg text-white leading-tight">{cat.name}</h3>
+                      <ArrowRight size={15} className="text-amber-brand flex-shrink-0 mt-0.5 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    {cat.description && <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{cat.description}</p>}
+                    {cat.product_ids?.length > 0 && (
+                      <p className="text-[10px] text-amber-brand/60 mt-2">{cat.product_ids.length} product{cat.product_ids.length !== 1 ? "s" : ""}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            /* Fallback static cards if no corporate categories created yet */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { icon: "👔", title: "Employee Welcome Kits", desc: "Make every new joiner feel special with branded onboarding kits tailored to your company culture." },
+                { icon: "💼", title: "Corporate Gift Hampers", desc: "Premium hampers for clients, partners, and executives — curated for maximum brand impact." },
+                { icon: "🎉", title: "Event & Conference Merch", desc: "Branded merchandise for product launches, trade shows, and corporate events." },
+                { icon: "🎁", title: "Festive & Seasonal Gifting", desc: "Diwali, Christmas, New Year — bulk seasonal gifting that every recipient will remember." },
+                { icon: "📢", title: "Promotional Products", desc: "Logo-branded everyday items that keep your brand visible long after the gift is given." },
+                { icon: "🤝", title: "Client Appreciation Gifts", desc: "Thoughtful premium gifts that strengthen business relationships and drive loyalty." },
+              ].map((s) => (
                 <div key={s.title} className="bg-[#15151a] border border-[#d4af37]/15 rounded-xl p-6 hover:border-[#d4af37]/40 transition-all group">
                   <div className="w-11 h-11 rounded-lg bg-[#d4af37]/10 flex items-center justify-center mb-4 group-hover:bg-[#d4af37]/20 transition-colors">
-                    <Icon size={20} className="text-amber-brand" />
+                    <span className="text-xl">{s.icon}</span>
                   </div>
                   <h3 className="font-display text-lg text-white mb-2">{s.title}</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">{s.desc}</p>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

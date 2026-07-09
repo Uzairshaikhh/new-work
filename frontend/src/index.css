@@ -51,6 +51,16 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
 .page-in {
   animation: page-in 0.25s ease-out both;
 }

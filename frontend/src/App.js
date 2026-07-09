@@ -6,7 +6,6 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
 import FloatingDock from "@/components/FloatingDock";
-import BackToTop from "@/components/BackToTop";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ScrollProgress from "@/components/ScrollProgress";
 import PopupManager from "@/components/PopupManager";
@@ -39,6 +38,9 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const AdminCollections = lazy(() => import("@/pages/admin/AdminCollections"));
 const AdminPopup = lazy(() => import("@/pages/admin/AdminPopup"));
 const AdminCallbacks = lazy(() => import("@/pages/admin/AdminCallbacks"));
+const AdminCorporate = lazy(() => import("@/pages/admin/AdminCorporate"));
+
+const CorporateCategoryPage = lazy(() => import("@/pages/CorporateCategoryPage"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -57,7 +59,6 @@ const GlobalUI = () => {
       <ScrollProgress />
       <AnnouncementBar />
       <FloatingDock />
-      <BackToTop />
       <PopupManager />
     </>
   );
@@ -95,6 +96,7 @@ function App() {
             <Route path="/product/:id" element={<Suspense fallback={null}><ProductDetail /></Suspense>} />
             <Route path="/gallery" element={<Suspense fallback={null}><Gallery /></Suspense>} />
             <Route path="/corporate" element={<Suspense fallback={null}><Corporate /></Suspense>} />
+            <Route path="/corporate/:slug" element={<Suspense fallback={null}><CorporateCategoryPage /></Suspense>} />
             <Route path="/collections" element={<Suspense fallback={null}><Collections /></Suspense>} />
             <Route path="/collections/:id" element={<Suspense fallback={null}><CollectionView /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
@@ -110,6 +112,7 @@ function App() {
                 <Route path="collections" element={<Suspense fallback={null}><AdminCollections /></Suspense>} />
                 <Route path="popup" element={<Suspense fallback={null}><AdminPopup /></Suspense>} />
                 <Route path="callbacks" element={<Suspense fallback={null}><AdminCallbacks /></Suspense>} />
+                <Route path="corporate" element={<Suspense fallback={null}><AdminCorporate /></Suspense>} />
                 <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>

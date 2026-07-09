@@ -103,8 +103,6 @@ const [testimonials, setTestimonials] = useState([
   api
     .get("/settings")
     .then((r) => {
-      console.log("SETTINGS RESPONSE", r.data);
-
       if (r.data?.bulk_pricing) {
         setTiers(r.data.bulk_pricing);
       }
@@ -136,13 +134,7 @@ if (r.data?.testimonials) {
   setTestimonials(r.data.testimonials);
 }
 })
-    .catch((err) => {
-      console.log(
-        "SETTINGS ERROR",
-        err.response?.status,
-        err.response?.data
-      );
-    })
+    .catch(() => {})
     .finally(() => setLoading(false));
 }, []);
 
@@ -182,8 +174,7 @@ if (r.data?.testimonials) {
   stats_cities: statsCities,
 });
       toast.success("Settings saved");
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to save settings");
     }
   };

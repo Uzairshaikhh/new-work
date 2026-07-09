@@ -234,6 +234,24 @@ class AnalyticsEventIn(BaseModel):
     page: Optional[str] = None
 
 
+class CorporateCategoryIn(BaseModel):
+    name: str
+    slug: Optional[str] = ""
+    description: Optional[str] = ""
+    long_description: Optional[str] = ""
+    cover_image: Optional[str] = ""
+    banner_image: Optional[str] = ""
+    icon: Optional[str] = ""
+    product_ids: List[str] = []
+    seo_title: Optional[str] = ""
+    seo_description: Optional[str] = ""
+    featured: bool = False
+    trending: bool = False
+    show_on_homepage: bool = True
+    active: bool = True
+    order: int = 0
+
+
 class CollectionIn(BaseModel):
     title: str
     type: str = "custom"          # festival | corporate | industry | custom
@@ -834,6 +852,67 @@ async def get_analytics(admin=Depends(get_current_admin)):
     }
 
 
+# ---------- Corporate Categories ----------
+
+def make_slug(name: str) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+@api_router.get("/corporate-categories")
+async def list_corporate_categories(homepage_only: bool = False):
+    q = {"active": True}
+    if homepage_only:
+        q["show_on_homepage"] = True
+    docs = await db.corporate_categories.find(q, {"_id": 0}).sort("order", 1).to_list(50)
+    return docs
+
+
+@api_router.get("/corporate-categories/{slug}")
+async def get_corporate_category(slug: str):
+    doc = await db.corporate_categories.find_one({"slug": slug, "active": True}, {"_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Corporate category not found")
+    return doc
+
+
+@api_router.post("/admin/corporate-categories")
+async def create_corporate_category(payload: CorporateCategoryIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    if not doc.get("slug"):
+        doc["slug"] = make_slug(doc["name"])
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.corporate_categories.insert_one(doc)
+    return {k: v for k, v in doc.items() if k != "_id"}
+
+
+@api_router.put("/admin/corporate-categories/{cat_id}")
+async def update_corporate_category(cat_id: str, payload: CorporateCategoryIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    if not doc.get("slug"):
+        doc["slug"] = make_slug(doc["name"])
+    doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    res = await db.corporate_categories.update_one({"id": cat_id}, {"$set": doc})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Corporate category not found")
+    return {"ok": True}
+
+
+@api_router.delete("/admin/corporate-categories/{cat_id}")
+async def delete_corporate_category(cat_id: str, admin=Depends(get_current_admin)):
+    res = await db.corporate_categories.delete_one({"id": cat_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Corporate category not found")
+    return {"ok": True}
+
+
+@api_router.put("/admin/corporate-categories/{cat_id}/reorder")
+async def reorder_corporate_category(cat_id: str, order: int, admin=Depends(get_current_admin)):
+    await db.corporate_categories.update_one({"id": cat_id}, {"$set": {"order": order}})
+    return {"ok": True}
+
+
 # ---------- Public: Collections ----------
 
 @api_router.get("/collections")
@@ -950,6 +1029,7 @@ async def stats(admin=Depends(get_current_admin)):
         "gallery": await db.gallery.count_documents({}),
         "collections": await db.collections.count_documents({}),
         "callback_requests": await db.callback_requests.count_documents({"status": "pending"}),
+        "corporate_categories": await db.corporate_categories.count_documents({}),
     }
 
 
