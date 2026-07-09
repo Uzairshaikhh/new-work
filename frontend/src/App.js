@@ -5,6 +5,9 @@ import { useEffect, lazy, Suspense } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
+import FloatingDock from "@/components/FloatingDock";
+import BackToTop from "@/components/BackToTop";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 // Lazy-load all non-home pages so the initial bundle only contains what's needed for the landing page
 const CategoryPage = lazy(() => import("@/pages/CategoryPage"));
@@ -22,15 +25,27 @@ const AdminCategories = lazy(() => import("@/pages/admin/AdminCategories"));
 const AdminSubcategories = lazy(() => import("@/pages/admin/AdminSubcategories"));
 const AdminProducts = lazy(() => import("@/pages/admin/AdminProducts"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
+const AdminFAQs = lazy(() => import("@/pages/admin/AdminFAQs"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
-
   return null;
+};
+
+const GlobalUI = () => {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith("/admin");
+  if (isAdmin) return null;
+  return (
+    <>
+      <AnnouncementBar />
+      <FloatingDock />
+      <BackToTop />
+    </>
+  );
 };
 
 function App() {
@@ -53,6 +68,7 @@ function App() {
         />
         <BrowserRouter>
           <ScrollToTop />
+          <GlobalUI />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Suspense fallback={null}><AllProducts /></Suspense>} />
@@ -69,6 +85,7 @@ function App() {
                 <Route path="categories" element={<Suspense fallback={null}><AdminCategories /></Suspense>} />
                 <Route path="subcategories" element={<Suspense fallback={null}><AdminSubcategories /></Suspense>} />
                 <Route path="products" element={<Suspense fallback={null}><AdminProducts /></Suspense>} />
+                <Route path="faqs" element={<Suspense fallback={null}><AdminFAQs /></Suspense>} />
                 <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
               </Route>
             </Route>

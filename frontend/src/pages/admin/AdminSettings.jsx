@@ -55,6 +55,9 @@ const AvatarUpload = ({ value, onChange }) => {
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
+  const [announcementEnabled, setAnnouncementEnabled] = useState(false);
+  const [announcementText, setAnnouncementText] = useState("");
+  const [announcementColor, setAnnouncementColor] = useState("gold");
 
   const [tiers, setTiers] = useState([
     { qty: 100, price: "₹120" },
@@ -113,6 +116,9 @@ if (r.data?.trusted_clients_brands) {
   setClientsBrands(r.data.trusted_clients_brands);
 }
 
+if (r.data?.announcement_bar_enabled !== undefined) setAnnouncementEnabled(r.data.announcement_bar_enabled);
+if (r.data?.announcement_bar_text) setAnnouncementText(r.data.announcement_bar_text);
+if (r.data?.announcement_bar_color) setAnnouncementColor(r.data.announcement_bar_color);
 if (r.data?.whatsapp_url) setWhatsappUrl(r.data.whatsapp_url);
 if (r.data?.facebook_url) setFacebookUrl(r.data.facebook_url);
 if (r.data?.instagram_url) setInstagramUrl(r.data.instagram_url);
@@ -150,17 +156,18 @@ if (r.data?.testimonials) {
     try {
      await api.put("/admin/settings", {
   bulk_pricing: tiers,
-
   trusted_clients_title: clientsTitle,
   trusted_clients_brands: clientsBrands,
   trusted_clients_stats: clientsStats,
-
   whatsapp_url: whatsappUrl,
   facebook_url: facebookUrl,
   instagram_url: instagramUrl,
   linkedin_url: linkedinUrl,
   youtube_url: youtubeUrl,
-    testimonials: testimonials,
+  testimonials: testimonials,
+  announcement_bar_enabled: announcementEnabled,
+  announcement_bar_text: announcementText,
+  announcement_bar_color: announcementColor,
 });
       toast.success("Settings saved");
     } catch (err) {
@@ -384,7 +391,39 @@ if (r.data?.testimonials) {
 >
   Add Review
 </button>
-<div className="flex gap-4 mt-6"></div>
+<h2 className="text-2xl text-white mt-12 mb-6">Announcement Bar</h2>
+<p className="text-xs text-neutral-400 mb-4">Show a dismissible banner at the top of every page on the website.</p>
+
+<label className="flex items-center gap-3 mb-4 cursor-pointer">
+  <input
+    type="checkbox"
+    checked={announcementEnabled}
+    onChange={(e) => setAnnouncementEnabled(e.target.checked)}
+    className="w-4 h-4 accent-[#D4AF37]"
+  />
+  <span className="text-sm text-neutral-300">Enable Announcement Bar</span>
+</label>
+
+<input
+  value={announcementText}
+  onChange={(e) => setAnnouncementText(e.target.value)}
+  placeholder="e.g. 🎉 Free shipping on orders above ₹5000 | Call +91 98867 28837"
+  className="w-full mb-4 bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
+/>
+
+<div className="mb-4">
+  <label className="eyebrow block mb-2">Bar Color</label>
+  <select
+    value={announcementColor}
+    onChange={(e) => setAnnouncementColor(e.target.value)}
+    className="bg-[#0a0a0a] border border-[#D4AF37]/20 px-4 py-3 text-white"
+  >
+    <option value="gold">Gold</option>
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+  </select>
+</div>
 
       <div className="flex gap-4 mt-6">
         <button onClick={addTier} className="btn-primary">

@@ -11,20 +11,13 @@ const empty = {
   name: "",
   description: "",
   price: "",
-
   moq: 1,
-
-  bulk_pricing: [
-    {
-      qty: 100,
-      price: "₹120",
-    },
-  ],
-
+  bulk_pricing: [{ qty: 100, price: "₹120" }],
   image_url: "",
   video_url: "",
   images: [],
   featured: false,
+  badge: "",
 };
 
 const AdminProducts = () => {
@@ -376,6 +369,21 @@ const catName = (id) => categories.find((c) => c.id === id)?.name || "—";
               </div>
 
               <FileUploader value={form.video_url} onChange={(v) => setForm({ ...form, video_url: v })} label="Video (optional)" accept="video/*" testid="product-video" />
+
+              <div>
+                <label className="eyebrow block mb-3">Product Badge</label>
+                <select
+                  value={form.badge || ""}
+                  onChange={(e) => setForm({ ...form, badge: e.target.value })}
+                  className="w-full bg-[#0a0a0a] border border-[#D4AF37]/20 focus:border-[#D4AF37] outline-none px-4 py-3 text-white font-light"
+                >
+                  <option value="">No Badge</option>
+                  <option value="new">🟢 New</option>
+                  <option value="bestseller">🟡 Bestseller</option>
+                  <option value="trending">🟠 Trending</option>
+                  <option value="premium">🟣 Premium</option>
+                </select>
+              </div>
 
               <label className="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })}

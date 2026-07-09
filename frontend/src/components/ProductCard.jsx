@@ -25,11 +25,23 @@ const ProductCard = ({ product, compact = false }) => {
   height="400"
   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
 />
-        {product.featured && (
+        {product.badge && product.badge !== "" ? (
+          <span className={`absolute top-2 left-2 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+            product.badge === "bestseller" ? "bg-amber-brand text-[#0a0a0d]" :
+            product.badge === "new" ? "bg-emerald-500 text-white" :
+            product.badge === "trending" ? "bg-orange-500 text-white" :
+            product.badge === "premium" ? "bg-purple-500 text-white" : ""
+          }`}>
+            {product.badge === "bestseller" ? "Bestseller" :
+             product.badge === "new" ? "New" :
+             product.badge === "trending" ? "Trending" :
+             product.badge === "premium" ? "Premium" : ""}
+          </span>
+        ) : product.featured ? (
           <span className="absolute top-2 left-2 bg-amber-brand text-[#0a0a0d] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
             Popular
           </span>
-        )}
+        ) : null}
       </Link>
 
       <div className={`${compact ? "p-2" : "p-3"} flex flex-col flex-1`}>

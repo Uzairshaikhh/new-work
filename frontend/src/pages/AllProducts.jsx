@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Search, X } from "lucide-react";
+import { ChevronLeft, Search, X, ArrowUpDown } from "lucide-react";
 import { api } from "../lib/api";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
@@ -8,11 +8,15 @@ import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import ScrollablePills from "../components/ScrollablePills";
 
+const PAGE_SIZE = 24;
+
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [sortBy, setSortBy] = useState("default");
+  const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeCat = searchParams.get("category") || "";
@@ -49,10 +53,17 @@ const AllProducts = () => {
           (p.description || "").toLowerCase().includes(q)
       );
     }
+    if (sortBy === "az") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    else if (sortBy === "za") list = [...list].sort((a, b) => b.name.localeCompare(a.name));
+    else if (sortBy === "newest") list = [...list].sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
     return list;
-  }, [products, activeCat, query]);
+  }, [products, activeCat, query, sortBy]);
+
+  const visible = useMemo(() => filtered.slice(0, page * PAGE_SIZE), [filtered, page]);
+  const hasMore = visible.length < filtered.length;
 
   const setCategory = (id) => {
+    setPage(1);
     if (id) setSearchParams({ category: id });
     else setSearchParams({});
   };
@@ -101,6 +112,21 @@ const AllProducts = () => {
                 <X size={12} />
               </button>
             )}
+          </div>
+
+          {/* Sort By */}
+          <div className="relative flex-shrink-0 flex items-center gap-1.5">
+            <ArrowUpDown size={12} className="text-gray-500" />
+            <select
+              value={sortBy}
+              onChange={(e) => { setSortBy(e.target.value); setPage(1); }}
+              className="bg-[#15151a] border border-[#d4af37]/20 rounded-full pl-2 pr-6 py-1.5 text-xs text-white focus:outline-none focus:border-amber-brand appearance-none cursor-pointer"
+            >
+              <option value="default">Default</option>
+              <option value="az">Name A–Z</option>
+              <option value="za">Name Z–A</option>
+              <option value="newest">Newest</option>
+            </select>
           </div>
 
           {/* Divider */}
@@ -164,10 +190,20 @@ const AllProducts = () => {
                 {filtered.length} product{filtered.length !== 1 ? "s" : ""}
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {filtered.map((p) => (
+                {visible.map((p) => (
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>
+              {hasMore && (
+                <div className="text-center mt-10">
+                  <button
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="btn-amber !py-2.5 !px-8 !text-sm"
+                  >
+                    Load More ({filtered.length - visible.length} remaining)
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>

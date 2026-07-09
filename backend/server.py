@@ -204,6 +204,15 @@ class SiteSettingsIn(BaseModel):
             body="Great products at the best prices for bulk orders. Very satisfied!"
         ),
     ]
+    announcement_bar_enabled: bool = False
+    announcement_bar_text: str = ""
+    announcement_bar_color: str = "gold"
+
+
+class FAQIn(BaseModel):
+    question: str
+    answer: str
+    order: int = 0
 
 
 class ProductIn(BaseModel):
@@ -221,6 +230,7 @@ class ProductIn(BaseModel):
     bulk_pricing: List[PriceTier] = []
 
     featured: bool = False
+    badge: Optional[str] = ""
     status: Optional[str] = "active"
     sort_order: int = 0
 
@@ -389,7 +399,10 @@ async def get_settings():
         "avatar": "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=srgb&fm=jpg&w=120&q=80",
         "body": "Great products at the best prices for bulk orders. Very satisfied!"
     }
-]
+],
+"announcement_bar_enabled": False,
+"announcement_bar_text": "",
+"announcement_bar_color": "gold",
 }
 
     return settings
@@ -425,6 +438,10 @@ async def update_settings(
 "testimonials": [
     t.model_dump() for t in payload.testimonials
 ],
+
+"announcement_bar_enabled": payload.announcement_bar_enabled,
+"announcement_bar_text": payload.announcement_bar_text,
+"announcement_bar_color": payload.announcement_bar_color,
 
 }
         },
@@ -642,6 +659,43 @@ async def delete_product(product_id: str, admin=Depends(get_current_admin)):
     return {"ok": True}
 
 
+# ---------- Public: FAQs ----------
+
+@api_router.get("/faqs")
+async def list_faqs():
+    items = await db.faqs.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return items
+
+
+# ---------- Admin: FAQs CRUD ----------
+
+@api_router.post("/admin/faqs")
+async def create_faq(payload: FAQIn, admin=Depends(get_current_admin)):
+    doc = payload.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.faqs.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@api_router.put("/admin/faqs/{faq_id}")
+async def update_faq(faq_id: str, payload: FAQIn, admin=Depends(get_current_admin)):
+    res = await db.faqs.update_one({"id": faq_id}, {"$set": payload.model_dump()})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="FAQ not found")
+    item = await db.faqs.find_one({"id": faq_id}, {"_id": 0})
+    return item
+
+
+@api_router.delete("/admin/faqs/{faq_id}")
+async def delete_faq(faq_id: str, admin=Depends(get_current_admin)):
+    res = await db.faqs.delete_one({"id": faq_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="FAQ not found")
+    return {"ok": True}
+
+
 # ---------- Admin: Stats ----------
 
 @api_router.get("/admin/stats")
@@ -651,6 +705,7 @@ async def stats(admin=Depends(get_current_admin)):
         "subcategories": await db.subcategories.count_documents({}),
         "products": await db.products.count_documents({}),
         "sliders": await db.sliders.count_documents({}),
+        "faqs": await db.faqs.count_documents({}),
     }
 
 
