@@ -144,8 +144,8 @@ const Navbar = () => {
 
               {megaOpen && categories.length > 0 && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[580px] glass-dark border border-[#d4af37]/18 rounded-xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8),0_0_0_1px_rgba(212,175,55,0.06)] z-50 p-5
-                    animate-fade-down origin-top"
+                  className="absolute top-full right-0 mt-3 w-[560px] glass-dark border border-[#d4af37]/18 rounded-xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8),0_0_0_1px_rgba(212,175,55,0.06)] z-50 p-5
+                    animate-fade-down origin-top-right"
                   onMouseEnter={openMega}
                   onMouseLeave={closeMega}
                 >
