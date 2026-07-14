@@ -6,7 +6,11 @@ const AdminLayout = () => {
   const { admin, checking, logout } = useAuth();
   const navigate = useNavigate();
 
-  if (checking) return <div className="min-h-screen bg-[#0a0a0a]" />;
+  if (checking) return (
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full border-2 border-[#d4af37]/25 border-t-[#d4af37] animate-spin" />
+    </div>
+  );
   if (!admin) return <Navigate to="/admin-x9k2l-secret" replace />;
 
   const navItems = [

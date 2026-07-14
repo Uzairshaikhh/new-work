@@ -42,6 +42,12 @@ const AdminCorporate = lazy(() => import("@/pages/admin/AdminCorporate"));
 
 const CorporateCategoryPage = lazy(() => import("@/pages/CorporateCategoryPage"));
 
+const AdminLoader = () => (
+  <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-2 border-[#d4af37]/25 border-t-[#d4af37] animate-spin" />
+  </div>
+);
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -100,20 +106,20 @@ function App() {
             <Route path="/collections" element={<Suspense fallback={null}><Collections /></Suspense>} />
             <Route path="/collections/:id" element={<Suspense fallback={null}><CollectionView /></Suspense>} />
             <Route path="/admin-x9k2l-secret">
-              <Route index element={<Suspense fallback={null}><AdminLogin /></Suspense>} />
-              <Route element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
-                <Route path="dashboard" element={<Suspense fallback={null}><AdminDashboard /></Suspense>} />
-                <Route path="sliders" element={<Suspense fallback={null}><AdminSliders /></Suspense>} />
-                <Route path="categories" element={<Suspense fallback={null}><AdminCategories /></Suspense>} />
-                <Route path="subcategories" element={<Suspense fallback={null}><AdminSubcategories /></Suspense>} />
-                <Route path="products" element={<Suspense fallback={null}><AdminProducts /></Suspense>} />
-                <Route path="faqs" element={<Suspense fallback={null}><AdminFAQs /></Suspense>} />
-                <Route path="gallery" element={<Suspense fallback={null}><AdminGallery /></Suspense>} />
-                <Route path="collections" element={<Suspense fallback={null}><AdminCollections /></Suspense>} />
-                <Route path="popup" element={<Suspense fallback={null}><AdminPopup /></Suspense>} />
-                <Route path="callbacks" element={<Suspense fallback={null}><AdminCallbacks /></Suspense>} />
-                <Route path="corporate" element={<Suspense fallback={null}><AdminCorporate /></Suspense>} />
-                <Route path="settings" element={<Suspense fallback={null}><AdminSettings /></Suspense>} />
+              <Route index element={<Suspense fallback={<AdminLoader />}><AdminLogin /></Suspense>} />
+              <Route element={<Suspense fallback={<AdminLoader />}><AdminLayout /></Suspense>}>
+                <Route path="dashboard" element={<Suspense fallback={<AdminLoader />}><AdminDashboard /></Suspense>} />
+                <Route path="sliders" element={<Suspense fallback={<AdminLoader />}><AdminSliders /></Suspense>} />
+                <Route path="categories" element={<Suspense fallback={<AdminLoader />}><AdminCategories /></Suspense>} />
+                <Route path="subcategories" element={<Suspense fallback={<AdminLoader />}><AdminSubcategories /></Suspense>} />
+                <Route path="products" element={<Suspense fallback={<AdminLoader />}><AdminProducts /></Suspense>} />
+                <Route path="faqs" element={<Suspense fallback={<AdminLoader />}><AdminFAQs /></Suspense>} />
+                <Route path="gallery" element={<Suspense fallback={<AdminLoader />}><AdminGallery /></Suspense>} />
+                <Route path="collections" element={<Suspense fallback={<AdminLoader />}><AdminCollections /></Suspense>} />
+                <Route path="popup" element={<Suspense fallback={<AdminLoader />}><AdminPopup /></Suspense>} />
+                <Route path="callbacks" element={<Suspense fallback={<AdminLoader />}><AdminCallbacks /></Suspense>} />
+                <Route path="corporate" element={<Suspense fallback={<AdminLoader />}><AdminCorporate /></Suspense>} />
+                <Route path="settings" element={<Suspense fallback={<AdminLoader />}><AdminSettings /></Suspense>} />
               </Route>
             </Route>
             <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
