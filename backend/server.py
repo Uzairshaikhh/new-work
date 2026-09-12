@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import asyncio
 import logging
 import uuid
 import bcrypt
@@ -52,12 +53,15 @@ def init_storage():
     return None
 
 
-def put_object(path: str, data: bytes, content_type: str) -> dict:
-    upload_result = cloudinary.uploader.upload(
+async def put_object(path: str, data: bytes, content_type: str) -> dict:
+    # cloudinary.uploader.upload() is a blocking network call; run it off the
+    # event loop so a single admin upload doesn't stall every other request.
+    upload_result = await asyncio.to_thread(
+        cloudinary.uploader.upload,
         data,
         public_id=path,
         resource_type="auto",
-        overwrite=True
+        overwrite=True,
     )
 
     return {
@@ -587,7 +591,7 @@ async def upload_file(
     data = await file.read()
     content_type = file.content_type or "application/octet-stream"
 
-    result = put_object(path, data, content_type)
+    result = await put_object(path, data, content_type)
 
     await db.files.insert_one({
         "id": file_id,

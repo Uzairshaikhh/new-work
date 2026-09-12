@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronLeft, MessageCircle, Phone, Play, ShieldCheck, Truck, Package, Share2, Expand, X } from "lucide-react";
-import { api, resolveMedia, track } from "../lib/api";
+import { api, resolveMedia, getVideoEmbedUrl, track } from "../lib/api";
 import { BRAND, waLink } from "../lib/brand";
 import useSEO from "../hooks/useSEO";
 import Navbar from "../components/Navbar";
@@ -120,7 +120,17 @@ const ProductDetail = () => {
             {/* Gallery */}
             <div data-testid="product-gallery">
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#15151a] group cursor-zoom-in" onClick={() => !showVideo && setLightboxOpen(true)}>
-                {showVideo && product.video_url ? (
+                {showVideo && product.video_url && getVideoEmbedUrl(product.video_url) ? (
+                  <iframe
+                    src={`${getVideoEmbedUrl(product.video_url)}?autoplay=1`}
+                    title={`${product.name} video`}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                    data-testid="product-video"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : showVideo && product.video_url ? (
                   <video
                     src={resolveMedia(product.video_url)}
                     controls

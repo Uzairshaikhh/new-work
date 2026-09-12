@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { api, resolveMedia } from "../lib/api";
+import { api, resolveMedia, getVideoEmbedUrl } from "../lib/api";
 import { Upload, Loader2 } from "lucide-react";
 
 // Reusable file uploader for admin forms.
@@ -78,7 +78,15 @@ const upload = async (files) => {
       {value && (
         <div className="mt-3">
           {accept.includes("video") ? (
-            <video src={resolveMedia(value)} className="w-32 h-32 object-cover border border-[#D4AF37]/20" muted />
+            getVideoEmbedUrl(value) ? (
+              <iframe
+                src={getVideoEmbedUrl(value)}
+                title="Video preview"
+                className="w-32 h-32 border border-[#D4AF37]/20"
+              />
+            ) : (
+              <video src={resolveMedia(value)} className="w-32 h-32 object-cover border border-[#D4AF37]/20" muted />
+            )
           ) : (
             <img src={resolveMedia(value)} alt="" className="w-32 h-32 object-cover border border-[#D4AF37]/20" />
           )}

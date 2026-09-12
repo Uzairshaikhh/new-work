@@ -37,3 +37,24 @@ export const resolveMedia = (url, width = 800) => {
   if (url.startsWith("/api/")) return `${BACKEND_URL}${url}`;
   return url;
 };
+
+// Pasted "video URL" fields often contain a YouTube/Vimeo watch page link rather
+// than a direct media file — a plain <video> tag can't play those. Detect them
+// and return an embeddable iframe URL instead; returns null for direct file URLs.
+export const getVideoEmbedUrl = (url) => {
+  if (!url) return null;
+
+  const youtubeMatch = url.match(
+    /(?:youtube\.com\/watch\?v=|youtube\.com\/shorts\/|youtu\.be\/)([\w-]+)/
+  );
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+  }
+
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+
+  return null;
+};

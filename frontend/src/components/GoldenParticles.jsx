@@ -12,6 +12,13 @@ const GoldenParticles = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    // Skip the animation on mobile viewports and for users who asked for
+    // reduced motion — it's purely decorative and per-frame canvas work is
+    // one of the more expensive things we can do on a low-end phone CPU.
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion || window.innerWidth < 768) return;
+
     const ctx = canvas.getContext("2d");
 
     const resize = () => {
@@ -31,6 +38,22 @@ const GoldenParticles = () => {
       da: rand(-0.003, 0.003),
     }));
 
+    // Pre-render the glow once into an offscreen sprite instead of paying for
+    // ctx.shadowBlur on every particle, every frame (shadowBlur is very slow).
+    const SPRITE_SIZE = 24;
+    const sprite = document.createElement("canvas");
+    sprite.width = sprite.height = SPRITE_SIZE;
+    const sctx = sprite.getContext("2d");
+    const grad = sctx.createRadialGradient(
+      SPRITE_SIZE / 2, SPRITE_SIZE / 2, 0,
+      SPRITE_SIZE / 2, SPRITE_SIZE / 2, SPRITE_SIZE / 2
+    );
+    grad.addColorStop(0, "rgba(212,175,55,1)");
+    grad.addColorStop(0.4, "rgba(212,175,55,0.5)");
+    grad.addColorStop(1, "rgba(212,175,55,0)");
+    sctx.fillStyle = grad;
+    sctx.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
+
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.current.forEach((p) => {
@@ -42,16 +65,11 @@ const GoldenParticles = () => {
         if (p.x < -5) p.x = canvas.width + 5;
         if (p.x > canvas.width + 5) p.x = -5;
 
-        ctx.save();
+        const size = SPRITE_SIZE * (p.r / 1.2);
         ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = "#d4af37";
-        ctx.shadowColor = "#d4af37";
-        ctx.shadowBlur = 6;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        ctx.drawImage(sprite, p.x - size / 2, p.y - size / 2, size, size);
       });
+      ctx.globalAlpha = 1;
       frameRef.current = requestAnimationFrame(draw);
     };
     draw();

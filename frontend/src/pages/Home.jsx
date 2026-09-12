@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle, ArrowRight, Sparkles } from "lucide-react";
 import { api } from "../lib/api";
@@ -8,16 +8,19 @@ import Navbar from "../components/Navbar";
 import HeroSlider from "../components/HeroSlider";
 import CategoryGrid from "../components/CategoryGrid";
 import ProductCard from "../components/ProductCard";
-import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
-import TrustedClients from "../components/TrustedClients";
-import SocialLinks from "../components/SocialLinks";
-import Testimonials from "../components/Testimonials";
-import BulkPricing from "../components/BulkPricing";
-import FAQ from "../components/FAQ";
 import StatsCounter from "../components/StatsCounter";
-import CollectionsSection from "../components/CollectionsSection";
+
+// Below-the-fold sections: keep them out of the initial bundle so the browser
+// has less JS to parse/execute before the above-the-fold content is interactive.
+const BulkPricing = lazy(() => import("../components/BulkPricing"));
+const TrustedClients = lazy(() => import("../components/TrustedClients"));
+const SocialLinks = lazy(() => import("../components/SocialLinks"));
+const Testimonials = lazy(() => import("../components/Testimonials"));
+const CollectionsSection = lazy(() => import("../components/CollectionsSection"));
+const FAQ = lazy(() => import("../components/FAQ"));
+const ContactSection = lazy(() => import("../components/ContactSection"));
 
 const CACHE_KEY = "ag_home_v1";
 const readCache  = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } };
@@ -173,20 +176,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ── Bulk Pricing + How to Order ─────────────── */}
-      <BulkPricing settings={settings} />
+      <Suspense fallback={null}>
+        {/* ── Bulk Pricing + How to Order ─────────────── */}
+        <BulkPricing settings={settings} />
 
-      {/* ── Trusted Clients ─────────────────────────── */}
-      <TrustedClients settings={settings} />
+        {/* ── Trusted Clients ─────────────────────────── */}
+        <TrustedClients settings={settings} />
 
-      {/* ── Social Links ────────────────────────────── */}
-      <SocialLinks settings={settings} />
+        {/* ── Social Links ────────────────────────────── */}
+        <SocialLinks settings={settings} />
 
-      {/* ── Testimonials ────────────────────────────── */}
-      <Testimonials settings={settings} />
+        {/* ── Testimonials ────────────────────────────── */}
+        <Testimonials settings={settings} />
 
-      {/* ── Collections ─────────────────────────────── */}
-      <CollectionsSection />
+        {/* ── Collections ─────────────────────────────── */}
+        <CollectionsSection />
+      </Suspense>
 
       {/* ── Premium CTA Banner ──────────────────────── */}
       <section className="py-10 px-6 lg:px-10" data-testid="final-cta-section">
@@ -241,11 +246,13 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ── FAQ ──────────────────────────────────────── */}
-      <FAQ />
+      <Suspense fallback={null}>
+        {/* ── FAQ ──────────────────────────────────────── */}
+        <FAQ />
 
-      {/* ── Contact ──────────────────────────────────── */}
-      <ContactSection />
+        {/* ── Contact ──────────────────────────────────── */}
+        <ContactSection />
+      </Suspense>
 
       <Footer />
     </div>

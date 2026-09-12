@@ -11,8 +11,33 @@
         <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <!-- Preload LCP hero image so browser starts fetching before JS runs -->
-        <link rel="preload" as="image" href="https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=800&q=70" fetchpriority="high" />
+        <!--
+          Preload the LCP hero image before JS runs. Returning visitors already
+          have the real slider image cached (see Home.jsx's "ag_home_v1" cache) —
+          preload that instead of the generic placeholder so the browser fetches
+          the image that will actually be shown, not one that gets thrown away.
+        -->
+        <script>
+          (function () {
+            var href = "https://images.unsplash.com/photo-1668127494486-f27a1d2b88f9?crop=entropy&cs=srgb&fm=jpg&w=800&q=70";
+            try {
+              var cached = JSON.parse(localStorage.getItem("ag_home_v1"));
+              var url = cached && cached.sliders && cached.sliders[0] && cached.sliders[0].image_url;
+              if (url) {
+                if (url.indexOf("res.cloudinary.com") !== -1 && url.indexOf("/upload/") !== -1 && !/\/upload\/[a-z]_/.test(url)) {
+                  url = url.replace("/upload/", "/upload/f_auto,q_auto,w_1200/");
+                }
+                href = url;
+              }
+            } catch (e) {}
+            var link = document.createElement("link");
+            link.rel = "preload";
+            link.as = "image";
+            link.href = href;
+            link.fetchPriority = "high";
+            document.head.appendChild(link);
+          })();
+        </script>
         <link rel="icon" type="image/png" href="%PUBLIC_URL%/ag-logo.png" />
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/ag-logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
