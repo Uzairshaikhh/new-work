@@ -17,6 +17,7 @@ load_dotenv(ROOT_DIR / '.env')
 
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, UploadFile, File, Response, Header, Query
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
 
@@ -1210,3 +1211,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Every public GET response above is marked no-cache (so admin edits show up
+# immediately), which means it gets re-downloaded in full on every visit —
+# compress it so that re-download is small instead of relying on caching.
+app.add_middleware(GZipMiddleware, minimum_size=500)
