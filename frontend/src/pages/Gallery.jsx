@@ -17,9 +17,14 @@ const SECTIONS = [
   { key: "process", label: "Our Process" },
 ];
 
+const CACHE_KEY = "ag_gallery_v1";
+const readCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } };
+const writeCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
+
 const Gallery = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const cache = readCache();
+  const [items, setItems] = useState(cache || []);
+  const [loading, setLoading] = useState(!cache);
   const [active, setActive] = useState("all");
   const [lightbox, setLightbox] = useState({ open: false, idx: 0 });
 
@@ -29,7 +34,7 @@ const Gallery = () => {
   });
 
   useEffect(() => {
-    api.get("/gallery").then((r) => setItems(r.data)).catch(() => {}).finally(() => setLoading(false));
+    api.get("/gallery").then((r) => { setItems(r.data); writeCache(r.data); }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() =>

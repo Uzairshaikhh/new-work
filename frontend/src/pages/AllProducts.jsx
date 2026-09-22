@@ -10,10 +10,15 @@ import ScrollablePills from "../components/ScrollablePills";
 
 const PAGE_SIZE = 24;
 
+const CACHE_KEY = "ag_products_v1";
+const readCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } };
+const writeCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
+
 const AllProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const cache = readCache();
+  const [products, setProducts] = useState(cache?.products || []);
+  const [categories, setCategories] = useState(cache?.categories || []);
+  const [loading, setLoading] = useState(!cache);
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
   const [page, setPage] = useState(1);
@@ -34,6 +39,7 @@ const AllProducts = () => {
         if (!mounted) return;
         setProducts(p.data);
         setCategories(c.data);
+        writeCache({ products: p.data, categories: c.data });
       })
       .catch(() => {})
       .finally(() => mounted && setLoading(false));

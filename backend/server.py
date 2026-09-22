@@ -1117,9 +1117,15 @@ async def startup_event():
     # Indexes
     await db.admins.create_index("username", unique=True)
     await db.categories.create_index("id", unique=True)
+    await db.categories.create_index("slug")
     await db.products.create_index("id", unique=True)
+    await db.products.create_index("slug")
+    await db.products.create_index("category_id")
+    await db.products.create_index("subcategory_id")
+    await db.products.create_index("featured")
     await db.sliders.create_index("id", unique=True)
     await db.settings.create_index("key", unique=True)
+    await db.gallery.create_index("section")
 
     # Seed admin
     existing = await db.admins.find_one({"username": ADMIN_USERNAME})

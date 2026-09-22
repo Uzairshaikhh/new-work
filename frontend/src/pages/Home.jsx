@@ -11,6 +11,10 @@ import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
 import StatsCounter from "../components/StatsCounter";
+// Kept eager (not code-split): the Footer's "Contact" link on every page
+// points to "/#contact", and a lazy chunk isn't in the DOM yet at the
+// instant that anchor-scroll runs, so it must already be mounted.
+import ContactSection from "../components/ContactSection";
 
 // Below-the-fold sections: keep them out of the initial bundle so the browser
 // has less JS to parse/execute before the above-the-fold content is interactive.
@@ -20,7 +24,6 @@ const SocialLinks = lazy(() => import("../components/SocialLinks"));
 const Testimonials = lazy(() => import("../components/Testimonials"));
 const CollectionsSection = lazy(() => import("../components/CollectionsSection"));
 const FAQ = lazy(() => import("../components/FAQ"));
-const ContactSection = lazy(() => import("../components/ContactSection"));
 
 const CACHE_KEY = "ag_home_v1";
 const readCache  = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } };
@@ -246,13 +249,14 @@ const Home = () => {
         </div>
       </section>
 
+      {/* FAQ kept in its own boundary: a lazy sibling suspending would hide
+          ContactSection too if they shared one, defeating the point of
+          keeping Contact eager for the "/#contact" anchor link. */}
       <Suspense fallback={null}>
-        {/* ── FAQ ──────────────────────────────────────── */}
         <FAQ />
-
-        {/* ── Contact ──────────────────────────────────── */}
-        <ContactSection />
       </Suspense>
+
+      <ContactSection />
 
       <Footer />
     </div>

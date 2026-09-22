@@ -49,10 +49,25 @@ const AdminLoader = () => (
 );
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
+    if (hash) {
+      // Target section may still be mounting (e.g. a lazy-loaded chunk on
+      // Home) — retry briefly instead of giving up and resetting to top.
+      let tries = 0;
+      const tryScroll = () => {
+        const el = document.getElementById(hash.slice(1));
+        if (el) {
+          el.scrollIntoView({ behavior: "instant", block: "start" });
+        } else if (tries++ < 20) {
+          setTimeout(tryScroll, 50);
+        }
+      };
+      tryScroll();
+      return;
+    }
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [pathname]);
+  }, [pathname, hash]);
   return null;
 };
 
