@@ -5,6 +5,12 @@ import SearchOverlay from "./SearchOverlay";
 import { api, resolveMedia } from "../lib/api";
 import { BRAND, waLink } from "../lib/brand";
 
+// Navbar remounts on every route change (it's rendered per-page, not once
+// above the router), so without this the mega-menu categories would be
+// re-fetched from the server on every single navigation. Cache them in
+// module scope so that only happens once per page load.
+let categoriesCache = null;
+
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -12,14 +18,19 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(categoriesCache || []);
   const megaRef = useRef(null);
   const megaTimer = useRef(null);
 
   useEffect(() => setMobileOpen(false), [location.pathname]);
 
   useEffect(() => {
-    api.get("/categories").then((r) => setCategories(r.data.slice(0, 12))).catch(() => {});
+    if (categoriesCache) return;
+    api.get("/categories").then((r) => {
+      const data = r.data.slice(0, 12);
+      categoriesCache = data;
+      setCategories(data);
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
